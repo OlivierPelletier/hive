@@ -1,6 +1,6 @@
 use std::fmt::{Display, Formatter, Result};
 
-#[derive(Hash, PartialEq, Clone)]
+#[derive(Hash, Eq, PartialEq, Clone, Copy)]
 pub struct Hex {
     pub q: i64,
     pub r: i64,

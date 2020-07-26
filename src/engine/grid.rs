@@ -4,21 +4,31 @@ use crate::grid::geo::cube::Cube;
 use crate::grid::geo::hex::Hex;
 use crate::grid::piece::Piece;
 use std::collections::HashMap;
+use std::fmt::{Display, Formatter, Result};
 
 pub mod geo;
 pub mod piece;
 
 pub fn init_grid() -> Grid {
-    let mut grid: HashMap<Hex, Vec<dyn Piece>> = HashMap::new();
-    let hex_zero = Hex { q: 0, r: 0 };
-
-    grid.insert(hex_zero, Vec::new());
+    let grid: HashMap<Hex, Vec<Piece>> = HashMap::new();
 
     return Grid { grid };
 }
 
 pub struct Grid {
-    pub grid: HashMap<Hex, Vec<dyn Piece>>,
+    pub grid: HashMap<Hex, Vec<Piece>>,
+}
+
+pub fn place_piece_to_hex(grid: Grid, piece: Piece, hex: Hex) -> Grid {
+    let mut new_grid: HashMap<Hex, Vec<Piece>> = grid.grid;
+    let mut new_vec: Vec<Piece> = match new_grid.get(&hex) {
+        None => Vec::new(),
+        Some(v) => v.to_vec(),
+    };
+    new_vec.push(piece);
+    new_grid.insert(hex, new_vec);
+
+    Grid { grid: new_grid }
 }
 
 impl Grid {
@@ -40,7 +50,7 @@ impl Grid {
     }
 
     pub fn is_hex_accessible_from(&self, hex: Hex, from: Hex) -> bool {
-        let mut is_accessible = true;
+        let is_accessible;
 
         if self.is_hex_neighbor_of(hex, from) {
             let cube = axial_to_cube(hex.clone());
@@ -114,18 +124,108 @@ impl Grid {
         let mut is_neighbor = false;
 
         for neighbor in &hex.neighbors() {
-            is_neighbor = is_neighbor || neighbor == of;
+            is_neighbor = is_neighbor || *neighbor == of;
         }
 
         is_neighbor
     }
 
     pub fn is_hex_occupied(&self, hex: Hex) -> bool {
-        let pieces = self.grid.get(*hex);
+        let pieces = self.grid.get(&hex);
 
         match pieces {
             Some(p) => !p.is_empty(),
             None => false,
         }
     }
+
+    pub fn number_of_pieces(&self) -> usize {
+        let mut count = 0;
+        for vec in self.grid.values() {
+            count = count + vec.len()
+        }
+
+        count
+    }
+}
+
+impl Display for Grid {
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        let mut initialized = false;
+        let mut min_q = 0;
+        let mut max_q = 0;
+        let mut min_r = 0;
+        let mut max_r = 0;
+
+        for key in self.grid.keys() {
+            if !initialized {
+                min_q = key.q;
+                max_q = key.q;
+                min_r = key.r;
+                max_r = key.r;
+                initialized = true;
+            } else {
+                if min_q > key.q {
+                    min_q = key.q;
+                } else if max_q < key.q {
+                    max_q = key.q;
+                }
+
+                if min_r > key.r {
+                    min_r = key.r;
+                } else if max_r < key.r {
+                    max_r = key.r;
+                }
+            }
+        }
+
+        let mut count_r = -1;
+        let mut reverse_c_r = max_r - min_r;
+
+        write!(f, "GRID START")?;
+        for r in min_r..=max_r {
+            write!(f, "\n")?;
+            count_r += 1;
+            reverse_c_r -= 1;
+
+            for i in 0..=reverse_c_r {
+                if i % 2 == 0 {
+                    write!(f, "   ")?;
+                } else {
+                    write!(f, "    ")?;
+                }
+            }
+
+            for _i in 1..=count_r {
+                write!(f, "       ")?;
+            }
+
+            for q in min_q..=max_q {
+                let hex = Hex { q, r };
+                let q_str = str_number_with_sign(q);
+                let r_str = str_number_with_sign(r);
+
+                let occuped = self.is_hex_occupied(hex);
+
+                if occuped {
+                    write!(f, "[{},{}]", q_str, r_str)?;
+                } else {
+                    write!(f, "       ")?;
+                }
+            }
+            write!(f, "\n")?;
+        }
+
+        write!(f, "GRID END")
+    }
+}
+
+fn str_number_with_sign(number: i64) -> String {
+    let mut str = number.to_string();
+
+    if number > -1 {
+        str = "+".to_string() + &str
+    };
+
+    str
 }
