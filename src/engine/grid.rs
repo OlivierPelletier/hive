@@ -9,49 +9,49 @@ use std::fmt::{Display, Formatter, Result};
 pub mod geo;
 pub mod piece;
 
-pub fn init_grid() -> Grid {
-    let grid: HashMap<Hex, Vec<Piece>> = HashMap::new();
-
-    return Grid { grid };
-}
-
 pub struct Grid {
     pub grid: HashMap<Hex, Vec<Piece>>,
 }
 
-pub fn place_piece_to_hex(grid: Grid, piece: Piece, hex: Hex) -> Grid {
-    let mut _grid: HashMap<Hex, Vec<Piece>> = grid.grid;
-    let mut _vec: Vec<Piece> = match _grid.get(&hex) {
-        None => Vec::new(),
-        Some(v) => v.to_vec(),
-    };
-    _vec.push(piece);
-    _grid.insert(hex, _vec);
-
-    Grid { grid: _grid }
-}
-
-pub fn remove_top_piece_from_hex(grid: Grid, hex: Hex) -> (Grid, Option<Piece>) {
-    let mut _grid: HashMap<Hex, Vec<Piece>> = grid.grid;
-    let mut _vec: Vec<Piece> = match _grid.get(&hex) {
-        None => Vec::new(),
-        Some(v) => v.to_vec(),
-    };
-    let piece = _vec.pop();
-    _grid.insert(hex, _vec);
-
-    (Grid { grid: _grid }, piece)
-}
-
-pub fn move_piece_from_to(grid: Grid, from: Hex, to: Hex) -> Grid {
-    let mut _grid_piece = remove_top_piece_from_hex(grid, from);
-    match _grid_piece.1 {
-        Some(p) => place_piece_to_hex(_grid_piece.0, p, to),
-        None => _grid_piece.0,
-    }
-}
-
 impl Grid {
+    pub fn new() -> Grid {
+        let grid: HashMap<Hex, Vec<Piece>> = HashMap::new();
+
+        return Grid { grid };
+    }
+
+    pub fn place_piece_to_hex(&self, piece: Piece, hex: Hex) -> Grid {
+        let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
+        let mut _vec: Vec<Piece> = match _grid.get(&hex) {
+            None => Vec::new(),
+            Some(v) => v.to_vec(),
+        };
+        _vec.push(piece);
+        _grid.insert(hex, _vec);
+
+        Grid { grid: _grid }
+    }
+
+    pub fn remove_top_piece_from_hex(&self, hex: Hex) -> (Grid, Option<Piece>) {
+        let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
+        let mut _vec: Vec<Piece> = match _grid.get(&hex) {
+            None => Vec::new(),
+            Some(v) => v.to_vec(),
+        };
+        let piece = _vec.pop();
+        _grid.insert(hex, _vec);
+
+        (Grid { grid: _grid }, piece)
+    }
+
+    pub fn move_piece_from_to(&self, from: Hex, to: Hex) -> Grid {
+        let mut _grid_piece = self.remove_top_piece_from_hex(from);
+        match _grid_piece.1 {
+            Some(p) => _grid_piece.0.place_piece_to_hex(p, to),
+            None => _grid_piece.0,
+        }
+    }
+
     pub fn is_hex_surrounded(&self, hex: Hex) -> bool {
         let neighbors = hex.neighbors();
 
