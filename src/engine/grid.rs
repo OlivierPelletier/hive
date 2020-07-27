@@ -9,6 +9,7 @@ use std::fmt::{Display, Formatter, Result};
 pub mod geo;
 pub mod piece;
 
+#[derive(Clone)]
 pub struct Grid {
     pub grid: HashMap<Hex, Vec<Piece>>,
 }
@@ -20,31 +21,31 @@ impl Grid {
         return Grid { grid };
     }
 
-    pub fn place_piece_to_hex(&self, piece: Piece, hex: Hex) -> Grid {
+    pub fn place_piece_to_hex(&self, piece: Piece, hex: &Hex) -> Grid {
         let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
         let mut _vec: Vec<Piece> = match _grid.get(&hex) {
             None => Vec::new(),
             Some(v) => v.to_vec(),
         };
         _vec.push(piece);
-        _grid.insert(hex, _vec);
+        _grid.insert(*hex, _vec);
 
         Grid { grid: _grid }
     }
 
-    pub fn remove_top_piece_from_hex(&self, hex: Hex) -> (Grid, Option<Piece>) {
+    pub fn remove_top_piece_from_hex(&self, hex: &Hex) -> (Grid, Option<Piece>) {
         let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
         let mut _vec: Vec<Piece> = match _grid.get(&hex) {
             None => Vec::new(),
             Some(v) => v.to_vec(),
         };
         let piece = _vec.pop();
-        _grid.insert(hex, _vec);
+        _grid.insert(*hex, _vec);
 
         (Grid { grid: _grid }, piece)
     }
 
-    pub fn move_piece_from_to(&self, from: Hex, to: Hex) -> Grid {
+    pub fn move_piece_from_to(&self, from: &Hex, to: &Hex) -> Grid {
         let mut _grid_piece = self.remove_top_piece_from_hex(from);
         match _grid_piece.1 {
             Some(p) => _grid_piece.0.place_piece_to_hex(p, to),
@@ -52,37 +53,7 @@ impl Grid {
         }
     }
 
-    pub fn is_move_piece_from_to_valid(&self, from: Hex, to: Hex) -> bool {
-        let mut is_valid = true;
-        let from_neighbors = from.neighbors();
-        let to_neighbors = to.neighbors();
-        let mut temp_grid = Grid {
-            grid: self.grid.clone(),
-        };
-
-        if self.is_hex_occupied(from) {
-            temp_grid = temp_grid.move_piece_from_to(from, to);
-
-            for from_neighbor in from_neighbors {
-                if temp_grid.is_hex_occupied(from_neighbor) && temp_grid.is_hex_alone(from_neighbor)
-                {
-                    is_valid = false;
-                }
-            }
-
-            for to_neighbor in to_neighbors {
-                if temp_grid.is_hex_occupied(to_neighbor) && temp_grid.is_hex_alone(to_neighbor) {
-                    is_valid = false;
-                }
-            }
-        } else {
-            is_valid = false;
-        }
-
-        is_valid
-    }
-
-    pub fn is_hex_surrounded(&self, hex: Hex) -> bool {
+    pub fn is_hex_surrounded(&self, hex: &Hex) -> bool {
         let neighbors = hex.neighbors();
 
         let mut is_surrended = true;
@@ -99,7 +70,7 @@ impl Grid {
         is_surrended
     }
 
-    pub fn is_hex_accessible_from(&self, hex: Hex, from: Hex) -> bool {
+    pub fn is_hex_accessible_from(&self, hex: &Hex, from: &Hex) -> bool {
         let is_accessible;
 
         if self.is_hex_neighbor_of(hex, from) {
@@ -124,7 +95,7 @@ impl Grid {
                 let h1 = cube_to_axial(c1);
                 let h2 = cube_to_axial(c2);
 
-                is_accessible = !(self.is_hex_occupied(h1) && self.is_hex_occupied(h2));
+                is_accessible = !(self.is_hex_occupied(&h1) && self.is_hex_occupied(&h2));
             } else if cube.z == cube_from.z {
                 let zx_offset = cube.x - cube_from.x;
                 let zy_offset = cube.y - cube_from.y;
@@ -143,7 +114,7 @@ impl Grid {
                 let h1 = cube_to_axial(c1);
                 let h2 = cube_to_axial(c2);
 
-                is_accessible = !(self.is_hex_occupied(h1) && self.is_hex_occupied(h2));
+                is_accessible = !(self.is_hex_occupied(&h1) && self.is_hex_occupied(&h2));
             } else {
                 let yx_offset = cube.x - cube_from.x;
                 let yz_offset = cube.z - cube_from.z;
@@ -162,7 +133,7 @@ impl Grid {
                 let h1 = cube_to_axial(c1);
                 let h2 = cube_to_axial(c2);
 
-                is_accessible = !(self.is_hex_occupied(h1) && self.is_hex_occupied(h2));
+                is_accessible = !(self.is_hex_occupied(&h1) && self.is_hex_occupied(&h2));
             }
         } else {
             is_accessible = false;
@@ -170,17 +141,17 @@ impl Grid {
         is_accessible
     }
 
-    pub fn is_hex_neighbor_of(&self, hex: Hex, of: Hex) -> bool {
+    pub fn is_hex_neighbor_of(&self, hex: &Hex, of: &Hex) -> bool {
         let mut is_neighbor = false;
 
-        for neighbor in &hex.neighbors() {
-            is_neighbor = is_neighbor || *neighbor == of;
+        for neighbor in hex.neighbors() {
+            is_neighbor = is_neighbor || neighbor == *of;
         }
 
         is_neighbor
     }
 
-    pub fn is_hex_occupied(&self, hex: Hex) -> bool {
+    pub fn is_hex_occupied(&self, hex: &Hex) -> bool {
         let pieces = self.grid.get(&hex);
 
         match pieces {
@@ -189,13 +160,13 @@ impl Grid {
         }
     }
 
-    pub fn is_hex_alone(&self, hex: Hex) -> bool {
+    pub fn is_hex_alone(&self, hex: &Hex) -> bool {
         let neighbors = hex.neighbors();
 
         let mut is_alone = true;
 
-        for neighbor in &neighbors {
-            is_alone = is_alone && !self.is_hex_occupied(*neighbor);
+        for neighbor in neighbors {
+            is_alone = is_alone && !self.is_hex_occupied(&neighbor);
         }
 
         is_alone
@@ -267,7 +238,7 @@ impl Display for Grid {
                 let q_str = str_number_with_sign(q);
                 let r_str = str_number_with_sign(r);
 
-                let occuped = self.is_hex_occupied(hex);
+                let occuped = self.is_hex_occupied(&hex);
 
                 if occuped {
                     write!(f, "[{},{}]", q_str, r_str)?;
