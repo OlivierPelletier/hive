@@ -34,4 +34,15 @@ fn main() {
     grid = grid.move_piece_from_to(hex9, hex10);
 
     println!("{}", grid);
+
+    println!(
+        "{}",
+        grid.is_move_piece_from_to_valid(hex8, Hex { q: 6, r: 1 })
+    );
+    println!(
+        "{}",
+        grid.is_move_piece_from_to_valid(hex2, Hex { q: 4, r: 2 })
+    );
+
+    println!("{}", grid);
 }

@@ -52,6 +52,36 @@ impl Grid {
         }
     }
 
+    pub fn is_move_piece_from_to_valid(&self, from: Hex, to: Hex) -> bool {
+        let mut is_valid = true;
+        let from_neighbors = from.neighbors();
+        let to_neighbors = to.neighbors();
+        let mut temp_grid = Grid {
+            grid: self.grid.clone(),
+        };
+
+        if self.is_hex_occupied(from) {
+            temp_grid = temp_grid.move_piece_from_to(from, to);
+
+            for from_neighbor in from_neighbors {
+                if temp_grid.is_hex_occupied(from_neighbor) && temp_grid.is_hex_alone(from_neighbor)
+                {
+                    is_valid = false;
+                }
+            }
+
+            for to_neighbor in to_neighbors {
+                if temp_grid.is_hex_occupied(to_neighbor) && temp_grid.is_hex_alone(to_neighbor) {
+                    is_valid = false;
+                }
+            }
+        } else {
+            is_valid = false;
+        }
+
+        is_valid
+    }
+
     pub fn is_hex_surrounded(&self, hex: Hex) -> bool {
         let neighbors = hex.neighbors();
 
@@ -157,6 +187,18 @@ impl Grid {
             Some(p) => !p.is_empty(),
             None => false,
         }
+    }
+
+    pub fn is_hex_alone(&self, hex: Hex) -> bool {
+        let neighbors = hex.neighbors();
+
+        let mut is_alone = true;
+
+        for neighbor in &neighbors {
+            is_alone = is_alone && !self.is_hex_occupied(*neighbor);
+        }
+
+        is_alone
     }
 
     pub fn number_of_pieces(&self) -> usize {
