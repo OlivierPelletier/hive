@@ -1,7 +1,6 @@
-use crate::grid::geo::hex::Hex;
-use crate::grid::Grid;
+use std::fmt::{Display, Formatter, Result};
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub enum PieceType {
     QUEENBEE,
     BEETLE,
@@ -63,4 +62,10 @@ impl Piece {
     // pub fn available_moves(&self, self_hex: Hex, grid: Grid) -> Vec<Hex> {
     //     Vec::new()
     // }
+}
+
+impl Display for Piece {
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        write!(f, "{:?}", self.p_type)
+    }
 }

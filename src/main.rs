@@ -1,6 +1,6 @@
 use hive::grid::geo::hex::Hex;
 use hive::grid::piece::Piece;
-use hive::grid::{init_grid, place_piece_to_hex};
+use hive::grid::{init_grid, move_piece_from_to, place_piece_to_hex};
 
 fn main() {
     let piece = Piece::queen_bee();
@@ -25,6 +25,12 @@ fn main() {
     grid = place_piece_to_hex(grid, piece.clone(), hex7);
     grid = place_piece_to_hex(grid, piece.clone(), hex8);
     grid = place_piece_to_hex(grid, piece.clone(), hex9);
+
+    println!("{}", grid);
+
+    let hex10 = Hex { q: 3, r: 1 };
+
+    grid = move_piece_from_to(grid, hex9, hex10);
 
     println!("{}", grid);
 }

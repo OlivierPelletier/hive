@@ -20,15 +20,35 @@ pub struct Grid {
 }
 
 pub fn place_piece_to_hex(grid: Grid, piece: Piece, hex: Hex) -> Grid {
-    let mut new_grid: HashMap<Hex, Vec<Piece>> = grid.grid;
-    let mut new_vec: Vec<Piece> = match new_grid.get(&hex) {
+    let mut _grid: HashMap<Hex, Vec<Piece>> = grid.grid;
+    let mut _vec: Vec<Piece> = match _grid.get(&hex) {
         None => Vec::new(),
         Some(v) => v.to_vec(),
     };
-    new_vec.push(piece);
-    new_grid.insert(hex, new_vec);
+    _vec.push(piece);
+    _grid.insert(hex, _vec);
 
-    Grid { grid: new_grid }
+    Grid { grid: _grid }
+}
+
+pub fn remove_top_piece_from_hex(grid: Grid, hex: Hex) -> (Grid, Option<Piece>) {
+    let mut _grid: HashMap<Hex, Vec<Piece>> = grid.grid;
+    let mut _vec: Vec<Piece> = match _grid.get(&hex) {
+        None => Vec::new(),
+        Some(v) => v.to_vec(),
+    };
+    let piece = _vec.pop();
+    _grid.insert(hex, _vec);
+
+    (Grid { grid: _grid }, piece)
+}
+
+pub fn move_piece_from_to(grid: Grid, from: Hex, to: Hex) -> Grid {
+    let mut _grid_piece = remove_top_piece_from_hex(grid, from);
+    match _grid_piece.1 {
+        Some(p) => place_piece_to_hex(_grid_piece.0, p, to),
+        None => _grid_piece.0,
+    }
 }
 
 impl Grid {
