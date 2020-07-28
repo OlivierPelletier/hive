@@ -237,26 +237,24 @@ impl Display for Grid {
         for r in min_r..=max_r {
             write!(f, "\n")?;
             count_r += 1;
-            reverse_c_r -= 1;
             for i in 0..count_r {
                 if i % 2 == 0 {
-                    write!(f, "   ")?;
+                    write!(f, "  ")?;
                 } else {
-                    write!(f, "    ")?;
+                    write!(f, "  ")?;
                 }
             }
 
             for q in min_q..=max_q {
                 let hex = Hex { q, r };
-                let q_str = str_number_with_sign(q);
-                let r_str = str_number_with_sign(r);
 
                 let occupied = self.is_hex_occupied(&hex);
 
                 if occupied {
-                    write!(f, "[{},{}]", q_str, r_str)?;
+                    let piece = self.get_piece_copy(&hex);
+                    write!(f, "[{}]", piece)?;
                 } else {
-                    write!(f, "   *   ")?;
+                    write!(f, " ** ")?;
                 }
             }
         }
@@ -265,12 +263,12 @@ impl Display for Grid {
     }
 }
 
-fn str_number_with_sign(number: i64) -> String {
-    let mut str = number.to_string();
-
-    if number > -1 {
-        str = "+".to_string() + &str
-    };
-
-    str
-}
+// fn str_number_with_sign(number: i64) -> String {
+//     let mut str = number.to_string();
+//
+//     if number > -1 {
+//         str = "+".to_string() + &str
+//     };
+//
+//     str
+// }

@@ -7,6 +7,10 @@ pub struct Hex {
 }
 
 impl Hex {
+    pub fn new(q: i64, r: i64) -> Hex {
+        Hex { q, r }
+    }
+
     pub fn neighbors(&self) -> Vec<Hex> {
         let q = self.q;
         let r = self.r;

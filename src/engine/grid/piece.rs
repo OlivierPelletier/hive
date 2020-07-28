@@ -1,6 +1,6 @@
 use std::fmt::{Display, Formatter, Result};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PieceType {
     QUEENBEE,
     BEETLE,
@@ -63,6 +63,25 @@ impl Piece {
 
 impl Display for Piece {
     fn fmt(&self, f: &mut Formatter) -> Result {
-        write!(f, "{:?}", self.p_type)
+        let str;
+
+        if self.p_type == PieceType::QUEENBEE {
+            str = "QU"
+        } else if self.p_type == PieceType::BEETLE {
+            str = "BE"
+        } else if self.p_type == PieceType::GRASSHOPPER {
+            str = "GR"
+        } else if self.p_type == PieceType::LADYBUG {
+            str = "LA"
+        } else if self.p_type == PieceType::MOSQUITO {
+            str = "MO"
+        } else if self.p_type == PieceType::SOLDIERANT {
+            str = "SO"
+        } else if self.p_type == PieceType::SPIDER {
+            str = "SP"
+        } else {
+            str = "NA"
+        }
+        write!(f, "{}", str)
     }
 }

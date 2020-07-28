@@ -4,47 +4,31 @@ use hive::grid::Grid;
 use hive::rule::single_hive_rule_validation;
 
 fn main() {
-    let piece = Piece::queen_bee();
-
-    let hex0 = Hex { q: 0, r: 0 };
-    let hex1 = Hex { q: 2, r: 2 };
-    let hex2 = Hex { q: 3, r: 2 };
-    let hex3 = Hex { q: 1, r: 3 };
-    let hex4 = Hex { q: 2, r: 3 };
-    let hex5 = Hex { q: 3, r: 3 };
-    let hex6 = Hex { q: 1, r: 4 };
-    let hex7 = Hex { q: 2, r: 4 };
-    let hex8 = Hex { q: 6, r: 0 };
-    let hex9 = Hex { q: 3, r: 0 };
-
     let mut grid = Grid::new()
-        .place_piece_to_hex(piece.clone(), &hex0)
-        .place_piece_to_hex(piece.clone(), &hex1)
-        .place_piece_to_hex(piece.clone(), &hex2)
-        .place_piece_to_hex(piece.clone(), &hex2)
-        .place_piece_to_hex(piece.clone(), &hex3)
-        .place_piece_to_hex(piece.clone(), &hex4)
-        .place_piece_to_hex(piece.clone(), &hex5)
-        .place_piece_to_hex(piece.clone(), &hex6)
-        .place_piece_to_hex(piece.clone(), &hex7)
-        .place_piece_to_hex(piece.clone(), &hex8)
-        .place_piece_to_hex(piece.clone(), &hex9);
+        .place_piece_to_hex(Piece::queen_bee(), &Hex::new(0, 0))
+        .place_piece_to_hex(Piece::mosquito(), &Hex::new(2, 2))
+        .place_piece_to_hex(Piece::soldier_ant(), &Hex::new(3, 2))
+        .place_piece_to_hex(Piece::soldier_ant(), &Hex::new(3, 3))
+        .place_piece_to_hex(Piece::grasshopper(), &Hex::new(1, 4))
+        .place_piece_to_hex(Piece::grasshopper(), &Hex::new(2, 4))
+        .place_piece_to_hex(Piece::grasshopper(), &Hex::new(6, 0))
+        .place_piece_to_hex(Piece::beetle(), &Hex::new(3, 0))
+        .place_piece_to_hex(Piece::beetle(), &Hex::new(2, 3))
+        .place_piece_to_hex(Piece::ladybug(), &Hex::new(1, 3));
 
     println!("{}", grid);
 
-    let hex10 = Hex { q: 3, r: 1 };
-
-    grid = grid.move_piece_from_to(&hex9, &hex10);
+    grid = grid.move_piece_from_to(&Hex::new(1, 3), &Hex::new(3, 1));
 
     println!("{}", grid);
 
     println!(
         "{}",
-        single_hive_rule_validation(&grid, &hex8, &Hex { q: 6, r: 1 })
+        single_hive_rule_validation(&grid, &Hex::new(6, 0), &Hex::new(6, 1))
     );
     println!(
         "{}",
-        single_hive_rule_validation(&grid, &hex2, &Hex { q: 4, r: 2 })
+        single_hive_rule_validation(&grid, &Hex::new(3, 2), &Hex::new(4, 2))
     );
 
     println!("{}", grid);
