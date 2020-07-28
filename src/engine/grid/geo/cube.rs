@@ -1,3 +1,4 @@
+use crate::grid::geo::hex::Hex;
 use std::fmt::{Display, Formatter, Result};
 
 #[derive(PartialEq, Clone)]
@@ -8,6 +9,13 @@ pub struct Cube {
 }
 
 impl Cube {
+    pub fn to_axial(&self) -> Hex {
+        Hex {
+            q: self.x,
+            r: self.z,
+        }
+    }
+
     pub fn neighbors(&self) -> Vec<Cube> {
         let x = self.x;
         let z = self.z;

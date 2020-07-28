@@ -66,21 +66,21 @@ impl Display for Piece {
         let str;
 
         if self.p_type == PieceType::QUEENBEE {
-            str = "QU"
+            str = "QBEE"
         } else if self.p_type == PieceType::BEETLE {
-            str = "BE"
+            str = "BETL"
         } else if self.p_type == PieceType::GRASSHOPPER {
-            str = "GR"
+            str = "GRHP"
         } else if self.p_type == PieceType::LADYBUG {
-            str = "LA"
+            str = "LDBG"
         } else if self.p_type == PieceType::MOSQUITO {
-            str = "MO"
+            str = "MSQT"
         } else if self.p_type == PieceType::SOLDIERANT {
-            str = "SO"
+            str = "SLDR"
         } else if self.p_type == PieceType::SPIDER {
-            str = "SP"
+            str = "SPDR"
         } else {
-            str = "NA"
+            str = "N//A"
         }
         write!(f, "{}", str)
     }

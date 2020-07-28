@@ -1,3 +1,4 @@
+use crate::grid::geo::cube::Cube;
 use std::fmt::{Display, Formatter, Result};
 
 #[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
@@ -11,17 +12,25 @@ impl Hex {
         Hex { q, r }
     }
 
+    pub fn to_cube(&self) -> Cube {
+        Cube {
+            x: self.q,
+            z: self.r,
+            y: -self.q - self.r,
+        }
+    }
+
     pub fn neighbors(&self) -> Vec<Hex> {
         let q = self.q;
         let r = self.r;
 
         let neighbors: Vec<Hex> = vec![
-            Hex { q: q + 1, r: r - 1 },
-            Hex { q: q + 1, r },
-            Hex { q, r: r + 1 },
-            Hex { q: q - 1, r: r + 1 },
-            Hex { q: q - 1, r },
-            Hex { q, r: r - 1 },
+            Hex::new(q + 1, r - 1),
+            Hex::new(q + 1, r),
+            Hex::new(q, r + 1),
+            Hex::new(q - 1, r + 1),
+            Hex::new(q - 1, r),
+            Hex::new(q, r - 1),
         ];
 
         return neighbors;
@@ -30,6 +39,15 @@ impl Hex {
 
 impl Display for Hex {
     fn fmt(&self, f: &mut Formatter) -> Result {
-        write!(f, "q: {}, r: {}", self.q, self.r)
+        let mut str: String = self.q.to_string() + "," + self.r.to_string().as_str();
+
+        for i in str.len()..8 {
+            if i % 2 == 1 {
+                str = " ".to_owned() + &str;
+            } else {
+                str = str + " ";
+            }
+        }
+        write!(f, "{}", str)
     }
 }

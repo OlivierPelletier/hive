@@ -1,6 +1,4 @@
-use crate::engine::grid::geo::cube_to_axial;
 use crate::engine::grid::piece::PieceType;
-use crate::grid::geo::axial_to_cube;
 use crate::grid::geo::cube::Cube;
 use crate::grid::geo::hex::Hex;
 use crate::grid::piece::Piece;
@@ -93,8 +91,8 @@ impl Grid {
         let is_accessible;
 
         if self.is_hex_neighbor_of(hex, from) {
-            let cube = axial_to_cube(hex.clone());
-            let cube_from = axial_to_cube(from.clone());
+            let cube = hex.clone().to_cube();
+            let cube_from = from.clone().to_cube();
 
             if cube.x == cube_from.x {
                 let xz_offset = cube.z - cube_from.z;
@@ -111,8 +109,8 @@ impl Grid {
                     z: cube_from.z,
                 };
 
-                let h1 = cube_to_axial(c1);
-                let h2 = cube_to_axial(c2);
+                let h1 = c1.to_axial();
+                let h2 = c2.to_axial();
 
                 is_accessible = !(self.is_hex_occupied(&h1) && self.is_hex_occupied(&h2));
             } else if cube.z == cube_from.z {
@@ -130,8 +128,8 @@ impl Grid {
                     z: cube_from.z - zy_offset,
                 };
 
-                let h1 = cube_to_axial(c1);
-                let h2 = cube_to_axial(c2);
+                let h1 = c1.to_axial();
+                let h2 = c2.to_axial();
 
                 is_accessible = !(self.is_hex_occupied(&h1) && self.is_hex_occupied(&h2));
             } else {
@@ -149,8 +147,8 @@ impl Grid {
                     z: cube.z,
                 };
 
-                let h1 = cube_to_axial(c1);
-                let h2 = cube_to_axial(c2);
+                let h1 = c1.to_axial();
+                let h2 = c2.to_axial();
 
                 is_accessible = !(self.is_hex_occupied(&h1) && self.is_hex_occupied(&h2));
             }
@@ -235,26 +233,36 @@ impl Display for Grid {
 
         write!(f, "GRID START")?;
         for r in min_r..=max_r {
-            write!(f, "\n")?;
-            count_r += 1;
-            for i in 0..count_r {
-                if i % 2 == 0 {
-                    write!(f, "  ")?;
-                } else {
-                    write!(f, "  ")?;
+            for m in 1..=2 {
+                write!(f, "\n")?;
+
+                if m % 2 == 1 {
+                    count_r += 1;
                 }
-            }
 
-            for q in min_q..=max_q {
-                let hex = Hex { q, r };
+                for _i in 0..count_r {
+                    write!(f, "    ")?;
+                }
 
-                let occupied = self.is_hex_occupied(&hex);
+                for q in min_q..=max_q {
+                    let hex = Hex::new(q, r);
 
-                if occupied {
-                    let piece = self.get_piece_copy(&hex);
-                    write!(f, "[{}]", piece)?;
-                } else {
-                    write!(f, " ** ")?;
+                    let occupied = self.is_hex_occupied(&hex);
+
+                    if occupied {
+                        if m % 2 == 0 {
+                            write!(f, "{}", hex)?;
+                        } else {
+                            let piece = self.get_piece_copy(&hex);
+                            write!(f, " [{}] ", piece)?;
+                        }
+                    } else {
+                        if m % 2 == 1 {
+                            write!(f, "   __   ")?;
+                        } else {
+                            write!(f, "   ˉˉ   ")?;
+                        }
+                    }
                 }
             }
         }
@@ -262,13 +270,3 @@ impl Display for Grid {
         write!(f, "\nGRID END")
     }
 }
-
-// fn str_number_with_sign(number: i64) -> String {
-//     let mut str = number.to_string();
-//
-//     if number > -1 {
-//         str = "+".to_string() + &str
-//     };
-//
-//     str
-// }
