@@ -1,4 +1,5 @@
 use crate::engine::grid::geo::cube_to_axial;
+use crate::engine::grid::piece::PieceType;
 use crate::grid::geo::axial_to_cube;
 use crate::grid::geo::cube::Cube;
 use crate::grid::geo::hex::Hex;
@@ -9,7 +10,7 @@ use std::fmt::{Display, Formatter, Result};
 pub mod geo;
 pub mod piece;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Grid {
     pub grid: HashMap<Hex, Vec<Piece>>,
 }
@@ -23,7 +24,7 @@ impl Grid {
 
     pub fn place_piece_to_hex(&self, piece: Piece, hex: &Hex) -> Grid {
         let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
-        let mut _vec: Vec<Piece> = match _grid.get(&hex) {
+        let mut _vec: Vec<Piece> = match _grid.get(hex) {
             None => Vec::new(),
             Some(v) => v.to_vec(),
         };
@@ -35,7 +36,7 @@ impl Grid {
 
     pub fn remove_top_piece_from_hex(&self, hex: &Hex) -> (Grid, Option<Piece>) {
         let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
-        let mut _vec: Vec<Piece> = match _grid.get(&hex) {
+        let mut _vec: Vec<Piece> = match _grid.get(hex) {
             None => Vec::new(),
             Some(v) => v.to_vec(),
         };
@@ -50,6 +51,24 @@ impl Grid {
         match _grid_piece.1 {
             Some(p) => _grid_piece.0.place_piece_to_hex(p, to),
             None => _grid_piece.0,
+        }
+    }
+
+    pub fn get_piece_copy(&self, hex: &Hex) -> Piece {
+        let none = Piece {
+            p_type: PieceType::NONE,
+        };
+
+        if self.is_hex_occupied(hex) {
+            match self.grid.get(hex) {
+                Some(v) => match v.clone().pop() {
+                    Some(p) => p,
+                    None => none,
+                },
+                None => none,
+            }
+        } else {
+            none
         }
     }
 
@@ -152,7 +171,7 @@ impl Grid {
     }
 
     pub fn is_hex_occupied(&self, hex: &Hex) -> bool {
-        let pieces = self.grid.get(&hex);
+        let pieces = self.grid.get(hex);
 
         match pieces {
             Some(p) => !p.is_empty(),
@@ -213,15 +232,13 @@ impl Display for Grid {
         }
 
         let mut count_r = -1;
-        let mut reverse_c_r = max_r - min_r;
 
         write!(f, "GRID START")?;
         for r in min_r..=max_r {
             write!(f, "\n")?;
             count_r += 1;
             reverse_c_r -= 1;
-
-            for i in 0..=reverse_c_r {
+            for i in 0..count_r {
                 if i % 2 == 0 {
                     write!(f, "   ")?;
                 } else {
@@ -229,27 +246,22 @@ impl Display for Grid {
                 }
             }
 
-            for _i in 1..=count_r {
-                write!(f, "       ")?;
-            }
-
             for q in min_q..=max_q {
                 let hex = Hex { q, r };
                 let q_str = str_number_with_sign(q);
                 let r_str = str_number_with_sign(r);
 
-                let occuped = self.is_hex_occupied(&hex);
+                let occupied = self.is_hex_occupied(&hex);
 
-                if occuped {
+                if occupied {
                     write!(f, "[{},{}]", q_str, r_str)?;
                 } else {
-                    write!(f, "       ")?;
+                    write!(f, "   *   ")?;
                 }
             }
-            write!(f, "\n")?;
         }
 
-        write!(f, "GRID END")
+        write!(f, "\nGRID END")
     }
 }
 

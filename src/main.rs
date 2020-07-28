@@ -6,6 +6,7 @@ use hive::rule::single_hive_rule_validation;
 fn main() {
     let piece = Piece::queen_bee();
 
+    let hex0 = Hex { q: 0, r: 0 };
     let hex1 = Hex { q: 2, r: 2 };
     let hex2 = Hex { q: 3, r: 2 };
     let hex3 = Hex { q: 1, r: 3 };
@@ -17,6 +18,7 @@ fn main() {
     let hex9 = Hex { q: 3, r: 0 };
 
     let mut grid = Grid::new()
+        .place_piece_to_hex(piece.clone(), &hex0)
         .place_piece_to_hex(piece.clone(), &hex1)
         .place_piece_to_hex(piece.clone(), &hex2)
         .place_piece_to_hex(piece.clone(), &hex2)

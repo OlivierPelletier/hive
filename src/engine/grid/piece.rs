@@ -9,9 +9,10 @@ pub enum PieceType {
     MOSQUITO,
     SOLDIERANT,
     SPIDER,
+    NONE,
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Piece {
     pub p_type: PieceType,
 }
@@ -58,10 +59,6 @@ impl Piece {
             p_type: PieceType::SPIDER,
         }
     }
-
-    // pub fn available_moves(&self, self_hex: Hex, grid: Grid) -> Vec<Hex> {
-    //     Vec::new()
-    // }
 }
 
 impl Display for Piece {
