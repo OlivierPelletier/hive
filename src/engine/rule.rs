@@ -1,3 +1,4 @@
+use crate::engine::grid::piece::PieceType;
 use crate::grid::geo::hex::Hex;
 use crate::grid::Grid;
 
@@ -28,4 +29,30 @@ pub fn single_hive_rule_validation(grid: &Grid, from: &Hex, to: &Hex) -> bool {
     }
 
     is_valid
+}
+
+pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
+    let piece = grid.get_piece_copy(hex);
+    let mut moves: Vec<Hex> = Vec::new();
+
+    if piece.p_type == PieceType::QUEENBEE {
+        moves = queen_modes(grid, hex);
+    }
+
+    moves
+}
+
+fn queen_modes(grid: &Grid, hex: &Hex) -> Vec<Hex> {
+    let mut moves: Vec<Hex> = Vec::new();
+
+    for neighbor in hex.neighbors() {
+        if single_hive_rule_validation(grid, hex, &neighbor)
+            && grid.is_hex_accessible_from(&neighbor, hex)
+            && !grid.is_hex_occupied(&neighbor)
+        {
+            moves.push(neighbor);
+        }
+    }
+
+    moves
 }

@@ -1,4 +1,4 @@
-use crate::engine::grid::piece::PieceType;
+use crate::engine::grid::piece::{PieceColor, PieceType};
 use crate::grid::geo::cube::Cube;
 use crate::grid::geo::hex::Hex;
 use crate::grid::piece::Piece;
@@ -55,6 +55,7 @@ impl Grid {
     pub fn get_piece_copy(&self, hex: &Hex) -> Piece {
         let none = Piece {
             p_type: PieceType::NONE,
+            p_color: PieceColor::NONE,
         };
 
         if self.is_hex_occupied(hex) {
@@ -254,13 +255,13 @@ impl Display for Grid {
                             write!(f, "{}", hex)?;
                         } else {
                             let piece = self.get_piece_copy(&hex);
-                            write!(f, " [{}] ", piece)?;
+                            write!(f, " {} ", piece)?;
                         }
                     } else {
                         if m % 2 == 1 {
                             write!(f, "   __   ")?;
                         } else {
-                            write!(f, "   ˉˉ   ")?;
+                            write!(f, "{}", hex)?;
                         }
                     }
                 }
