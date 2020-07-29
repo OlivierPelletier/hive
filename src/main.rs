@@ -9,12 +9,20 @@ fn main() {
         .place_piece_to_hex(Piece::beetle().black(), &Hex::new(-1, 0))
         .place_piece_to_hex(Piece::grasshopper().white(), &Hex::new(1, 0))
         .place_piece_to_hex(Piece::grasshopper().black(), &Hex::new(-2, 0))
-        .place_piece_to_hex(Piece::soldier_ant().white(), &Hex::new(2, -1))
+        .place_piece_to_hex(Piece::queen_bee().white(), &Hex::new(2, -1))
         .place_piece_to_hex(Piece::soldier_ant().black(), &Hex::new(-3, 1))
-        .place_piece_to_hex(Piece::queen_bee().white(), &Hex::new(1, 1))
+        .place_piece_to_hex(Piece::soldier_ant().white(), &Hex::new(3, -1))
         .place_piece_to_hex(Piece::queen_bee().black(), &Hex::new(-2, -1));
 
     println!("{}", grid);
 
-    println!("{:?}", available_moves(&grid, &Hex::new(1, 1)))
+    println!(
+        "W QBEE MOVES: {:?}",
+        available_moves(&grid, &Hex::new(1, 1))
+    );
+
+    println!(
+        "B QBEE MOVES: {:?}",
+        available_moves(&grid, &Hex::new(-2, -1))
+    )
 }
