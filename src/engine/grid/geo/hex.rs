@@ -41,13 +41,17 @@ impl Display for Hex {
     fn fmt(&self, f: &mut Formatter) -> Result {
         let mut str: String = self.q.to_string() + "," + self.r.to_string().as_str();
 
-        for i in str.len()..8 {
-            if i % 2 == 1 {
-                str = " ".to_owned() + &str;
-            } else {
-                str = str + " ";
+        if str.len() <= 6 {
+            for i in str.len()..8 {
+                if i % 2 == 1 {
+                    str = " ".to_owned() + &str;
+                } else {
+                    str = str + " ";
+                }
             }
+            write!(f, "{}", str)
+        } else {
+            write!(f, "{}", "   ?,?  ")
         }
-        write!(f, "{}", str)
     }
 }

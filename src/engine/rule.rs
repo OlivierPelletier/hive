@@ -36,13 +36,13 @@ pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
     let mut moves: Vec<Hex> = Vec::new();
 
     if piece.p_type == PieceType::QUEENBEE {
-        moves = queen_modes(grid, hex);
+        moves = queen_moves(grid, hex);
     }
 
     moves
 }
 
-fn queen_modes(grid: &Grid, hex: &Hex) -> Vec<Hex> {
+fn queen_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
     let mut moves: Vec<Hex> = Vec::new();
 
     for neighbor in hex.neighbors() {
