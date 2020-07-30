@@ -1,5 +1,4 @@
 use crate::engine::grid::piece::{PieceColor, PieceType};
-use crate::grid::geo::cube::Cube;
 use crate::grid::geo::hex::Hex;
 use crate::grid::piece::Piece;
 use std::collections::HashMap;
@@ -10,264 +9,193 @@ pub mod piece;
 
 #[derive(Debug, Clone)]
 pub struct Grid {
-    pub grid: HashMap<Hex, Vec<Piece>>,
+  pub grid: HashMap<Hex, Vec<Piece>>,
 }
 
 impl Grid {
-    pub fn new() -> Grid {
-        let grid: HashMap<Hex, Vec<Piece>> = HashMap::new();
+  pub fn new() -> Grid {
+    let grid: HashMap<Hex, Vec<Piece>> = HashMap::new();
 
-        return Grid { grid };
+    return Grid { grid };
+  }
+
+  pub fn place_piece_to_hex(&self, piece: Piece, hex: &Hex) -> Grid {
+    let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
+    let mut _vec: Vec<Piece> = match _grid.get(hex) {
+      None => Vec::new(),
+      Some(v) => v.to_vec(),
+    };
+    _vec.push(piece);
+    _grid.insert(*hex, _vec);
+
+    Grid { grid: _grid }
+  }
+
+  pub fn remove_top_piece_from_hex(&self, hex: &Hex) -> (Grid, Option<Piece>) {
+    let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
+    let mut _vec: Vec<Piece> = match _grid.get(hex) {
+      None => Vec::new(),
+      Some(v) => v.to_vec(),
+    };
+    let piece = _vec.pop();
+    _grid.insert(*hex, _vec);
+
+    (Grid { grid: _grid }, piece)
+  }
+
+  pub fn move_piece_from_to(&self, from: &Hex, to: &Hex) -> Grid {
+    let mut _grid_piece = self.remove_top_piece_from_hex(from);
+    match _grid_piece.1 {
+      Some(p) => _grid_piece.0.place_piece_to_hex(p, to),
+      None => _grid_piece.0,
     }
+  }
 
-    pub fn place_piece_to_hex(&self, piece: Piece, hex: &Hex) -> Grid {
-        let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
-        let mut _vec: Vec<Piece> = match _grid.get(hex) {
-            None => Vec::new(),
-            Some(v) => v.to_vec(),
-        };
-        _vec.push(piece);
-        _grid.insert(*hex, _vec);
+  pub fn find_top_piece(&self, hex: &Hex) -> Piece {
+    let none = Piece {
+      p_type: PieceType::NONE,
+      p_color: PieceColor::NONE,
+    };
 
-        Grid { grid: _grid }
+    if self.is_hex_occupied(hex) {
+      match self.grid.get(hex) {
+        Some(v) => match v.clone().pop() {
+          Some(p) => p,
+          None => none,
+        },
+        None => none,
+      }
+    } else {
+      none
     }
+  }
 
-    pub fn remove_top_piece_from_hex(&self, hex: &Hex) -> (Grid, Option<Piece>) {
-        let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
-        let mut _vec: Vec<Piece> = match _grid.get(hex) {
-            None => Vec::new(),
-            Some(v) => v.to_vec(),
-        };
-        let piece = _vec.pop();
-        _grid.insert(*hex, _vec);
+  pub fn is_hex_surrounded(&self, hex: &Hex) -> bool {
+    let neighbors = hex.neighbors();
 
-        (Grid { grid: _grid }, piece)
-    }
+    let mut is_surrended = true;
 
-    pub fn move_piece_from_to(&self, from: &Hex, to: &Hex) -> Grid {
-        let mut _grid_piece = self.remove_top_piece_from_hex(from);
-        match _grid_piece.1 {
-            Some(p) => _grid_piece.0.place_piece_to_hex(p, to),
-            None => _grid_piece.0,
+    for neighbor in &neighbors {
+      let pieces = self.grid.get(neighbor);
+      is_surrended = is_surrended
+        && match pieces {
+          Some(p) => !p.is_empty(),
+          None => false,
         }
     }
 
-    pub fn get_piece_copy(&self, hex: &Hex) -> Piece {
-        let none = Piece {
-            p_type: PieceType::NONE,
-            p_color: PieceColor::NONE,
-        };
+    is_surrended
+  }
 
-        if self.is_hex_occupied(hex) {
-            match self.grid.get(hex) {
-                Some(v) => match v.clone().pop() {
-                    Some(p) => p,
-                    None => none,
-                },
-                None => none,
-            }
-        } else {
-            none
-        }
+  pub fn is_hex_neighbor_of(&self, hex: &Hex, of: &Hex) -> bool {
+    let mut is_neighbor = false;
+
+    for neighbor in hex.neighbors() {
+      is_neighbor = is_neighbor || neighbor == *of;
     }
 
-    pub fn is_hex_surrounded(&self, hex: &Hex) -> bool {
-        let neighbors = hex.neighbors();
+    is_neighbor
+  }
 
-        let mut is_surrended = true;
+  pub fn is_hex_occupied(&self, hex: &Hex) -> bool {
+    let pieces = self.grid.get(hex);
 
-        for neighbor in &neighbors {
-            let pieces = self.grid.get(neighbor);
-            is_surrended = is_surrended
-                && match pieces {
-                    Some(p) => !p.is_empty(),
-                    None => false,
-                }
-        }
+    match pieces {
+      Some(p) => !p.is_empty(),
+      None => false,
+    }
+  }
 
-        is_surrended
+  pub fn is_hex_alone(&self, hex: &Hex) -> bool {
+    let neighbors = hex.neighbors();
+
+    let mut is_alone = true;
+
+    for neighbor in neighbors {
+      is_alone = is_alone && !self.is_hex_occupied(&neighbor);
     }
 
-    pub fn is_hex_accessible_from(&self, hex: &Hex, from: &Hex) -> bool {
-        let is_accessible;
+    is_alone
+  }
 
-        if self.is_hex_neighbor_of(hex, from) {
-            let cube = hex.clone().to_cube();
-            let cube_from = from.clone().to_cube();
-
-            if cube.x == cube_from.x {
-                let xz_offset = cube.z - cube_from.z;
-                let xy_offset = cube.y - cube_from.y;
-
-                let c1 = Cube {
-                    x: cube_from.x - xz_offset,
-                    y: cube_from.y,
-                    z: cube.z,
-                };
-                let c2 = Cube {
-                    x: cube_from.x - xy_offset,
-                    y: cube.y,
-                    z: cube_from.z,
-                };
-
-                let h1 = c1.to_axial();
-                let h2 = c2.to_axial();
-
-                is_accessible = !(self.is_hex_occupied(&h1) && self.is_hex_occupied(&h2));
-            } else if cube.z == cube_from.z {
-                let zx_offset = cube.x - cube_from.x;
-                let zy_offset = cube.y - cube_from.y;
-
-                let c1 = Cube {
-                    x: cube.x,
-                    y: cube_from.y,
-                    z: cube_from.z - zx_offset,
-                };
-                let c2 = Cube {
-                    x: cube_from.x,
-                    y: cube.y,
-                    z: cube_from.z - zy_offset,
-                };
-
-                let h1 = c1.to_axial();
-                let h2 = c2.to_axial();
-
-                is_accessible = !(self.is_hex_occupied(&h1) && self.is_hex_occupied(&h2));
-            } else {
-                let yx_offset = cube.x - cube_from.x;
-                let yz_offset = cube.z - cube_from.z;
-
-                let c1 = Cube {
-                    x: cube.x,
-                    y: cube_from.y - yx_offset,
-                    z: cube_from.z,
-                };
-                let c2 = Cube {
-                    x: cube_from.x,
-                    y: cube_from.y - yz_offset,
-                    z: cube.z,
-                };
-
-                let h1 = c1.to_axial();
-                let h2 = c2.to_axial();
-
-                is_accessible = !(self.is_hex_occupied(&h1) && self.is_hex_occupied(&h2));
-            }
-        } else {
-            is_accessible = false;
-        }
-        is_accessible
+  pub fn number_of_pieces(&self) -> usize {
+    let mut count = 0;
+    for vec in self.grid.values() {
+      count = count + vec.len()
     }
 
-    pub fn is_hex_neighbor_of(&self, hex: &Hex, of: &Hex) -> bool {
-        let mut is_neighbor = false;
-
-        for neighbor in hex.neighbors() {
-            is_neighbor = is_neighbor || neighbor == *of;
-        }
-
-        is_neighbor
-    }
-
-    pub fn is_hex_occupied(&self, hex: &Hex) -> bool {
-        let pieces = self.grid.get(hex);
-
-        match pieces {
-            Some(p) => !p.is_empty(),
-            None => false,
-        }
-    }
-
-    pub fn is_hex_alone(&self, hex: &Hex) -> bool {
-        let neighbors = hex.neighbors();
-
-        let mut is_alone = true;
-
-        for neighbor in neighbors {
-            is_alone = is_alone && !self.is_hex_occupied(&neighbor);
-        }
-
-        is_alone
-    }
-
-    pub fn number_of_pieces(&self) -> usize {
-        let mut count = 0;
-        for vec in self.grid.values() {
-            count = count + vec.len()
-        }
-
-        count
-    }
+    count
+  }
 }
 
 impl Display for Grid {
-    fn fmt(&self, f: &mut Formatter) -> Result {
-        let mut initialized = false;
-        let mut min_q = 0;
-        let mut max_q = 0;
-        let mut min_r = 0;
-        let mut max_r = 0;
+  fn fmt(&self, f: &mut Formatter) -> Result {
+    let mut initialized = false;
+    let mut min_q = 0;
+    let mut max_q = 0;
+    let mut min_r = 0;
+    let mut max_r = 0;
 
-        for key in self.grid.keys() {
-            if !initialized {
-                min_q = key.q;
-                max_q = key.q;
-                min_r = key.r;
-                max_r = key.r;
-                initialized = true;
-            } else {
-                if min_q > key.q {
-                    min_q = key.q;
-                } else if max_q < key.q {
-                    max_q = key.q;
-                }
-
-                if min_r > key.r {
-                    min_r = key.r;
-                } else if max_r < key.r {
-                    max_r = key.r;
-                }
-            }
+    for key in self.grid.keys() {
+      if !initialized {
+        min_q = key.q;
+        max_q = key.q;
+        min_r = key.r;
+        max_r = key.r;
+        initialized = true;
+      } else {
+        if min_q > key.q {
+          min_q = key.q;
+        } else if max_q < key.q {
+          max_q = key.q;
         }
 
-        let mut count_r = -1;
-
-        write!(f, "GRID START")?;
-        for r in min_r..=max_r {
-            for m in 1..=2 {
-                write!(f, "\n")?;
-
-                if m % 2 == 1 {
-                    count_r += 1;
-                }
-
-                for _i in 0..count_r {
-                    write!(f, "    ")?;
-                }
-
-                for q in min_q..=max_q {
-                    let hex = Hex::new(q, r);
-
-                    let occupied = self.is_hex_occupied(&hex);
-
-                    if occupied {
-                        if m % 2 == 0 {
-                            write!(f, "{}", hex)?;
-                        } else {
-                            let piece = self.get_piece_copy(&hex);
-                            write!(f, " {} ", piece)?;
-                        }
-                    } else {
-                        if m % 2 == 1 {
-                            write!(f, "   __   ")?;
-                        } else {
-                            write!(f, "{}", hex)?;
-                        }
-                    }
-                }
-            }
+        if min_r > key.r {
+          min_r = key.r;
+        } else if max_r < key.r {
+          max_r = key.r;
         }
-
-        write!(f, "\nGRID END")
+      }
     }
+
+    let mut count_r = -1;
+
+    write!(f, "GRID START")?;
+    for r in min_r..=max_r {
+      for m in 1..=2 {
+        write!(f, "\n")?;
+
+        if m % 2 == 1 {
+          count_r += 1;
+        }
+
+        for _i in 0..count_r {
+          write!(f, "    ")?;
+        }
+
+        for q in min_q..=max_q {
+          let hex = Hex::new(q, r);
+
+          let occupied = self.is_hex_occupied(&hex);
+
+          if occupied {
+            if m % 2 == 0 {
+              write!(f, "{}", hex)?;
+            } else {
+              let piece = self.find_top_piece(&hex);
+              write!(f, " {} ", piece)?;
+            }
+          } else {
+            if m % 2 == 1 {
+              write!(f, "   __   ")?;
+            } else {
+              write!(f, "{}", hex)?;
+            }
+          }
+        }
+      }
+    }
+
+    write!(f, "\nGRID END")
+  }
 }
