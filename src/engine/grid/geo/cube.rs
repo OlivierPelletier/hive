@@ -9,6 +9,22 @@ pub struct Cube {
 }
 
 impl Cube {
+    pub fn new(x: i64, z: i64, y: i64) -> Cube {
+        Cube { x, z, y }
+    }
+
+    pub fn xy(x: i64, y: i64) -> Cube {
+        Cube { x, y, z: -x - y }
+    }
+
+    pub fn xz(x: i64, z: i64) -> Cube {
+        Cube { x, y: -x - z, z }
+    }
+
+    pub fn yz(y: i64, z: i64) -> Cube {
+        Cube { x: -y - z, y, z }
+    }
+
     pub fn to_axial(&self) -> Hex {
         Hex {
             q: self.x,
