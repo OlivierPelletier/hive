@@ -107,3 +107,50 @@ pub fn grasshopper_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
 
   moves
 }
+
+pub fn spider_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
+  let mut moves: Vec<Hex> = Vec::new();
+  let start_trail: Vec<Hex> = vec![*hex];
+
+  let trails: Vec<Vec<Hex>> = spider_moves_it(grid, hex, hex, start_trail);
+
+  for trail in trails {
+    if trail.len() == 4 {
+      match trail.last() {
+        Some(h) => {
+          if !moves.contains(h) && one_hive_rule(grid, hex, h) {
+            moves.push(*h);
+          }
+        }
+        None => (),
+      }
+    }
+  }
+
+  moves
+}
+
+fn spider_moves_it(grid: &Grid, initital_hex: &Hex, hex: &Hex, trail: Vec<Hex>) -> Vec<Vec<Hex>> {
+  let mut _trail = trail.clone();
+  let mut trails: Vec<Vec<Hex>> = Vec::new();
+
+  for neighbor in hex.neighbors() {
+    if !_trail.contains(&neighbor)
+      && !grid.is_hex_occupied(&neighbor)
+      && one_hive_rule(grid, initital_hex, &neighbor)
+      && freedom_to_move_rule(grid, &hex, &neighbor)
+    {
+      let mut temp_trail = _trail.clone();
+      temp_trail.push(neighbor);
+
+      if temp_trail.len() < 4 {
+        let mut new_trails = spider_moves_it(grid, initital_hex, &neighbor, temp_trail);
+        trails.append(&mut new_trails);
+      } else {
+        trails.push(temp_trail);
+      }
+    }
+  }
+
+  trails
+}

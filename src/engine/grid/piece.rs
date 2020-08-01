@@ -22,7 +22,7 @@ impl Debug for PieceType {
       PieceType::MOSQUITO => write!(f, "MSQT"),
       PieceType::SOLDIERANT => write!(f, "SLDR"),
       PieceType::SPIDER => write!(f, "SPDR"),
-      PieceType::NONE => write!(f, "N//A"),
+      PieceType::NONE => write!(f, " NA "),
     }
   }
 }
