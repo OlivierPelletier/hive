@@ -1,3 +1,4 @@
+use crate::engine::grid::piece::PieceType;
 use crate::grid::geo::cube::Cube;
 use crate::grid::geo::hex::Hex;
 use crate::grid::Grid;
@@ -238,4 +239,35 @@ fn soldier_ant_moves_it(
   }
 
   _moves
+}
+
+pub fn mosquito_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
+  let mut moves: Vec<Hex> = Vec::new();
+  let mut found_types: Vec<PieceType> = Vec::new();
+
+  for neighbor in hex.neighbors() {
+    let piece = grid.find_top_piece(&neighbor);
+    found_types.push(piece.p_type);
+  }
+
+  for found_type in found_types {
+    let mut temp_moves: Vec<Hex> = match found_type {
+      PieceType::QUEENBEE => queen_moves(grid, hex),
+      PieceType::BEETLE => beetle_moves(grid, hex),
+      PieceType::GRASSHOPPER => grasshopper_moves(grid, hex),
+      PieceType::LADYBUG => ladybug_moves(grid, hex),
+      PieceType::SOLDIERANT => soldier_ant_moves(grid, hex),
+      PieceType::SPIDER => spider_moves(grid, hex),
+      PieceType::MOSQUITO => Vec::new(),
+      PieceType::NONE => Vec::new(),
+    };
+
+    for temp_move in temp_moves {
+      if !moves.contains(&temp_move) {
+        moves.push(temp_move)
+      }
+    }
+  }
+
+  moves
 }

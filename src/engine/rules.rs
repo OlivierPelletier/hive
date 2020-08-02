@@ -8,32 +8,17 @@ pub mod moves;
 
 pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   let piece = grid.find_top_piece(hex);
-  let mut moves: Vec<Hex> = Vec::new();
 
-  match piece.p_type {
-    PieceType::QUEENBEE => {
-      moves = moves::queen_moves(grid, hex);
-    }
-    PieceType::BEETLE => {
-      moves = moves::beetle_moves(grid, hex);
-    }
-    PieceType::GRASSHOPPER => {
-      moves = moves::grasshopper_moves(grid, hex);
-    }
-    PieceType::LADYBUG => {
-      moves = moves::ladybug_moves(grid, hex);
-    }
-    PieceType::MOSQUITO => {}
-    PieceType::SOLDIERANT => {
-      moves = moves::soldier_ant_moves(grid, hex);
-    }
-    PieceType::SPIDER => {
-      moves = moves::spider_moves(grid, hex);
-    }
-    PieceType::NONE => {
-      moves = Vec::new();
-    }
-  }
+  let mut moves: Vec<Hex> = match piece.p_type {
+    PieceType::QUEENBEE => moves::queen_moves(grid, hex),
+    PieceType::BEETLE => moves::beetle_moves(grid, hex),
+    PieceType::GRASSHOPPER => moves::grasshopper_moves(grid, hex),
+    PieceType::LADYBUG => moves::ladybug_moves(grid, hex),
+    PieceType::MOSQUITO => moves::mosquito_moves(grid, hex),
+    PieceType::SOLDIERANT => moves::soldier_ant_moves(grid, hex),
+    PieceType::SPIDER => moves::spider_moves(grid, hex),
+    PieceType::NONE => Vec::new(),
+  };
 
   moves
 }
