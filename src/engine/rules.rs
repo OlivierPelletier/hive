@@ -24,11 +24,15 @@ pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
       moves = moves::ladybug_moves(grid, hex);
     }
     PieceType::MOSQUITO => {}
-    PieceType::SOLDIERANT => {}
+    PieceType::SOLDIERANT => {
+      moves = moves::soldier_ant_moves(grid, hex);
+    }
     PieceType::SPIDER => {
       moves = moves::spider_moves(grid, hex);
     }
-    PieceType::NONE => {}
+    PieceType::NONE => {
+      moves == Vec::new();
+    }
   }
 
   moves

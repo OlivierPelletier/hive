@@ -53,4 +53,8 @@ fn main() {
     "B LDBG MOVES: {:?}",
     available_moves(&grid, &Hex::new(-1, -1))
   );
+  println!(
+    "W SLDR MOVES: {:?}",
+    available_moves(&grid, &Hex::new(3, -1))
+  );
 }
