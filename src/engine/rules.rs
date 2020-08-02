@@ -20,7 +20,9 @@ pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
     PieceType::GRASSHOPPER => {
       moves = moves::grasshopper_moves(grid, hex);
     }
-    PieceType::LADYBUG => {}
+    PieceType::LADYBUG => {
+      moves = moves::ladybug_moves(grid, hex);
+    }
     PieceType::MOSQUITO => {}
     PieceType::SOLDIERANT => {}
     PieceType::SPIDER => {
