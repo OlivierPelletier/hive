@@ -20,7 +20,7 @@ impl Debug for PieceType {
       PieceType::GRASSHOPPER => write!(f, "GRHP"),
       PieceType::LADYBUG => write!(f, "LDBG"),
       PieceType::MOSQUITO => write!(f, "MSQT"),
-      PieceType::SOLDIERANT => write!(f, "SLDR"),
+      PieceType::SOLDIERANT => write!(f, "SANT"),
       PieceType::SPIDER => write!(f, "SPDR"),
       PieceType::NONE => write!(f, " NA "),
     }

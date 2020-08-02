@@ -31,7 +31,7 @@ pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
       moves = moves::spider_moves(grid, hex);
     }
     PieceType::NONE => {
-      moves == Vec::new();
+      moves = Vec::new();
     }
   }
 

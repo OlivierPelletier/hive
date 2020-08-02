@@ -54,7 +54,7 @@ fn main() {
     available_moves(&grid, &Hex::new(-1, -1))
   );
   println!(
-    "W SLDR MOVES: {:?}",
+    "W SANT MOVES: {:?}",
     available_moves(&grid, &Hex::new(3, -1))
   );
 }
