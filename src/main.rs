@@ -1,7 +1,7 @@
 use hive::grid::geo::hex::Hex;
 use hive::grid::piece::Piece;
 use hive::grid::Grid;
-use hive::rules::available_moves;
+use hive::moves::available_moves;
 
 fn main() {
   let grid = Grid::new()
@@ -16,7 +16,8 @@ fn main() {
     .place_piece_to_hex(Piece::grasshopper().white(), &Hex::new(2, 0))
     .place_piece_to_hex(Piece::beetle().black(), &Hex::new(-2, 1))
     .place_piece_to_hex(Piece::spider().white(), &Hex::new(0, 1))
-    .place_piece_to_hex(Piece::ladybug().black(), &Hex::new(-1, -1));
+    .place_piece_to_hex(Piece::ladybug().black(), &Hex::new(-1, -1))
+    .place_piece_to_hex(Piece::mosquito().white(), &Hex::new(-2, -1));
 
   println!("{}", grid);
 
@@ -49,12 +50,19 @@ fn main() {
     "W SPDR MOVES: {:?}",
     available_moves(&grid, &Hex::new(0, 1))
   );
+
   println!(
     "B LDBG MOVES: {:?}",
     available_moves(&grid, &Hex::new(-1, -1))
   );
+
   println!(
     "W SANT MOVES: {:?}",
     available_moves(&grid, &Hex::new(3, -1))
+  );
+
+  println!(
+    "W MSQT MOVES: {:?}",
+    available_moves(&grid, &Hex::new(-2, -1))
   );
 }

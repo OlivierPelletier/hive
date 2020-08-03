@@ -1,27 +1,8 @@
-use crate::engine::grid::piece::PieceType;
 use crate::grid::geo::cube::Cube;
 use crate::grid::geo::hex::Hex;
 use crate::grid::Grid;
 
 pub mod hive;
-pub mod moves;
-
-pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
-  let piece = grid.find_top_piece(hex);
-
-  let mut moves: Vec<Hex> = match piece.p_type {
-    PieceType::QUEENBEE => moves::queen_moves(grid, hex),
-    PieceType::BEETLE => moves::beetle_moves(grid, hex),
-    PieceType::GRASSHOPPER => moves::grasshopper_moves(grid, hex),
-    PieceType::LADYBUG => moves::ladybug_moves(grid, hex),
-    PieceType::MOSQUITO => moves::mosquito_moves(grid, hex),
-    PieceType::SOLDIERANT => moves::soldier_ant_moves(grid, hex),
-    PieceType::SPIDER => moves::spider_moves(grid, hex),
-    PieceType::NONE => Vec::new(),
-  };
-
-  moves
-}
 
 pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
   let is_valid;
