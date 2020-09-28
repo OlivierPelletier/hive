@@ -39,13 +39,10 @@ pub fn extract_moves_from_paths(paths: Vec<Vec<Hex>>, path_expected_length: usiz
 
   for path in paths {
     if path.len() == path_expected_length {
-      match path.last() {
-        Some(h) => {
-          if !moves.contains(h) {
-            moves.push(*h);
-          }
+      if let Some(h) = path.last() {
+        if !moves.contains(h) {
+          moves.push(*h);
         }
-        None => (),
       }
     }
   }

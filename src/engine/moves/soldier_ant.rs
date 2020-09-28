@@ -17,8 +17,8 @@ fn soldier_ant_moves_it(
   trail: Vec<Hex>,
   moves: Vec<Hex>,
 ) -> Vec<Hex> {
-  let mut _trail = trail.clone();
-  let mut _moves = moves.clone();
+  let mut _trail = trail;
+  let mut _moves = moves;
 
   for neighbor in hex.neighbors() {
     if !_trail.contains(&neighbor)

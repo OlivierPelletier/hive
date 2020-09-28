@@ -70,7 +70,7 @@ impl Cube {
       },
     ];
 
-    return neighbors;
+    neighbors
   }
 }
 

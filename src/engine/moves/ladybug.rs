@@ -11,7 +11,7 @@ pub fn ladybug_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
 }
 
 fn ladybug_moves_it(grid: &Grid, hex: &Hex, initital_hex: &Hex, path: Vec<Hex>) -> Vec<Vec<Hex>> {
-  let mut _path = path.clone();
+  let mut _path = path;
   let mut paths: Vec<Vec<Hex>> = Vec::new();
 
   for neighbor in hex.neighbors() {

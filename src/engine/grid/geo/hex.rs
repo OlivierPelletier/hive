@@ -33,7 +33,7 @@ impl Hex {
       Hex::new(q, r - 1),
     ];
 
-    return neighbors;
+    neighbors
   }
 }
 
@@ -46,7 +46,7 @@ impl Display for Hex {
         if i % 2 == 1 {
           str = " ".to_owned() + &str;
         } else {
-          str = str + " ";
+          str += " ";
         }
       }
       write!(f, "{}", str)

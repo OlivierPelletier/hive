@@ -16,7 +16,7 @@ impl Grid {
   pub fn new() -> Grid {
     let grid: HashMap<Hex, Vec<Piece>> = HashMap::new();
 
-    return Grid { grid };
+    Grid { grid }
   }
 
   pub fn place_piece_to_hex(&self, piece: Piece, hex: &Hex) -> Grid {
@@ -121,10 +121,16 @@ impl Grid {
   pub fn number_of_pieces(&self) -> usize {
     let mut count = 0;
     for vec in self.grid.values() {
-      count = count + vec.len()
+      count += vec.len()
     }
 
     count
+  }
+}
+
+impl Default for Grid {
+  fn default() -> Self {
+    Self::new()
   }
 }
 
@@ -163,7 +169,7 @@ impl Display for Grid {
     write!(f, "GRID START")?;
     for r in min_r..=max_r {
       for m in 1..=2 {
-        write!(f, "\n")?;
+        writeln!(f)?;
 
         if m % 2 == 1 {
           count_r += 1;
@@ -185,12 +191,10 @@ impl Display for Grid {
               let piece = self.find_top_piece(&hex);
               write!(f, " {} ", piece)?;
             }
+          } else if m % 2 == 1 {
+            write!(f, "   __   ")?;
           } else {
-            if m % 2 == 1 {
-              write!(f, "   __   ")?;
-            } else {
-              write!(f, "{}", hex)?;
-            }
+            write!(f, "{}", hex)?;
           }
         }
       }

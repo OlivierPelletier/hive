@@ -7,9 +7,8 @@ pub fn one_hive_rule_grid_validation(grid: &Grid) -> bool {
   let mut keys_it = grid.grid.keys();
   let mut found_pieces = HashSet::new();
 
-  match keys_it.next() {
-    Some(start) => found_pieces = one_hive_rule_iterative_pieces_search(grid, found_pieces, *start),
-    None => (),
+  if let Some(start) = keys_it.next() {
+    found_pieces = one_hive_rule_iterative_pieces_search(grid, found_pieces, *start)
   }
 
   if found_pieces.len() != grid.number_of_pieces() {
