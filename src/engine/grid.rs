@@ -206,7 +206,9 @@ impl Display for Grid {
 
 #[cfg(test)]
 mod tests {
-  use super::*;
+  use super::geo::hex::Hex;
+  use super::piece::Piece;
+  use super::Grid;
 
   #[test]
   fn given_empty_grid_when_placing_piece_then_grid_contains_piece() {
