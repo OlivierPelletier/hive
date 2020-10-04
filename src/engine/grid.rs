@@ -1,6 +1,6 @@
-use crate::engine::grid::piece::{PieceColor, PieceType};
 use crate::grid::geo::hex::Hex;
 use crate::grid::piece::Piece;
+use crate::grid::piece::{PieceColor, PieceType};
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter, Result};
 
@@ -201,5 +201,18 @@ impl Display for Grid {
     }
 
     write!(f, "\nGRID END")
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn given_empty_grid_when_placing_piece_then_grid_contains_piece() {
+    let mut grid = Grid::new();
+    let hex = Hex::new(0, 0);
+    grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
+    assert!(grid.grid.contains_key(&hex));
   }
 }

@@ -1,6 +1,6 @@
-use crate::engine::moves::extract_moves_from_paths;
 use crate::grid::geo::hex::Hex;
 use crate::grid::Grid;
+use crate::moves::extract_moves_from_paths;
 use crate::rules::{freedom_to_move_rule, one_hive_rule};
 
 pub fn spider_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
