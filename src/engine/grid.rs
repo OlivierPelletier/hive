@@ -217,4 +217,16 @@ mod tests {
     grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
     assert!(grid.grid.contains_key(&hex));
   }
+
+  #[test]
+  fn given_non_empty_grid_when_removing_piece_then_grid_doesnt_contains_piece() {
+    let mut grid = Grid::new();
+    let hex = Hex::new(0, 0);
+    grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
+    grid = grid.remove_top_piece_from_hex(&hex).0;
+    match grid.grid.get(&hex) {
+      Some(p) => assert!(p.len() == 0),
+      None => assert!(false),
+    }
+  }
 }
