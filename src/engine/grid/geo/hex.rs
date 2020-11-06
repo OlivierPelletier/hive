@@ -51,7 +51,7 @@ impl Display for Hex {
       }
       write!(f, "{}", str)
     } else {
-      write!(f, "{}", "   ?,?  ")
+      write!(f, "   ?,?  ")
     }
   }
 }
