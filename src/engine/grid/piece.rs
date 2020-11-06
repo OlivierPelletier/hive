@@ -27,7 +27,7 @@ impl Debug for PieceType {
   }
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum PieceColor {
   BLACK,
   WHITE,
@@ -44,7 +44,7 @@ impl Debug for PieceColor {
   }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Piece {
   pub p_type: PieceType,
   pub p_color: PieceColor,

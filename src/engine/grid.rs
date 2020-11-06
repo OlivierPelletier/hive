@@ -211,7 +211,7 @@ mod tests {
   use super::Grid;
 
   #[test]
-  fn given_empty_grid_when_placing_piece_then_grid_contains_piece() {
+  fn given_a_grid_when_placing_piece_to_hex_then_hex_contains_piece() {
     let mut grid = Grid::new();
     let hex = Hex::new(0, 0);
     grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
@@ -219,14 +219,47 @@ mod tests {
   }
 
   #[test]
-  fn given_non_empty_grid_when_removing_piece_then_grid_doesnt_contains_piece() {
+  fn given_a_grid_when_removing_piece_from_hex_then_piece_is_removed_from_hex() {
     let mut grid = Grid::new();
     let hex = Hex::new(0, 0);
     grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
     grid = grid.remove_top_piece_from_hex(&hex).0;
     match grid.grid.get(&hex) {
-      Some(p) => assert!(p.len() == 0),
+      Some(p) => assert_eq!(p.len(), 0),
       None => assert!(false),
     }
+  }
+
+  #[test]
+  fn given_a_grid_when_adding_two_pieces_on_same_hex_then_hex_contains_both_pieces() {
+    let mut grid = Grid::new();
+    let hex = Hex::new(0, 0);
+    grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
+    grid = grid.place_piece_to_hex(Piece::spider(), &hex);
+    match grid.grid.get(&hex) {
+      Some(p) => {
+        let mut piece = p.clone();
+        assert_eq!(p.len(), 2);
+        assert_eq!(piece.pop(), Some(Piece::spider()));
+        assert_eq!(piece.pop(), Some(Piece::queen_bee()));
+      }
+      None => assert!(false),
+    }
+  }
+
+  #[test]
+  fn given_a_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
+    let mut grid = Grid::new();
+    let from = Hex::new(0, 0);
+    let to = Hex::new(0, 1);
+    grid = grid.place_piece_to_hex(Piece::queen_bee(), &from);
+    grid = grid.move_piece_from_to(&from, &to);
+    match grid.grid.get(&from) {
+      Some(p) => {
+        assert_eq!(p.len(), 0);
+      }
+      None => assert!(false),
+    }
+    assert!(grid.grid.contains_key(&to));
   }
 }
