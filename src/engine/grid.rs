@@ -208,16 +208,16 @@ impl Display for Grid {
 mod tests {
   use super::geo::hex::Hex;
   use super::piece::Piece;
+  use super::piece::PieceType;
   use super::Grid;
 
   #[test]
-  fn given_a_grid_when_placing_piece_to_hex_then_hex_contains_piece() {
+  fn given_grid_when_placing_piece_to_hex_then_hex_contains_piece() {
     let mut grid = Grid::new();
     let hex = Hex::new(0, 0);
 
     grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
 
-    assert!(grid.grid.contains_key(&hex));
     match grid.grid.get(&hex) {
       Some(p) => {
         let mut piece = p.clone();
@@ -228,7 +228,7 @@ mod tests {
   }
 
   #[test]
-  fn given_a_grid_when_removing_piece_from_hex_then_piece_is_removed_from_hex() {
+  fn given_grid_when_removing_piece_from_hex_then_piece_is_removed_from_hex() {
     let mut grid = Grid::new();
     let hex = Hex::new(0, 0);
 
@@ -242,7 +242,7 @@ mod tests {
   }
 
   #[test]
-  fn given_a_grid_when_removing_piece_from_hex_containing_two_pieces_then_top_piece_is_removed_from_hex(
+  fn given_grid_when_removing_piece_from_hex_containing_two_pieces_then_top_piece_is_removed_from_hex(
   ) {
     let mut grid = Grid::new();
     let hex = Hex::new(0, 0);
@@ -261,7 +261,7 @@ mod tests {
   }
 
   #[test]
-  fn given_a_grid_when_adding_two_pieces_on_same_hex_then_hex_contains_both_pieces() {
+  fn given_grid_when_adding_two_pieces_on_same_hex_then_hex_contains_both_pieces() {
     let mut grid = Grid::new();
     let hex = Hex::new(0, 0);
 
@@ -280,7 +280,7 @@ mod tests {
   }
 
   #[test]
-  fn given_a_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
+  fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
     let mut grid = Grid::new();
     let from = Hex::new(0, 0);
     let to = Hex::new(0, 1);
@@ -305,7 +305,52 @@ mod tests {
   }
 
   #[test]
-  fn given_a_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and_hex_contains_both_pieces(
+  fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and_hex_contains_both_pieces(
   ) {
+    let mut grid = Grid::new();
+    let from = Hex::new(0, 0);
+    let to = Hex::new(0, 1);
+    grid = grid.place_piece_to_hex(Piece::beetle(), &from);
+    grid = grid.place_piece_to_hex(Piece::queen_bee(), &to);
+
+    grid = grid.move_piece_from_to(&from, &to);
+
+    match grid.grid.get(&from) {
+      Some(p) => {
+        assert_eq!(p.len(), 0);
+      }
+      None => assert!(false),
+    }
+
+    match grid.grid.get(&to) {
+      Some(p) => {
+        let mut piece = p.clone();
+        assert_eq!(piece.pop(), Some(Piece::beetle()));
+        assert_eq!(piece.pop(), Some(Piece::queen_bee()));
+      }
+      None => assert!(false),
+    }
+  }
+
+  #[test]
+  fn given_grid_when_finding_top_piece_then_top_piece_is_returned() {
+    let mut grid = Grid::new();
+    let hex = Hex::new(0, 0);
+    grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
+    grid = grid.place_piece_to_hex(Piece::ladybug(), &hex);
+
+    let piece = grid.find_top_piece(&hex);
+
+    assert_eq!(piece, Piece::ladybug());
+  }
+
+  #[test]
+  fn given_empty_grid_when_finding_top_piece_then_no_piece_is_returned() {
+    let grid = Grid::new();
+    let hex = Hex::new(0, 0);
+
+    let piece = grid.find_top_piece(&hex);
+
+    assert_eq!(piece.p_type, PieceType::NONE);
   }
 }
