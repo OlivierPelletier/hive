@@ -7,6 +7,10 @@ Hive is a bug-themed tabletop game, designed by John Yianni and published in 200
 ## Purpose
 The goal of this project is to create a reliable game engine for the game Hive using [Rust Programming Language](https://rust-lang.org). The project focus on stability and compatibility with [Web Assembly](https://webassembly.org/) to provide a way to integrate the Hive Engine into a web application.
 
+## Setup
+* Rust 1.45.2 (https://www.rust-lang.org/tools/install)
+* Wasm-pack (https://rustwasm.github.io/wasm-pack/installer/)
+
 ## Usage
 ### Run tests
 ```
@@ -18,27 +22,27 @@ cargo test
 cargo run
 ```
 
-## 🚴 Wasm Usage
+## Wasm Usage
 
-### 🛠️ Build with `wasm-pack build`
+### Build with `wasm-pack build`
 
 ```
 wasm-pack build
 ```
 
-### 🔬 Test in Headless Browsers with `wasm-pack test`
+### Test in Headless Browsers with `wasm-pack test`
 
 ```
 wasm-pack test --headless --firefox
 ```
 
-### 🎁 Publish to NPM with `wasm-pack publish`
+### Publish to NPM with `wasm-pack publish`
 
 ```
 wasm-pack publish
 ```
 
-## 🔋 Batteries Included
+## Batteries Included
 
 * [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen) for communicating
   between WebAssembly and JavaScript.
