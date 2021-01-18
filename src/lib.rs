@@ -19,5 +19,5 @@ extern "C" {
 
 #[wasm_bindgen]
 pub fn greet() {
-  alert("Hello, hive-wasm-test!");
+  alert("Hello! You're correctly binded with the Hive game engine.");
 }
