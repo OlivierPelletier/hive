@@ -1,4 +1,4 @@
-use crate::engine::grid::geo::hex::Hex;
+use crate::engine::grid::coordinate::hex::Hex;
 use crate::engine::grid::Grid;
 use crate::engine::moves::extract_moves_from_paths;
 use crate::engine::rules::{freedom_to_move_rule, one_hive_rule};

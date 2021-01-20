@@ -1,6 +1,6 @@
 use std::fmt::{Display, Formatter, Result};
 
-use crate::engine::grid::geo::cube::Cube;
+use crate::engine::grid::coordinate::cube::Cube;
 
 #[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub struct Hex {

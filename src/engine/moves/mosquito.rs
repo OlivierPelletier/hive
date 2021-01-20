@@ -1,4 +1,4 @@
-use crate::engine::grid::geo::hex::Hex;
+use crate::engine::grid::coordinate::hex::Hex;
 use crate::engine::grid::piece::PieceType;
 use crate::engine::grid::Grid;
 use crate::engine::moves::beetle::beetle_moves;

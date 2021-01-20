@@ -1,5 +1,5 @@
-use crate::engine::grid::geo::cube::Cube;
-use crate::engine::grid::geo::hex::Hex;
+use crate::engine::grid::coordinate::cube::Cube;
+use crate::engine::grid::coordinate::hex::Hex;
 use crate::engine::grid::Grid;
 use crate::engine::rules::one_hive_rule;
 

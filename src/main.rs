@@ -1,4 +1,4 @@
-use hive::engine::grid::geo::hex::Hex;
+use hive::engine::grid::coordinate::hex::Hex;
 use hive::engine::grid::piece::Piece;
 use hive::engine::grid::Grid;
 use hive::engine::moves::available_moves;

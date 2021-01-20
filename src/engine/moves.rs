@@ -1,4 +1,4 @@
-use crate::engine::grid::geo::hex::Hex;
+use crate::engine::grid::coordinate::hex::Hex;
 use crate::engine::grid::piece::PieceType;
 use crate::engine::grid::Grid;
 use crate::engine::moves::beetle::beetle_moves;
@@ -16,6 +16,10 @@ pub mod mosquito;
 pub mod queen_bee;
 pub mod soldier_ant;
 pub mod spider;
+
+#[cfg(test)]
+#[path = "../tests/moves_tests.rs"]
+mod moves_tests;
 
 pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   let piece = grid.find_top_piece(hex);

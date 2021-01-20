@@ -1,8 +1,12 @@
-use crate::engine::grid::geo::cube::Cube;
-use crate::engine::grid::geo::hex::Hex;
+use crate::engine::grid::coordinate::cube::Cube;
+use crate::engine::grid::coordinate::hex::Hex;
 use crate::engine::grid::Grid;
 
 pub mod hive;
+
+#[cfg(test)]
+#[path = "../tests/rules_tests.rs"]
+mod rules_tests;
 
 pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
   let is_valid;
