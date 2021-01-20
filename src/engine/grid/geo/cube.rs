@@ -1,5 +1,6 @@
-use crate::grid::geo::hex::Hex;
 use std::fmt::{Display, Formatter, Result};
+
+use crate::engine::grid::geo::hex::Hex;
 
 #[derive(PartialEq, Clone)]
 pub struct Cube {

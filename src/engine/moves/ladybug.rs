@@ -1,7 +1,7 @@
+use crate::engine::grid::geo::hex::Hex;
+use crate::engine::grid::Grid;
 use crate::engine::moves::extract_moves_from_paths;
-use crate::grid::geo::hex::Hex;
-use crate::grid::Grid;
-use crate::rules::one_hive_rule;
+use crate::engine::rules::one_hive_rule;
 
 pub fn ladybug_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   let initial_path: Vec<Hex> = vec![*hex];

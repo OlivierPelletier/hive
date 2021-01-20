@@ -1,9 +1,12 @@
-use hive::grid::geo::hex::Hex;
-use hive::grid::piece::Piece;
-use hive::grid::Grid;
-use hive::moves::available_moves;
+use hive::engine::grid::geo::hex::Hex;
+use hive::engine::grid::piece::Piece;
+use hive::engine::grid::Grid;
+use hive::engine::moves::available_moves;
+use hive::utils::set_panic_hook;
 
 fn main() {
+  set_panic_hook();
+
   let grid = Grid::new()
     .place_piece_to_hex(Piece::beetle().white(), &Hex::new(0, 0))
     .place_piece_to_hex(Piece::beetle().black(), &Hex::new(-1, 0))

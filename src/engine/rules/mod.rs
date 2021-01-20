@@ -1,6 +1,6 @@
-use crate::grid::geo::cube::Cube;
-use crate::grid::geo::hex::Hex;
-use crate::grid::Grid;
+use crate::engine::grid::geo::cube::Cube;
+use crate::engine::grid::geo::hex::Hex;
+use crate::engine::grid::Grid;
 
 pub mod hive;
 

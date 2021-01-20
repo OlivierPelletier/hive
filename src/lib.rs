@@ -1,8 +1,5 @@
-mod engine;
-
-pub use crate::engine::grid;
-pub use crate::engine::moves;
-pub use crate::engine::rules;
+pub mod engine;
+pub mod utils;
 
 use wasm_bindgen::prelude::*;
 

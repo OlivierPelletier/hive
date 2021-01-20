@@ -1,6 +1,7 @@
-use crate::grid::geo::hex::Hex;
-use crate::grid::Grid;
 use std::collections::HashSet;
+
+use crate::engine::grid::geo::hex::Hex;
+use crate::engine::grid::Grid;
 
 pub fn one_hive_rule_grid_validation(grid: &Grid) -> bool {
   let mut is_valid = true;

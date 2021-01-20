@@ -1,8 +1,8 @@
-use crate::grid::geo::hex::Hex;
-use crate::grid::piece::Piece;
-use crate::grid::piece::{PieceColor, PieceType};
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter, Result};
+
+use crate::engine::grid::geo::hex::Hex;
+use crate::engine::grid::piece::{Piece, PieceColor, PieceType};
 
 pub mod geo;
 pub mod piece;
