@@ -2,7 +2,7 @@ use std::fmt::{Display, Formatter, Result};
 
 use crate::engine::grid::coordinate::cube::Cube;
 
-#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
+#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy, Ord, PartialOrd)]
 pub struct Hex {
   pub q: i64,
   pub r: i64,

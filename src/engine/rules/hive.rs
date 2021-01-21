@@ -5,10 +5,10 @@ use crate::engine::grid::Grid;
 
 pub fn one_hive_rule_grid_validation(grid: &Grid) -> bool {
   let mut is_valid = true;
-  let mut keys_it = grid.grid.keys();
+  let keys_it = grid.grid.keys();
   let mut found_pieces = HashSet::new();
 
-  if let Some(start) = keys_it.next() {
+  if let Some(start) = keys_it.filter(|x| grid.is_hex_occupied(&x)).next() {
     found_pieces = one_hive_rule_iterative_pieces_search(grid, found_pieces, *start)
   }
 

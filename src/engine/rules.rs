@@ -10,13 +10,14 @@ mod rules_tests;
 
 pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
   let is_valid;
-  let temp_grid = Grid {
+  let mut temp_grid = Grid {
     grid: grid.grid.clone(),
   };
+  temp_grid = temp_grid.move_piece_from_to(from, to);
 
   if grid.is_hex_occupied(from) {
-    is_valid = hive::one_hive_rule_grid_validation(grid)
-      && hive::one_hive_rule_grid_validation(&temp_grid.move_piece_from_to(from, to));
+    is_valid =
+      hive::one_hive_rule_grid_validation(grid) && hive::one_hive_rule_grid_validation(&temp_grid);
   } else {
     is_valid = false;
   }
