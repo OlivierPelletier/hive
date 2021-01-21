@@ -53,7 +53,7 @@ wasm-pack publish
 
 
 ## TODO
-* *grid.rs* unit tests
+* ~~*grid.rs* unit tests~~
 * *moves.rs* unit tests
 * *rules.rs* unit tests
 * Create the game controller

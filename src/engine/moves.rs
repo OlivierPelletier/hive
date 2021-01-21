@@ -38,7 +38,7 @@ pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   moves
 }
 
-pub fn extract_moves_from_paths(paths: Vec<Vec<Hex>>, path_expected_length: usize) -> Vec<Hex> {
+fn extract_moves_from_paths(paths: Vec<Vec<Hex>>, path_expected_length: usize) -> Vec<Hex> {
   let mut moves: Vec<Hex> = Vec::new();
 
   for path in paths {
