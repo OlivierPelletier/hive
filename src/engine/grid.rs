@@ -122,6 +122,28 @@ impl Grid {
     is_alone
   }
 
+  pub fn is_hex_of_color(&self, hex: &Hex, piece_color: PieceColor) -> bool {
+    let piece = self.find_top_piece(hex);
+
+    piece.p_type != PieceType::NONE && piece.p_color == piece_color
+  }
+
+  pub fn is_hex_neighbors_only_piece_color(&self, hex: &Hex, piece_color: PieceColor) -> bool {
+    let mut is_hex_surrounded_by_piece_color = true;
+
+    if !self.is_hex_alone(hex) {
+      for neighbor in hex.neighbors() {
+        if self.is_hex_occupied(&neighbor) && !self.is_hex_of_color(&neighbor, piece_color) {
+          is_hex_surrounded_by_piece_color = false;
+        }
+      }
+    } else {
+      is_hex_surrounded_by_piece_color = false;
+    }
+
+    is_hex_surrounded_by_piece_color
+  }
+
   pub fn number_of_pieces(&self) -> usize {
     let mut count = 0;
     for vec in self.grid.values() {

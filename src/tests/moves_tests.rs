@@ -1,7 +1,7 @@
 use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::piece::Piece;
+use crate::engine::grid::piece::{Piece, PieceColor};
 use crate::engine::grid::Grid;
-use crate::engine::moves::available_moves;
+use crate::engine::moves::{available_moves, available_moves_for_piece_color};
 
 fn initialize_grid() -> Grid {
   Grid::new()
@@ -23,7 +23,7 @@ fn initialize_grid() -> Grid {
 #[test]
 fn given_grid_when_available_moves_queenbee_should_return_correct_moves() {
   let grid = initialize_grid();
-  let mut correct_moves: Vec<Hex> = vec![Hex { q: -4, r: 1 }, Hex { q: -3, r: -1 }];
+  let mut correct_moves = vec![Hex { q: -4, r: 1 }, Hex { q: -3, r: -1 }];
 
   let mut moves = available_moves(&grid, &Hex::new(-3, -0));
 
@@ -36,7 +36,7 @@ fn given_grid_when_available_moves_queenbee_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_beetle_should_return_correct_moves() {
   let grid = initialize_grid();
-  let mut correct_moves: Vec<Hex> = vec![
+  let mut correct_moves = vec![
     Hex { q: -1, r: 0 },
     Hex { q: -1, r: 1 },
     Hex { q: -3, r: 2 },
@@ -55,7 +55,7 @@ fn given_grid_when_available_moves_beetle_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_grasshopper_should_return_correct_moves() {
   let grid = initialize_grid();
-  let mut correct_moves: Vec<Hex> = vec![
+  let mut correct_moves = vec![
     Hex { q: 4, r: -2 },
     Hex { q: -4, r: 0 },
     Hex { q: 2, r: -2 },
@@ -72,7 +72,7 @@ fn given_grid_when_available_moves_grasshopper_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_spider_should_return_correct_moves() {
   let grid = initialize_grid();
-  let mut correct_moves: Vec<Hex> = vec![Hex { q: 3, r: 0 }, Hex { q: -3, r: 2 }];
+  let mut correct_moves = vec![Hex { q: 3, r: 0 }, Hex { q: -3, r: 2 }];
 
   let mut moves = available_moves(&grid, &Hex::new(0, 1));
 
@@ -85,7 +85,7 @@ fn given_grid_when_available_moves_spider_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_ladybug_should_return_correct_moves() {
   let grid = initialize_grid();
-  let mut correct_moves: Vec<Hex> = vec![
+  let mut correct_moves = vec![
     Hex { q: 1, r: -1 },
     Hex { q: -1, r: 1 },
     Hex { q: 0, r: -1 },
@@ -110,7 +110,7 @@ fn given_grid_when_available_moves_ladybug_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_solider_ant_should_return_correct_moves() {
   let grid = initialize_grid();
-  let mut correct_moves: Vec<Hex> = vec![
+  let mut correct_moves = vec![
     Hex { q: 3, r: 0 },
     Hex { q: 2, r: 1 },
     Hex { q: 1, r: 1 },
@@ -143,7 +143,7 @@ fn given_grid_when_available_moves_solider_ant_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_mosquito_should_return_correct_moves() {
   let grid = initialize_grid();
-  let mut correct_moves: Vec<Hex> = vec![
+  let mut correct_moves = vec![
     Hex { q: 0, r: -1 },
     Hex { q: -1, r: 1 },
     Hex { q: 0, r: -2 },
@@ -157,6 +157,25 @@ fn given_grid_when_available_moves_mosquito_should_return_correct_moves() {
   ];
 
   let mut moves = available_moves(&grid, &Hex::new(-2, -1));
+  moves.sort();
+  correct_moves.sort();
+
+  assert_eq!(moves, correct_moves);
+}
+
+#[test]
+fn given_grid_when_available_moves_by_color_should_return_correct_moves() {
+  let grid = initialize_grid();
+  let mut correct_moves = vec![
+    Hex { q: 0, r: -2 },
+    Hex { q: -4, r: 1 },
+    Hex { q: -4, r: 0 },
+    Hex { q: -4, r: 2 },
+    Hex { q: -3, r: 2 },
+    Hex { q: -2, r: 2 },
+  ];
+
+  let mut moves = available_moves_for_piece_color(&grid, PieceColor::BLACK);
   moves.sort();
   correct_moves.sort();
 

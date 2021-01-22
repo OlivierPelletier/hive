@@ -43,10 +43,10 @@ pub fn available_moves_for_piece_color(grid: &Grid, piece_color: PieceColor) -> 
   let mut moves: HashSet<Hex> = HashSet::new();
 
   for hex in grid.grid.keys() {
-    if grid.is_hex_occupied(hex) && grid.find_top_piece(hex).p_color == piece_color {
+    if grid.is_hex_of_color(hex, piece_color) {
       for neighbor in hex.neighbors() {
         if !grid.is_hex_occupied(&neighbor)
-          && is_hex_surrounded_by_piece_color(grid, &neighbor, piece_color)
+          && grid.is_hex_neighbors_only_piece_color(&neighbor, piece_color)
         {
           moves.insert(neighbor);
         }
@@ -55,23 +55,6 @@ pub fn available_moves_for_piece_color(grid: &Grid, piece_color: PieceColor) -> 
   }
 
   moves.into_iter().collect()
-}
-
-fn is_hex_surrounded_by_piece_color(grid: &Grid, hex: &Hex, piece_color: PieceColor) -> bool {
-  let mut valid = true;
-
-  if !grid.is_hex_alone(hex) {
-    for neighbor in hex.neighbors() {
-      let piece = grid.find_top_piece(&neighbor);
-      if piece.p_type != PieceType::NONE && piece.p_color != piece_color {
-        valid = false;
-      }
-    }
-  } else {
-    valid = false;
-  }
-
-  valid
 }
 
 fn extract_moves_from_paths(paths: Vec<Vec<Hex>>, path_expected_length: usize) -> Vec<Hex> {
