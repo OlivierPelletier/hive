@@ -1,7 +1,7 @@
 use hive::engine::grid::coordinate::hex::Hex;
-use hive::engine::grid::piece::Piece;
+use hive::engine::grid::piece::{Piece, PieceColor};
 use hive::engine::grid::Grid;
-use hive::engine::moves::available_moves;
+use hive::engine::moves::{available_moves, available_moves_for_piece_color};
 use hive::utils::set_panic_hook;
 
 fn main() {
@@ -67,5 +67,15 @@ fn main() {
   println!(
     "W MSQT MOVES: {:?}",
     available_moves(&grid, &Hex::new(-2, -1))
+  );
+
+  println!(
+    "W MOVES: {:?}",
+    available_moves_for_piece_color(&grid, PieceColor::WHITE)
+  );
+
+  println!(
+    "B MOVES: {:?}",
+    available_moves_for_piece_color(&grid, PieceColor::BLACK)
   );
 }
