@@ -42,13 +42,19 @@ pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
 pub fn available_moves_for_piece_color(grid: &Grid, piece_color: PieceColor) -> Vec<Hex> {
   let mut moves: HashSet<Hex> = HashSet::new();
 
-  for hex in grid.grid.keys() {
-    if grid.is_hex_of_color(hex, piece_color) {
-      for neighbor in hex.neighbors() {
-        if !grid.is_hex_occupied(&neighbor)
-          && grid.is_hex_neighbors_only_piece_color(&neighbor, piece_color)
-        {
-          moves.insert(neighbor);
+  if grid.number_of_pieces() == 0 {
+    moves.insert(Hex::new(0, 0));
+  } else if grid.number_of_pieces() == 1 {
+    moves.insert(Hex::new(-1, 0));
+  } else {
+    for hex in grid.grid.keys() {
+      if grid.is_hex_of_color(hex, piece_color) {
+        for neighbor in hex.neighbors() {
+          if !grid.is_hex_occupied(&neighbor)
+            && grid.is_hex_neighbors_only_piece_color(&neighbor, piece_color)
+          {
+            moves.insert(neighbor);
+          }
         }
       }
     }

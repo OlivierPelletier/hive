@@ -59,6 +59,7 @@ impl Grid {
     let none = Piece {
       p_type: PieceType::NONE,
       p_color: PieceColor::NONE,
+      id: String::from(""),
     };
 
     if self.is_hex_occupied(hex) {

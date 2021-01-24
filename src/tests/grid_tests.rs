@@ -6,13 +6,14 @@ use super::Grid;
 fn given_grid_when_placing_piece_to_hex_then_hex_contains_piece() {
   let mut grid = Grid::new();
   let hex = Hex::new(0, 0);
+  let queen_bee = Piece::queen_bee();
 
-  grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
+  grid = grid.place_piece_to_hex(queen_bee.clone(), &hex);
 
   match grid.grid.get(&hex) {
     Some(p) => {
       let mut piece = p.clone();
-      assert_eq!(piece.pop(), Some(Piece::queen_bee()));
+      assert_eq!(piece.pop(), Some(queen_bee.clone()));
     }
     None => assert!(false),
   }
@@ -37,15 +38,17 @@ fn given_grid_when_removing_piece_from_hex_containing_two_pieces_then_top_piece_
 ) {
   let mut grid = Grid::new();
   let hex = Hex::new(0, 0);
-  grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
-  grid = grid.place_piece_to_hex(Piece::beetle(), &hex);
+  let queen_bee = Piece::queen_bee();
+  let beetle = Piece::beetle();
+  grid = grid.place_piece_to_hex(queen_bee.clone(), &hex);
+  grid = grid.place_piece_to_hex(beetle.clone(), &hex);
 
   grid = grid.remove_top_piece_from_hex(&hex).0;
 
   match grid.grid.get(&hex) {
     Some(p) => {
       let mut piece = p.clone();
-      assert_eq!(piece.pop(), Some(Piece::queen_bee()));
+      assert_eq!(piece.pop(), Some(queen_bee.clone()));
     }
     None => assert!(false),
   }
@@ -55,16 +58,18 @@ fn given_grid_when_removing_piece_from_hex_containing_two_pieces_then_top_piece_
 fn given_grid_when_adding_two_pieces_on_same_hex_then_hex_contains_both_pieces() {
   let mut grid = Grid::new();
   let hex = Hex::new(0, 0);
+  let queen_bee = Piece::queen_bee();
+  let spider = Piece::spider();
 
-  grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
-  grid = grid.place_piece_to_hex(Piece::spider(), &hex);
+  grid = grid.place_piece_to_hex(queen_bee.clone(), &hex);
+  grid = grid.place_piece_to_hex(spider.clone(), &hex);
 
   match grid.grid.get(&hex) {
     Some(p) => {
       let mut piece = p.clone();
       assert_eq!(p.len(), 2);
-      assert_eq!(piece.pop(), Some(Piece::spider()));
-      assert_eq!(piece.pop(), Some(Piece::queen_bee()));
+      assert_eq!(piece.pop(), Some(spider.clone()));
+      assert_eq!(piece.pop(), Some(queen_bee.clone()));
     }
     None => assert!(false),
   }
@@ -75,7 +80,8 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
   let mut grid = Grid::new();
   let from = Hex::new(0, 0);
   let to = Hex::new(0, 1);
-  grid = grid.place_piece_to_hex(Piece::queen_bee(), &from);
+  let queen_bee = Piece::queen_bee();
+  grid = grid.place_piece_to_hex(queen_bee.clone(), &from);
 
   grid = grid.move_piece_from_to(&from, &to);
 
@@ -89,7 +95,7 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
   match grid.grid.get(&to) {
     Some(p) => {
       let mut piece = p.clone();
-      assert_eq!(piece.pop(), Some(Piece::queen_bee()));
+      assert_eq!(piece.pop(), Some(queen_bee.clone()));
     }
     None => assert!(false),
   }
@@ -101,8 +107,10 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
   let mut grid = Grid::new();
   let from = Hex::new(0, 0);
   let to = Hex::new(0, 1);
-  grid = grid.place_piece_to_hex(Piece::beetle(), &from);
-  grid = grid.place_piece_to_hex(Piece::queen_bee(), &to);
+  let queen_bee = Piece::queen_bee();
+  let beetle = Piece::beetle();
+  grid = grid.place_piece_to_hex(beetle.clone(), &from);
+  grid = grid.place_piece_to_hex(queen_bee.clone(), &to);
 
   grid = grid.move_piece_from_to(&from, &to);
 
@@ -116,8 +124,8 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
   match grid.grid.get(&to) {
     Some(p) => {
       let mut piece = p.clone();
-      assert_eq!(piece.pop(), Some(Piece::beetle()));
-      assert_eq!(piece.pop(), Some(Piece::queen_bee()));
+      assert_eq!(piece.pop(), Some(beetle.clone()));
+      assert_eq!(piece.pop(), Some(queen_bee.clone()));
     }
     None => assert!(false),
   }
@@ -127,12 +135,15 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
 fn given_grid_when_finding_top_piece_then_top_piece_is_returned() {
   let mut grid = Grid::new();
   let hex = Hex::new(0, 0);
-  grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
-  grid = grid.place_piece_to_hex(Piece::ladybug(), &hex);
+  let queen_bee = Piece::queen_bee();
+  let ladybug = Piece::ladybug();
+
+  grid = grid.place_piece_to_hex(queen_bee.clone(), &hex);
+  grid = grid.place_piece_to_hex(ladybug.clone(), &hex);
 
   let piece = grid.find_top_piece(&hex);
 
-  assert_eq!(piece, Piece::ladybug());
+  assert_eq!(piece, ladybug.clone());
 }
 
 #[test]
