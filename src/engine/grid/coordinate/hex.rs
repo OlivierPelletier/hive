@@ -13,11 +13,8 @@ impl Hex {
     Hex { q, r }
   }
 
-  pub fn max() -> Hex {
-    Hex {
-      q: i64::MAX,
-      r: i64::MAX,
-    }
+  pub fn zero() -> Hex {
+    Hex { q: 0, r: 0 }
   }
 
   pub fn to_cube(&self) -> Cube {

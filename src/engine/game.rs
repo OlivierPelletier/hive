@@ -3,6 +3,7 @@ use crate::engine::grid::coordinate::hex::Hex;
 use crate::engine::grid::piece::{Piece, PieceType};
 use crate::engine::grid::Grid;
 use crate::engine::moves::{available_moves, available_moves_for_piece_color};
+use std::fmt::{Display, Formatter, Result};
 
 pub mod player;
 
@@ -37,6 +38,7 @@ impl Game {
             piece: piece.clone(),
             from: *from,
             to,
+            in_hand: false,
           })
         }
       }
@@ -47,8 +49,9 @@ impl Game {
         if self.can_play_piece(&piece) {
           moves.push(Move {
             piece,
-            from: Hex::max(),
+            from: Hex::zero(),
             to,
+            in_hand: true,
           })
         }
       }
@@ -69,4 +72,15 @@ pub struct Move {
   pub piece: Piece,
   pub from: Hex,
   pub to: Hex,
+  pub in_hand: bool,
+}
+
+impl Display for Move {
+  fn fmt(&self, f: &mut Formatter) -> Result {
+    if self.in_hand {
+      write!(f, "{} from: HAND, to: {}", self.piece, self.to)
+    } else {
+      write!(f, "{} from: {}, to: {}", self.piece, self.from, self.to)
+    }
+  }
 }
