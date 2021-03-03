@@ -11,7 +11,7 @@ pub struct Game {
   pub grid: Grid,
   pub players: Vec<Player>,
   pub moves: Vec<Move>,
-  pub turn: u64,
+  pub turn: Box<u64>,
   pub is_tournement_rule: bool,
 }
 
@@ -21,8 +21,23 @@ impl Game {
       grid: Grid::new(),
       players: vec![Player::white(), Player::black()],
       moves: Vec::new(),
-      turn: 1,
+      turn: Box::new(0),
       is_tournement_rule: true,
+    }
+  }
+
+  pub fn current_player(&self) -> &Player {
+    let player: Option<&Player>;
+
+    if *self.turn % 2 == 0 {
+      player = self.players.get(0)
+    } else {
+      player = self.players.get(1)
+    }
+
+    match player {
+      Some(p) => p,
+      None => &Player::new()
     }
   }
 
@@ -63,7 +78,7 @@ impl Game {
   fn can_play_piece(&self, piece: &Piece) -> bool {
     !(self.is_tournement_rule
       && piece.p_type == PieceType::QUEENBEE
-      && (self.turn == 1 || self.turn == 2))
+      && (*self.turn == 0 || *self.turn == 1))
   }
 }
 
