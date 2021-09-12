@@ -1,7 +1,7 @@
 use crate::engine::grid::coordinate::hex::Hex;
 use crate::engine::grid::piece::{Piece, PieceColor};
 use crate::engine::grid::Grid;
-use crate::engine::moves::{available_moves, available_moves_for_piece_color};
+use crate::engine::moves::{available_actions_for_piece_color, available_moves};
 
 fn initialize_grid() -> Grid {
   Grid::new()
@@ -175,7 +175,7 @@ fn given_grid_when_available_moves_by_color_should_return_correct_moves() {
     Hex { q: -2, r: 2 },
   ];
 
-  let mut moves = available_moves_for_piece_color(&grid, PieceColor::BLACK);
+  let mut moves = available_actions_for_piece_color(&grid, PieceColor::BLACK);
   moves.sort();
   correct_moves.sort();
 

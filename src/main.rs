@@ -4,15 +4,19 @@ use hive::utils::{get_usize_input, set_panic_hook};
 fn main() {
   set_panic_hook();
 
-  let game = Game::tournement();
+  let mut game = Game::tournement();
 
-  let moves = game.list_moves_for_player(&game.players[0]);
+  println!("{:?}", game);
 
-  for (i, m) in moves.iter().enumerate() {
+  let actions = game.list_actions_for_player(&game.players[0]);
+
+  for (i, m) in actions.iter().enumerate() {
     println!("{}: {}", i, m)
   }
 
-  let chosen_move = get_usize_input("Choose a move");
+  let chosen_action = get_usize_input("Choose an action");
 
-  println!("{}", moves[chosen_move])
+  game = game.play_action(actions[chosen_action].clone());
+
+  println!("{:?}", game)
 }

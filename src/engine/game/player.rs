@@ -1,5 +1,6 @@
 use crate::engine::grid::piece::{Piece, PieceColor};
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct Player {
   pub color: PieceColor,
   pub pieces: Vec<Piece>,
