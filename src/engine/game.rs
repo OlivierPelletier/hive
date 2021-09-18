@@ -28,20 +28,26 @@ impl Game {
     }
   }
 
+  pub fn current_player_index(&self) -> usize {
+    return if self.turn % 2 == 0 { 0 } else { 1 };
+  }
+
   pub fn list_actions_for_player(&self, player: &Player) -> Vec<Action> {
-    let mut moves: Vec<Action> = Vec::new();
+    let mut actions: Vec<Action> = Vec::new();
 
-    for from in self.grid.grid.keys() {
-      let piece = self.grid.find_top_piece(from);
+    if player.is_queen_played {
+      for from in self.grid.grid.keys() {
+        let piece = self.grid.find_top_piece(from);
 
-      if piece.p_type != PieceType::NONE && piece.p_color == player.color {
-        for to in available_moves(&self.grid, from) {
-          moves.push(Action {
-            piece: piece.clone(),
-            from: *from,
-            to,
-            in_hand: false,
-          })
+        if piece.p_type != PieceType::NONE && piece.p_color == player.color {
+          for to in available_moves(&self.grid, from) {
+            actions.push(Action {
+              piece: piece.clone(),
+              from: *from,
+              to,
+              in_hand: false,
+            })
+          }
         }
       }
     }
@@ -49,7 +55,7 @@ impl Game {
     for to in available_actions_for_piece_color(&self.grid, player.color) {
       for piece in player.pieces.clone() {
         if self.can_play_piece(&piece) {
-          moves.push(Action {
+          actions.push(Action {
             piece,
             from: Hex::zero(),
             to,
@@ -59,30 +65,34 @@ impl Game {
       }
     }
 
-    moves
+    actions
   }
 
   fn can_play_piece(&self, piece: &Piece) -> bool {
-    !(self.is_tournement_rule
+    let current_player = &self.players[self.current_player_index()];
+
+    return if self.is_tournement_rule
       && piece.p_type == PieceType::QUEENBEE
-      && (self.turn == 0 || self.turn == 1))
+      && (self.turn == 0 || self.turn == 1)
+    {
+      false
+    } else if piece.p_type != PieceType::QUEENBEE
+      && !current_player.is_queen_played
+      && (self.turn >= 6)
+    {
+      false
+    } else {
+      true
+    };
   }
 
   pub fn play_action(&self, action: Action) -> Game {
     let mut grid = self.grid.clone();
-    let players = self.players.clone();
+    let mut players = self.players.clone();
     let mut actions_history = self.actions_history.clone();
-    let mut turn = self.turn;
+    let current_player_index = self.current_player_index();
 
-    let mut current_player;
-    let other_player;
-    if players[0].color == action.piece.p_color {
-      current_player = players[0].clone();
-      other_player = players[1].clone();
-    } else {
-      current_player = players[1].clone();
-      other_player = players[0].clone();
-    }
+    let mut current_player = players[current_player_index].clone();
 
     if self
       .list_actions_for_player(&current_player)
@@ -100,14 +110,33 @@ impl Game {
         grid = grid.move_piece_from_to(&action.from, &action.to)
       }
 
+      if action.piece.p_type == PieceType::QUEENBEE {
+        current_player.is_queen_played = true
+      }
+
       actions_history.push(action.clone());
-      turn = turn + 1;
     }
+
+    players[current_player_index] = current_player;
 
     Game {
       grid,
-      players: vec![current_player, other_player],
+      players,
       actions_history,
+      turn: self.turn,
+      is_tournement_rule: self.is_tournement_rule,
+    }
+  }
+
+  pub fn next_turn(&self) -> Game {
+    let mut turn = self.turn;
+
+    turn = turn + 1;
+
+    Game {
+      grid: self.grid.clone(),
+      players: self.players.clone(),
+      actions_history: self.actions_history.clone(),
       turn,
       is_tournement_rule: self.is_tournement_rule,
     }
