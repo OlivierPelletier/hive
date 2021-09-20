@@ -1,8 +1,10 @@
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::piece::Piece;
 use std::fmt::{Display, Formatter, Result};
 
-#[derive(Debug, PartialEq, Clone)]
+use serde::{Deserialize, Serialize};
+
+use crate::engine::grid::{coordinate::hex::Hex, piece::Piece};
+
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Action {
   pub piece: Piece,
   pub from: Hex,

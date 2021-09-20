@@ -1,6 +1,7 @@
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::Grid;
-use crate::engine::rules::{freedom_to_move_rule, one_hive_rule};
+use crate::engine::{
+  grid::{coordinate::hex::Hex, Grid},
+  rules::{freedom_to_move_rule, one_hive_rule},
+};
 
 pub fn soldier_ant_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   let start_trail: Vec<Hex> = vec![*hex];

@@ -1,6 +1,8 @@
-use super::coordinate::hex::Hex;
-use super::piece::{Piece, PieceType};
-use super::Grid;
+use super::{
+  coordinate::hex::Hex,
+  piece::{Piece, PieceType},
+  Grid,
+};
 
 #[test]
 fn given_grid_when_placing_piece_to_hex_then_hex_contains_piece() {

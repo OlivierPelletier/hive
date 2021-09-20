@@ -1,12 +1,10 @@
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::piece::PieceType;
-use crate::engine::grid::Grid;
-use crate::engine::moves::beetle::beetle_moves;
-use crate::engine::moves::grasshoper::grasshopper_moves;
-use crate::engine::moves::ladybug::ladybug_moves;
-use crate::engine::moves::queen_bee::queen_bee_moves;
-use crate::engine::moves::soldier_ant::soldier_ant_moves;
-use crate::engine::moves::spider::spider_moves;
+use crate::engine::{
+  grid::{coordinate::hex::Hex, piece::PieceType, Grid},
+  moves::{
+    beetle::beetle_moves, grasshoper::grasshopper_moves, ladybug::ladybug_moves,
+    queen_bee::queen_bee_moves, soldier_ant::soldier_ant_moves, spider::spider_moves,
+  },
+};
 
 pub fn mosquito_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   let mut moves: Vec<Hex> = Vec::new();

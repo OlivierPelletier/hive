@@ -1,5 +1,7 @@
-use hive::engine::game::Game;
-use hive::utils::{get_usize_input, set_panic_hook};
+use hive::{
+  engine::game::Game,
+  utils::{get_usize_input, set_panic_hook},
+};
 
 fn main() {
   set_panic_hook();

@@ -1,7 +1,10 @@
-use crate::engine::grid::coordinate::cube::Cube;
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::Grid;
-use crate::engine::rules::one_hive_rule;
+use crate::engine::{
+  grid::{
+    coordinate::{cube::Cube, hex::Hex},
+    Grid,
+  },
+  rules::one_hive_rule,
+};
 
 pub fn grasshopper_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   let cube = hex.to_cube();

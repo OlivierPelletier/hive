@@ -1,7 +1,9 @@
 use std::fmt::{Debug, Display, Formatter, Result};
+
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-#[derive(Clone, Copy, Eq, PartialEq)]
+#[derive(Clone, Copy, Eq, PartialEq, Serialize, Deserialize)]
 pub enum PieceType {
   QUEENBEE,
   BEETLE,
@@ -28,7 +30,7 @@ impl Debug for PieceType {
   }
 }
 
-#[derive(Clone, Eq, PartialEq, Copy)]
+#[derive(Clone, Eq, PartialEq, Copy, Serialize, Deserialize)]
 pub enum PieceColor {
   BLACK,
   WHITE,
@@ -45,7 +47,7 @@ impl Debug for PieceColor {
   }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Piece {
   pub p_type: PieceType,
   pub p_color: PieceColor,

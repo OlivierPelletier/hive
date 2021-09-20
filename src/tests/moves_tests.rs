@@ -1,7 +1,11 @@
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::piece::{Piece, PieceColor};
-use crate::engine::grid::Grid;
-use crate::engine::moves::{available_actions_for_piece_color, available_moves};
+use crate::engine::{
+  grid::{
+    coordinate::hex::Hex,
+    piece::{Piece, PieceColor},
+    Grid,
+  },
+  moves::{available_actions_for_piece_color, available_moves},
+};
 
 fn initialize_grid() -> Grid {
   Grid::new()

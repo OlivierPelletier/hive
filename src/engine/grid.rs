@@ -1,8 +1,14 @@
-use std::collections::HashMap;
-use std::fmt::{Display, Formatter, Result};
+use std::{
+  collections::HashMap,
+  fmt::{Display, Formatter, Result},
+};
 
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::piece::{Piece, PieceColor, PieceType};
+use serde::{Deserialize, Serialize};
+
+use crate::engine::grid::{
+  coordinate::hex::Hex,
+  piece::{Piece, PieceColor, PieceType},
+};
 
 pub mod coordinate;
 pub mod piece;
@@ -11,7 +17,7 @@ pub mod piece;
 #[path = "../tests/grid_tests.rs"]
 mod grid_tests;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Grid {
   pub grid: HashMap<Hex, Vec<Piece>>,
 }

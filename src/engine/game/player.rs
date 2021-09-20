@@ -1,6 +1,8 @@
+use serde::{Deserialize, Serialize};
+
 use crate::engine::grid::piece::{Piece, PieceColor};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Player {
   pub color: PieceColor,
   pub pieces: Vec<Piece>,

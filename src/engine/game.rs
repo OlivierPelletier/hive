@@ -1,14 +1,19 @@
-use crate::engine::game::action::Action;
-use crate::engine::game::player::Player;
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::piece::{Piece, PieceType};
-use crate::engine::grid::Grid;
-use crate::engine::moves::{available_actions_for_piece_color, available_moves};
+use serde::{Deserialize, Serialize};
+
+use crate::engine::{
+  game::{action::Action, player::Player},
+  grid::{
+    coordinate::hex::Hex,
+    piece::{Piece, PieceType},
+    Grid,
+  },
+  moves::{available_actions_for_piece_color, available_moves},
+};
 
 pub mod action;
 pub mod player;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Game {
   pub grid: Grid,
   pub players: Vec<Player>,

@@ -1,13 +1,15 @@
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::piece::{PieceColor, PieceType};
-use crate::engine::grid::Grid;
-use crate::engine::moves::beetle::beetle_moves;
-use crate::engine::moves::grasshoper::grasshopper_moves;
-use crate::engine::moves::ladybug::ladybug_moves;
-use crate::engine::moves::mosquito::mosquito_moves;
-use crate::engine::moves::queen_bee::queen_bee_moves;
-use crate::engine::moves::soldier_ant::soldier_ant_moves;
-use crate::engine::moves::spider::spider_moves;
+use crate::engine::{
+  grid::{
+    coordinate::hex::Hex,
+    piece::{PieceColor, PieceType},
+    Grid,
+  },
+  moves::{
+    beetle::beetle_moves, grasshoper::grasshopper_moves, ladybug::ladybug_moves,
+    mosquito::mosquito_moves, queen_bee::queen_bee_moves, soldier_ant::soldier_ant_moves,
+    spider::spider_moves,
+  },
+};
 use std::collections::HashSet;
 
 pub mod beetle;

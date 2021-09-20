@@ -1,7 +1,7 @@
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::piece::Piece;
-use crate::engine::grid::Grid;
-use crate::engine::rules::one_hive_rule;
+use crate::engine::{
+  grid::{coordinate::hex::Hex, piece::Piece, Grid},
+  rules::one_hive_rule,
+};
 
 fn initialize_grid() -> Grid {
   Grid::new()

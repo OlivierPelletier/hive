@@ -1,6 +1,7 @@
-use crate::engine::grid::coordinate::cube::Cube;
-use crate::engine::grid::coordinate::hex::Hex;
-use crate::engine::grid::Grid;
+use crate::engine::grid::{
+  coordinate::{cube::Cube, hex::Hex},
+  Grid,
+};
 
 pub mod hive;
 
