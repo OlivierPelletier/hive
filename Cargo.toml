@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Olivier Pelletier <olivier.op@outlook.com>"]
 edition = "2018"
 description = "A game engine for Hive."
-repository = "https://github.com/Opet69/hive"
+repository = "https://github.com/OlivierPelletier/hive"
 license = ""
 
 [lib]
@@ -14,8 +14,9 @@ crate-type = ["cdylib", "rlib"]
 default = ["console_error_panic_hook"]
 
 [dependencies]
-uuid = { version = "0.8", features = ["v4"] }
+uuid = { version = "0.8", features = ["v4", "wasm-bindgen"] }
 wasm-bindgen = "0.2.63"
+getrandom = { version = "0.2", features = ["js"] }
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires

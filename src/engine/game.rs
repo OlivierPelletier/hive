@@ -1,11 +1,11 @@
-use std::fmt::{Display, Formatter, Result};
-
+use crate::engine::game::action::Action;
 use crate::engine::game::player::Player;
 use crate::engine::grid::coordinate::hex::Hex;
 use crate::engine::grid::piece::{Piece, PieceType};
 use crate::engine::grid::Grid;
 use crate::engine::moves::{available_actions_for_piece_color, available_moves};
 
+pub mod action;
 pub mod player;
 
 #[derive(Debug)]
@@ -139,24 +139,6 @@ impl Game {
       actions_history: self.actions_history.clone(),
       turn,
       is_tournement_rule: self.is_tournement_rule,
-    }
-  }
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct Action {
-  pub piece: Piece,
-  pub from: Hex,
-  pub to: Hex,
-  pub in_hand: bool,
-}
-
-impl Display for Action {
-  fn fmt(&self, f: &mut Formatter) -> Result {
-    if self.in_hand {
-      write!(f, "{} from: HAND, to: {}", self.piece, self.to)
-    } else {
-      write!(f, "{} from: {}, to: {}", self.piece, self.from, self.to)
     }
   }
 }
