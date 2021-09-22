@@ -1,9 +1,10 @@
 use std::{
   collections::HashMap,
-  fmt::{Display, Formatter, Result},
+  fmt::{Display, Formatter},
 };
 
 use serde::{Deserialize, Serialize};
+use serde_with::serde_as;
 
 use crate::engine::grid::{
   coordinate::hex::Hex,
@@ -17,8 +18,10 @@ pub mod piece;
 #[path = "../tests/grid_tests.rs"]
 mod grid_tests;
 
+#[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Grid {
+  #[serde_as(as = "HashMap<serde_with::json::JsonString, _>")]
   pub grid: HashMap<Hex, Vec<Piece>>,
 }
 
@@ -168,7 +171,7 @@ impl Default for Grid {
 }
 
 impl Display for Grid {
-  fn fmt(&self, f: &mut Formatter) -> Result {
+  fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
     let mut initialized = false;
     let mut min_q = 0;
     let mut max_q = 0;

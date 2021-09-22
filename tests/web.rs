@@ -8,7 +8,8 @@ extern crate web_sys;
 use js_sys::JSON;
 use wasm_bindgen_test::*;
 
-use hive::new_game;
+use hive::{engine::game::action::Action, list_actions_for_player, new_game, play_action};
+use wasm_bindgen::JsValue;
 
 wasm_bindgen_test_configure!(run_in_browser);
 
@@ -19,10 +20,22 @@ fn pass() {
 
 #[wasm_bindgen_test]
 fn test_new_game() {
-  let game = new_game();
+  let mut game = new_game();
+  let actions = list_actions_for_player(&game, 0);
+  let mut actions: Vec<Action> = actions.into_serde().unwrap();
+  let action = actions.get(0).unwrap();
+  let action_js = &JsValue::from_serde(action).unwrap();
 
-  let game_as_string: String = JSON::stringify(&game).unwrap().into();
-  let game_as_str: &str = &*game_as_string;
+  log(action_js);
 
-  web_sys::console::log_1(&game_as_str.into())
+  game = play_action(&game, action_js);
+
+  log(&game)
+}
+
+fn log(object: &JsValue) {
+  let obj_as_string: String = JSON::stringify(&object).unwrap().into();
+  let obj_as_str: &str = &*obj_as_string;
+
+  web_sys::console::log_1(&obj_as_str.into())
 }
