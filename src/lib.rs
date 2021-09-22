@@ -45,12 +45,3 @@ pub fn play_action(game: &JsValue, action: &JsValue) -> JsValue {
 
   JsValue::from_serde(&game).unwrap()
 }
-
-#[wasm_bindgen]
-pub fn next_turn(game: &JsValue) -> JsValue {
-  let mut game: Game = game.into_serde().unwrap();
-
-  game = game.next_turn();
-
-  JsValue::from_serde(&game).unwrap()
-}

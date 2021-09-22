@@ -22,7 +22,7 @@ fn pass() {
 fn test_new_game() {
   let mut game = new_game();
   let actions = list_actions_for_player(&game, 0);
-  let mut actions: Vec<Action> = actions.into_serde().unwrap();
+  let actions: Vec<Action> = actions.into_serde().unwrap();
   let action = actions.get(0).unwrap();
   let action_js = &JsValue::from_serde(action).unwrap();
 

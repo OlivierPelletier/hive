@@ -12,7 +12,7 @@ fn main() {
     println!("{:?}", game);
     println!("{:}", game.grid);
 
-    let actions = game.list_actions_for_player(&game.players[game.current_player_index()]);
+    let actions = game.list_actions_for_player(&game.players[game.current_player_index]);
 
     for (i, m) in actions.iter().enumerate() {
       println!("{}: {}", i, m)
@@ -21,6 +21,5 @@ fn main() {
     let chosen_action = get_usize_input("Choose an action");
 
     game = game.play_action(actions[chosen_action].clone());
-    game = game.next_turn();
   }
 }

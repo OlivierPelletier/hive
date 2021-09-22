@@ -13,13 +13,14 @@ use crate::engine::{
 pub mod action;
 pub mod player;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Game {
   pub grid: Grid,
   pub players: Vec<Player>,
   pub actions_history: Vec<Action>,
   pub turn: u64,
   pub is_tournement_rule: bool,
+  pub current_player_index: usize,
 }
 
 impl Game {
@@ -30,11 +31,8 @@ impl Game {
       actions_history: Vec::new(),
       turn: 0,
       is_tournement_rule: true,
+      current_player_index: 0,
     }
-  }
-
-  pub fn current_player_index(&self) -> usize {
-    return if self.turn % 2 == 0 { 0 } else { 1 };
   }
 
   pub fn list_actions_for_player(&self, player: &Player) -> Vec<Action> {
@@ -74,7 +72,7 @@ impl Game {
   }
 
   fn can_play_piece(&self, piece: &Piece) -> bool {
-    let current_player = &self.players[self.current_player_index()];
+    let current_player = &self.players[self.current_player_index];
 
     return if self.is_tournement_rule
       && piece.p_type == PieceType::QUEENBEE
@@ -95,11 +93,10 @@ impl Game {
     let mut grid = self.grid.clone();
     let mut players = self.players.clone();
     let mut actions_history = self.actions_history.clone();
-    let current_player_index = self.current_player_index();
-
+    let current_player_index = self.current_player_index;
     let mut current_player = players[current_player_index].clone();
 
-    if self
+    return if self
       .list_actions_for_player(&current_player)
       .contains(&action)
     {
@@ -120,20 +117,24 @@ impl Game {
       }
 
       actions_history.push(action.clone());
-    }
+      players[current_player_index] = current_player;
 
-    players[current_player_index] = current_player;
+      let updated_game = Game {
+        grid,
+        players,
+        actions_history,
+        turn: self.turn,
+        is_tournement_rule: self.is_tournement_rule,
+        current_player_index,
+      };
 
-    Game {
-      grid,
-      players,
-      actions_history,
-      turn: self.turn,
-      is_tournement_rule: self.is_tournement_rule,
-    }
+      updated_game.next_turn()
+    } else {
+      (*self).clone()
+    };
   }
 
-  pub fn next_turn(&self) -> Game {
+  fn next_turn(&self) -> Game {
     let mut turn = self.turn;
 
     turn = turn + 1;
@@ -144,6 +145,11 @@ impl Game {
       actions_history: self.actions_history.clone(),
       turn,
       is_tournement_rule: self.is_tournement_rule,
+      current_player_index: Game::current_player_index(turn),
     }
+  }
+
+  fn current_player_index(turn: u64) -> usize {
+    return if turn % 2 == 0 { 0 } else { 1 };
   }
 }
