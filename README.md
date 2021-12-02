@@ -56,6 +56,7 @@ wasm-pack publish
 * ~~*grid.rs* unit tests~~
 * ~~*moves.rs* unit tests~~
 * ~~*rules.rs* unit tests~~
-* Create the game controller
-* Look for a way to use the engine
+* ~~Create the game controller~~
+* ~~Look for a way to use the engine~~
 * Complete *Usage* section
+* Add Pillbug piece type
