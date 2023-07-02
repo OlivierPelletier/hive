@@ -6,26 +6,25 @@ edition = "2018"
 description = "A game engine for Hive."
 repository = "https://github.com/OlivierPelletier/hive"
 license = ""
+build = "build.rs"
 
 [lib]
-crate-type = ["cdylib", "rlib"]
-
-[features]
-default = ["console_error_panic_hook"]
+name = "hive"
+crate-type = ["cdylib"]
 
 [dependencies]
-console_error_panic_hook = { version = "0.1.6", optional = true }
 getrandom = { version = "0.2", features = ["js"] }
 js-sys = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_with = { version = "1.5", features = ["json"] }
-uuid = { version = "0.8", features = ["v4", "wasm-bindgen"] }
-wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
-web-sys = { version = "0.3", features = ["console"] }
-wee_alloc = { version = "0.4.5", optional = true }
+serde_json = "1.0"
+uuid = { version = "0.8", features = ["v4"] }
+log = "0.4"
 
-[dev-dependencies]
-wasm-bindgen-test = "0.3.13"
+[build-dependencies]
+flapigen = "0.6.0"
+bindgen = { version = "0.66", default-features = false }
+env_logger = "0.10"
 
 [profile.release]
 opt-level = "s"

@@ -1,0 +1,18 @@
+use crate::jni_c_header::*;
+
+foreign_class!(
+	class HiveEngine {
+		self_type HiveEngine;
+		constructor HiveEngine::new()->HiveEngine;
+		fn HiveEngine::list_actions_for_player(& self , player_index : usize)->String; alias listActionsForPlayer;
+		fn HiveEngine::play_action(& mut self , action : & str); alias playAction;
+		foreign_code r#"
+    static {
+        try {
+            NativeUtils.loadLibraryFromJar("/libhive.dylib");
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }"#;
+	}
+);

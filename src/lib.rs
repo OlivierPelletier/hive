@@ -1,47 +1,49 @@
-use wasm_bindgen::prelude::*;
+#![allow(
+  clippy::enum_variant_names,
+  clippy::unused_unit,
+  clippy::let_and_return,
+  clippy::not_unsafe_ptr_arg_deref,
+  clippy::cast_lossless,
+  clippy::blacklisted_name,
+  clippy::too_many_arguments,
+  clippy::trivially_copy_pass_by_ref,
+  clippy::let_unit_value,
+  clippy::clone_on_copy
+)]
 
 use crate::engine::game::{action::Action, Game};
 
 pub mod engine;
+mod jni_c_header;
 pub mod utils;
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+include!(concat!(env!("OUT_DIR"), "/java_glue.rs"));
 
-#[wasm_bindgen]
-extern "C" {
-  pub fn alert(s: &str);
+#[allow(dead_code)]
+struct HiveEngine {
+  game: Game,
 }
 
-#[wasm_bindgen]
-pub fn greet() {
-  alert("Hello! You're correctly binded with the Hive game engine.");
-}
+impl HiveEngine {
+  #[allow(dead_code)]
+  fn new() -> HiveEngine {
+    HiveEngine {
+      game: Game::tournement(),
+    }
+  }
 
-#[wasm_bindgen]
-pub fn new_game() -> JsValue {
-  let game = Game::tournement();
+  #[allow(dead_code)]
+  fn list_actions_for_player(&self, player_index: usize) -> String {
+    let actions = self
+      .game
+      .list_actions_for_player(&self.game.players[player_index]);
 
-  JsValue::from_serde(&game).unwrap()
-}
+    serde_json::to_string(&actions).unwrap()
+  }
 
-#[wasm_bindgen]
-pub fn list_actions_for_player(game: &JsValue, player_index: usize) -> JsValue {
-  let game: Game = game.into_serde().unwrap();
-  let actions = game.list_actions_for_player(&game.players[player_index]);
-
-  JsValue::from_serde(&actions).unwrap()
-}
-
-#[wasm_bindgen]
-pub fn play_action(game: &JsValue, action: &JsValue) -> JsValue {
-  let mut game: Game = game.into_serde().unwrap();
-  let action: Action = action.into_serde().unwrap();
-
-  game = game.play_action(action);
-
-  JsValue::from_serde(&game).unwrap()
+  #[allow(dead_code)]
+  fn play_action(&mut self, action: &str) {
+    let action: Action = serde_json::from_str(action).unwrap();
+    self.game = self.game.play_action(action);
+  }
 }
