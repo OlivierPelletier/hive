@@ -128,7 +128,7 @@ impl Piece {
   }
 
   fn generate_id() -> String {
-    Uuid::new_v4().to_simple().to_string()
+    Uuid::new_v4().to_string()
   }
 }
 

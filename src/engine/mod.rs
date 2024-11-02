@@ -1,4 +1,4 @@
 pub mod game;
-pub mod grid;
-pub mod moves;
-pub mod rules;
+mod grid;
+mod moves;
+mod rules;

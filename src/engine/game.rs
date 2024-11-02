@@ -1,14 +1,11 @@
 use serde::{Deserialize, Serialize};
 
-use crate::engine::{
-  game::{action::Action, player::Player},
-  grid::{
-    coordinate::hex::Hex,
-    piece::{Piece, PieceType},
-    Grid,
-  },
-  moves::{available_actions_for_piece_color, available_moves},
-};
+use crate::engine::grid::piece::PieceColor;
+use crate::engine::{game::{action::Action, player::Player}, grid::{
+  coordinate::hex::Hex,
+  piece::{Piece, PieceType},
+  Grid,
+}, moves::{available_actions_for_piece_color, available_moves}, rules};
 
 pub mod action;
 pub mod player;
@@ -74,19 +71,12 @@ impl Game {
   fn can_play_piece(&self, piece: &Piece) -> bool {
     let current_player = &self.players[self.current_player_index];
 
-    return if self.is_tournement_rule
+    !(self.is_tournement_rule
       && piece.p_type == PieceType::QUEENBEE
-      && (self.turn == 0 || self.turn == 1)
-    {
-      false
-    } else if piece.p_type != PieceType::QUEENBEE
-      && !current_player.is_queen_played
-      && (self.turn >= 6)
-    {
-      false
-    } else {
-      true
-    };
+        && (self.turn == 0 || self.turn == 1))
+        && !(piece.p_type != PieceType::QUEENBEE
+        && !current_player.is_queen_played
+        && (self.turn >= 6))
   }
 
   pub fn play_action(&self, action: Action) -> Game {
@@ -96,7 +86,7 @@ impl Game {
     let current_player_index = self.current_player_index;
     let mut current_player = players[current_player_index].clone();
 
-    return if self
+    if self
       .list_actions_for_player(&current_player)
       .contains(&action)
     {
@@ -131,13 +121,25 @@ impl Game {
       updated_game.next_turn()
     } else {
       (*self).clone()
-    };
+    }
+  }
+
+  pub fn winner(&self) -> Option<PieceColor> {
+    let mut winner: Option<PieceColor> = None;
+
+    if rules::queen_surrended_rule(&self.grid, PieceColor::WHITE) {
+      winner = Option::from(PieceColor::BLACK)
+    } else if rules::queen_surrended_rule(&self.grid, PieceColor::BLACK) {
+      winner = Option::from(PieceColor::WHITE)
+    }
+
+    winner
   }
 
   fn next_turn(&self) -> Game {
     let mut turn = self.turn;
 
-    turn = turn + 1;
+    turn += 1;
 
     Game {
       grid: self.grid.clone(),
@@ -150,6 +152,10 @@ impl Game {
   }
 
   fn current_player_index(turn: u64) -> usize {
-    return if turn % 2 == 0 { 0 } else { 1 };
+    if turn % 2 == 0 {
+      0
+    } else {
+      1
+    }
   }
 }

@@ -1,3 +1,4 @@
+use crate::engine::grid::piece::{PieceColor, PieceType};
 use crate::engine::grid::{
   coordinate::{cube::Cube, hex::Hex},
   Grid,
@@ -10,7 +11,7 @@ pub mod hive;
 mod rules_tests;
 
 pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
-  let is_valid;
+  let mut is_valid = false;
   let mut temp_grid = Grid {
     grid: grid.grid.clone(),
   };
@@ -19,8 +20,6 @@ pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
   if grid.is_hex_occupied(from) {
     is_valid =
       hive::one_hive_rule_grid_validation(grid) && hive::one_hive_rule_grid_validation(&temp_grid);
-  } else {
-    is_valid = false;
   }
 
   is_valid
@@ -95,4 +94,18 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
     is_accessible = false;
   }
   is_accessible
+}
+
+pub fn queen_surrended_rule(grid: &Grid, color: PieceColor) -> bool {
+  let mut is_queen_surrended = false;
+
+  for hex_pieces in &grid.grid {
+    for piece in hex_pieces.1 {
+      if piece.p_type == PieceType::QUEENBEE && piece.p_color == color && grid.is_hex_surrounded(hex_pieces.0) {
+        is_queen_surrended = true
+      }
+    }
+  }
+
+  is_queen_surrended
 }

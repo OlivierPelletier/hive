@@ -4,7 +4,6 @@ use std::{
 };
 
 use serde::{Deserialize, Serialize};
-use serde_with::serde_as;
 
 use crate::engine::grid::{
   coordinate::hex::Hex,
@@ -18,10 +17,8 @@ pub mod piece;
 #[path = "../tests/grid_tests.rs"]
 mod grid_tests;
 
-#[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Grid {
-  #[serde_as(as = "HashMap<serde_with::json::JsonString, _>")]
   pub grid: HashMap<Hex, Vec<Piece>>,
 }
 
@@ -73,10 +70,7 @@ impl Grid {
 
     if self.is_hex_occupied(hex) {
       match self.grid.get(hex) {
-        Some(v) => match v.clone().pop() {
-          Some(p) => p,
-          None => none,
-        },
+        Some(v) => v.clone().pop().unwrap_or_else(|| none),
         None => none,
       }
     } else {
