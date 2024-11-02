@@ -1,6 +1,6 @@
-mod utils;
+pub mod misc;
 
-use crate::utils::get_usize_input;
+use crate::misc::utils::get_usize_input;
 use hive::engine::game::Game;
 
 fn main() {

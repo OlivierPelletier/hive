@@ -1,9 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-use crate::engine::grid::piece::PieceColor;
 use crate::engine::{game::{action::Action, player::Player}, grid::{
   coordinate::hex::Hex,
-  piece::{Piece, PieceType},
+  piece::{Piece, PieceColor, PieceType},
   Grid,
 }, moves::{available_actions_for_piece_color, available_moves}, rules};
 
