@@ -19,14 +19,6 @@ impl Hex {
     Hex { q: 0, r: 0 }
   }
 
-  pub fn to_cube(&self) -> Cube {
-    Cube {
-      x: self.q,
-      z: self.r,
-      y: -self.q - self.r,
-    }
-  }
-
   pub fn neighbors(&self) -> Vec<Hex> {
     let q = self.q;
     let r = self.r;
@@ -41,6 +33,15 @@ impl Hex {
     ];
 
     neighbors
+  }
+}
+
+impl From<Cube> for Hex {
+  fn from(cube: Cube) -> Self {
+    Hex {
+      q: cube.x,
+      r: cube.z,
+    }
   }
 }
 

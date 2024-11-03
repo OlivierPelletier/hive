@@ -9,7 +9,8 @@ The goal of this project is to create a reliable game engine for the game Hive
 using [Rust Programming Language](https://rust-lang.org).
 
 ## Setup
-* Rust 1.45.2 (https://www.rust-lang.org/tools/install)
+
+* Rust 1.82.0 (https://www.rust-lang.org/tools/install)
 
 ## Usage
 ### Run tests
@@ -17,16 +18,10 @@ using [Rust Programming Language](https://rust-lang.org).
 cargo test
 ```
 
-### Run usage example
+### Play the game through the command line
 ```
 cargo run
 ```
 
 ## TODO
-* ~~*grid.rs* unit tests~~
-* ~~*moves.rs* unit tests~~
-* ~~*rules.rs* unit tests~~
-* ~~Create the game controller~~
-* ~~Look for a way to use the engine~~
-* Complete *Usage* section
 * Add Pillbug piece type

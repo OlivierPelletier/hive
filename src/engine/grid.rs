@@ -3,12 +3,11 @@ use std::{
   fmt::{Display, Formatter},
 };
 
-use serde::{Deserialize, Serialize};
-
 use crate::engine::grid::{
   coordinate::hex::Hex,
-  piece::{Piece, PieceColor, PieceType},
+  piece::{Piece, PieceColor},
 };
+use serde::{Deserialize, Serialize};
 
 pub mod coordinate;
 pub mod piece;
@@ -29,31 +28,31 @@ impl Grid {
     Grid { grid }
   }
 
-  pub fn place_piece_to_hex(&self, piece: Piece, hex: &Hex) -> Grid {
+  pub fn place_piece_to_hex(&self, piece: Piece, hex: Hex) -> Grid {
     let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
-    let mut _vec: Vec<Piece> = match _grid.get(hex) {
+    let mut _vec: Vec<Piece> = match _grid.get(&hex) {
       None => Vec::new(),
       Some(v) => v.to_vec(),
     };
     _vec.push(piece);
-    _grid.insert(*hex, _vec);
+    _grid.insert(hex, _vec);
 
     Grid { grid: _grid }
   }
 
-  pub fn remove_top_piece_from_hex(&self, hex: &Hex) -> (Grid, Option<Piece>) {
+  pub fn remove_top_piece_from_hex(&self, hex: Hex) -> (Grid, Option<Piece>) {
     let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
-    let mut _vec: Vec<Piece> = match _grid.get(hex) {
+    let mut _vec: Vec<Piece> = match _grid.get(&hex) {
       None => Vec::new(),
       Some(v) => v.to_vec(),
     };
     let piece = _vec.pop();
-    _grid.insert(*hex, _vec);
+    _grid.insert(hex, _vec);
 
     (Grid { grid: _grid }, piece)
   }
 
-  pub fn move_piece_from_to(&self, from: &Hex, to: &Hex) -> Grid {
+  pub fn move_piece_from_to(&self, from: Hex, to: Hex) -> Grid {
     let mut _grid_piece = self.remove_top_piece_from_hex(from);
     match _grid_piece.1 {
       Some(p) => _grid_piece.0.place_piece_to_hex(p, to),
@@ -61,20 +60,14 @@ impl Grid {
     }
   }
 
-  pub fn find_top_piece(&self, hex: &Hex) -> Piece {
-    let none = Piece {
-      p_type: PieceType::NONE,
-      p_color: PieceColor::NONE,
-      id: String::from(""),
-    };
-
+  pub fn find_top_piece(&self, hex: &Hex) -> Option<&Piece> {
     if self.is_hex_occupied(hex) {
       match self.grid.get(hex) {
-        Some(v) => v.clone().pop().unwrap_or_else(|| none),
-        None => none,
+        Some(v) => v.last(),
+        None => None,
       }
     } else {
-      none
+      None
     }
   }
 
@@ -126,13 +119,16 @@ impl Grid {
     is_alone
   }
 
-  pub fn is_hex_of_color(&self, hex: &Hex, piece_color: PieceColor) -> bool {
+  pub fn is_hex_of_color(&self, hex: &Hex, piece_color: &PieceColor) -> bool {
     let piece = self.find_top_piece(hex);
 
-    piece.p_type != PieceType::NONE && piece.p_color == piece_color
+    match piece {
+      Some(p) => p.p_color == *piece_color,
+      None => false,
+    }
   }
 
-  pub fn is_hex_neighbors_only_piece_color(&self, hex: &Hex, piece_color: PieceColor) -> bool {
+  pub fn is_hex_neighbors_only_piece_color(&self, hex: &Hex, piece_color: &PieceColor) -> bool {
     let mut is_hex_surrounded_by_piece_color = true;
 
     if !self.is_hex_alone(hex) {
@@ -219,7 +215,10 @@ impl Display for Grid {
               write!(f, "{}", hex)?;
             } else {
               let piece = self.find_top_piece(&hex);
-              write!(f, " {} ", piece)?;
+              match piece {
+                Some(p) => write!(f, " {} ", p)?,
+                None => write!(f, " NA ")?,
+              }
             }
           } else if m % 2 == 1 {
             write!(f, "   __   ")?;

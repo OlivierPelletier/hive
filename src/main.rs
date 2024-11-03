@@ -22,7 +22,7 @@ fn main() {
 
         let chosen_action = get_usize_input("Choose an action");
 
-        game = game.play_action(actions[chosen_action].clone());
+        game = game.play_action(actions[chosen_action]);
         winner = game.winner();
     }
 

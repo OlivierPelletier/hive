@@ -1,6 +1,6 @@
 use super::{
   coordinate::hex::Hex,
-  piece::{Piece, PieceType},
+  piece::Piece,
   Grid,
 };
 
@@ -10,12 +10,12 @@ fn given_grid_when_placing_piece_to_hex_then_hex_contains_piece() {
   let hex = Hex::new(0, 0);
   let queen_bee = Piece::queen_bee();
 
-  grid = grid.place_piece_to_hex(queen_bee.clone(), &hex);
+  grid = grid.place_piece_to_hex(queen_bee, hex);
 
   match grid.grid.get(&hex) {
     Some(p) => {
-      let mut piece = p.clone();
-      assert_eq!(piece.pop(), Some(queen_bee.clone()));
+      let piece = p;
+      assert_eq!(*piece.last().unwrap(), queen_bee);
     }
     None => assert!(false),
   }
@@ -26,8 +26,8 @@ fn given_grid_when_removing_piece_from_hex_then_piece_is_removed_from_hex() {
   let mut grid = Grid::new();
   let hex = Hex::new(0, 0);
 
-  grid = grid.place_piece_to_hex(Piece::queen_bee(), &hex);
-  grid = grid.remove_top_piece_from_hex(&hex).0;
+  grid = grid.place_piece_to_hex(Piece::queen_bee(), hex);
+  grid = grid.remove_top_piece_from_hex(hex).0;
 
   match grid.grid.get(&hex) {
     Some(p) => assert_eq!(p.len(), 0),
@@ -42,15 +42,15 @@ fn given_grid_when_removing_piece_from_hex_containing_two_pieces_then_top_piece_
   let hex = Hex::new(0, 0);
   let queen_bee = Piece::queen_bee();
   let beetle = Piece::beetle();
-  grid = grid.place_piece_to_hex(queen_bee.clone(), &hex);
-  grid = grid.place_piece_to_hex(beetle.clone(), &hex);
+  grid = grid.place_piece_to_hex(queen_bee, hex);
+  grid = grid.place_piece_to_hex(beetle, hex);
 
-  grid = grid.remove_top_piece_from_hex(&hex).0;
+  grid = grid.remove_top_piece_from_hex(hex).0;
 
   match grid.grid.get(&hex) {
     Some(p) => {
-      let mut piece = p.clone();
-      assert_eq!(piece.pop(), Some(queen_bee.clone()));
+      let piece = p;
+      assert_eq!(piece.last(), Some(&queen_bee));
     }
     None => assert!(false),
   }
@@ -63,15 +63,15 @@ fn given_grid_when_adding_two_pieces_on_same_hex_then_hex_contains_both_pieces()
   let queen_bee = Piece::queen_bee();
   let spider = Piece::spider();
 
-  grid = grid.place_piece_to_hex(queen_bee.clone(), &hex);
-  grid = grid.place_piece_to_hex(spider.clone(), &hex);
+  grid = grid.place_piece_to_hex(queen_bee, hex);
+  grid = grid.place_piece_to_hex(spider, hex);
 
   match grid.grid.get(&hex) {
     Some(p) => {
-      let mut piece = p.clone();
+      let piece = p;
       assert_eq!(p.len(), 2);
-      assert_eq!(piece.pop(), Some(spider.clone()));
-      assert_eq!(piece.pop(), Some(queen_bee.clone()));
+      assert_eq!(piece.first(), Some(&queen_bee));
+      assert_eq!(piece.last(), Some(&spider));
     }
     None => assert!(false),
   }
@@ -83,9 +83,9 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
   let from = Hex::new(0, 0);
   let to = Hex::new(0, 1);
   let queen_bee = Piece::queen_bee();
-  grid = grid.place_piece_to_hex(queen_bee.clone(), &from);
+  grid = grid.place_piece_to_hex(queen_bee, from);
 
-  grid = grid.move_piece_from_to(&from, &to);
+  grid = grid.move_piece_from_to(from, to);
 
   match grid.grid.get(&from) {
     Some(p) => {
@@ -96,8 +96,8 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
 
   match grid.grid.get(&to) {
     Some(p) => {
-      let mut piece = p.clone();
-      assert_eq!(piece.pop(), Some(queen_bee.clone()));
+      let piece = p;
+      assert_eq!(piece.last(), Some(&queen_bee));
     }
     None => assert!(false),
   }
@@ -111,10 +111,10 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
   let to = Hex::new(0, 1);
   let queen_bee = Piece::queen_bee();
   let beetle = Piece::beetle();
-  grid = grid.place_piece_to_hex(beetle.clone(), &from);
-  grid = grid.place_piece_to_hex(queen_bee.clone(), &to);
+  grid = grid.place_piece_to_hex(beetle, from);
+  grid = grid.place_piece_to_hex(queen_bee, to);
 
-  grid = grid.move_piece_from_to(&from, &to);
+  grid = grid.move_piece_from_to(from, to);
 
   match grid.grid.get(&from) {
     Some(p) => {
@@ -125,9 +125,9 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
 
   match grid.grid.get(&to) {
     Some(p) => {
-      let mut piece = p.clone();
-      assert_eq!(piece.pop(), Some(beetle.clone()));
-      assert_eq!(piece.pop(), Some(queen_bee.clone()));
+      let piece = p;
+      assert_eq!(piece.last(), Some(&beetle));
+      assert_eq!(piece.first(), Some(&queen_bee));
     }
     None => assert!(false),
   }
@@ -140,12 +140,12 @@ fn given_grid_when_finding_top_piece_then_top_piece_is_returned() {
   let queen_bee = Piece::queen_bee();
   let ladybug = Piece::ladybug();
 
-  grid = grid.place_piece_to_hex(queen_bee.clone(), &hex);
-  grid = grid.place_piece_to_hex(ladybug.clone(), &hex);
+  grid = grid.place_piece_to_hex(queen_bee, hex);
+  grid = grid.place_piece_to_hex(ladybug, hex);
 
-  let piece = grid.find_top_piece(&hex);
+  let piece = grid.find_top_piece(&hex).unwrap();
 
-  assert_eq!(piece, ladybug.clone());
+  assert_eq!(piece, &ladybug);
 }
 
 #[test]
@@ -155,7 +155,7 @@ fn given_empty_grid_when_finding_top_piece_then_no_piece_is_returned() {
 
   let piece = grid.find_top_piece(&hex);
 
-  assert_eq!(piece.p_type, PieceType::NONE);
+  assert_eq!(piece.is_none(), true);
 }
 
 #[test]
@@ -176,12 +176,12 @@ fn given_grid_with_surrended_hex_when_is_hex_surrended_should_return_true() {
   let hex5 = Hex::new(-1, -1);
   let hex6 = Hex::new(-2, -1);
   let grid = Grid::new()
-    .place_piece_to_hex(Piece::beetle(), &hex1)
-    .place_piece_to_hex(Piece::beetle(), &hex2)
-    .place_piece_to_hex(Piece::beetle(), &hex3)
-    .place_piece_to_hex(Piece::beetle(), &hex4)
-    .place_piece_to_hex(Piece::beetle(), &hex5)
-    .place_piece_to_hex(Piece::beetle(), &hex6);
+      .place_piece_to_hex(Piece::beetle(), hex1)
+      .place_piece_to_hex(Piece::beetle(), hex2)
+      .place_piece_to_hex(Piece::beetle(), hex3)
+      .place_piece_to_hex(Piece::beetle(), hex4)
+      .place_piece_to_hex(Piece::beetle(), hex5)
+      .place_piece_to_hex(Piece::beetle(), hex6);
 
   assert!(grid.is_hex_surrounded(&center))
 }
@@ -195,11 +195,11 @@ fn given_grid_with_partially_surrended_hex_when_is_hex_surrended_should_return_f
   let hex4 = Hex::new(-1, 0);
   let hex5 = Hex::new(-1, -1);
   let grid = Grid::new()
-    .place_piece_to_hex(Piece::beetle(), &hex1)
-    .place_piece_to_hex(Piece::beetle(), &hex2)
-    .place_piece_to_hex(Piece::beetle(), &hex3)
-    .place_piece_to_hex(Piece::beetle(), &hex4)
-    .place_piece_to_hex(Piece::beetle(), &hex5);
+      .place_piece_to_hex(Piece::beetle(), hex1)
+      .place_piece_to_hex(Piece::beetle(), hex2)
+      .place_piece_to_hex(Piece::beetle(), hex3)
+      .place_piece_to_hex(Piece::beetle(), hex4)
+      .place_piece_to_hex(Piece::beetle(), hex5);
 
   assert!(!grid.is_hex_surrounded(&center))
 }
@@ -233,7 +233,7 @@ fn given_grid_empty_hex_when_is_hex_occupied_should_return_false() {
 #[test]
 fn given_grid_occupied_hex_when_is_hex_occupied_should_return_true() {
   let hex = Hex::new(0, 0);
-  let grid = Grid::new().place_piece_to_hex(Piece::beetle(), &hex);
+  let grid = Grid::new().place_piece_to_hex(Piece::beetle(), hex);
 
   assert!(grid.is_hex_occupied(&hex))
 }
@@ -250,7 +250,7 @@ fn given_empty_grid_when_is_hex_alone_should_return_true() {
 fn given_grid_with_partially_surrended_hex_when_is_hex_alone_should_return_false() {
   let center = Hex::new(-2, 0);
   let hex1 = Hex::new(-3, 0);
-  let grid = Grid::new().place_piece_to_hex(Piece::beetle(), &hex1);
+  let grid = Grid::new().place_piece_to_hex(Piece::beetle(), hex1);
 
   assert!(!grid.is_hex_alone(&center))
 }
@@ -270,11 +270,11 @@ fn given_filled_grid_when_number_of_pieces_should_return_correct_size() {
   let hex4 = Hex::new(-1, 0);
   let hex5 = Hex::new(-1, -1);
   let grid = Grid::new()
-    .place_piece_to_hex(Piece::beetle(), &hex1)
-    .place_piece_to_hex(Piece::beetle(), &hex2)
-    .place_piece_to_hex(Piece::beetle(), &hex3)
-    .place_piece_to_hex(Piece::beetle(), &hex4)
-    .place_piece_to_hex(Piece::beetle(), &hex5);
+      .place_piece_to_hex(Piece::beetle(), hex1)
+      .place_piece_to_hex(Piece::beetle(), hex2)
+      .place_piece_to_hex(Piece::beetle(), hex3)
+      .place_piece_to_hex(Piece::beetle(), hex4)
+      .place_piece_to_hex(Piece::beetle(), hex5);
 
   assert_eq!(grid.number_of_pieces(), 5)
 }

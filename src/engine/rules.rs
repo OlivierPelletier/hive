@@ -15,7 +15,7 @@ pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
   let mut temp_grid = Grid {
     grid: grid.grid.clone(),
   };
-  temp_grid = temp_grid.move_piece_from_to(from, to);
+  temp_grid = temp_grid.move_piece_from_to(*from, *to);
 
   if grid.is_hex_occupied(from) {
     is_valid =
@@ -29,8 +29,8 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
   let is_accessible;
 
   if grid.is_hex_neighbor_of(to, from) {
-    let cube = to.clone().to_cube();
-    let cube_from = from.clone().to_cube();
+    let cube = Cube::from(*to);
+    let cube_from = Cube::from(*from);
 
     if cube.x == cube_from.x {
       let xz_offset = cube.z - cube_from.z;
@@ -47,8 +47,8 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
         z: cube_from.z,
       };
 
-      let h1 = c1.to_axial();
-      let h2 = c2.to_axial();
+      let h1 = c1.into();
+      let h2 = c2.into();
 
       is_accessible = !(grid.is_hex_occupied(&h1) && grid.is_hex_occupied(&h2));
     } else if cube.z == cube_from.z {
@@ -66,8 +66,8 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
         z: cube_from.z - zy_offset,
       };
 
-      let h1 = c1.to_axial();
-      let h2 = c2.to_axial();
+      let h1 = c1.into();
+      let h2 = c2.into();
 
       is_accessible = !(grid.is_hex_occupied(&h1) && grid.is_hex_occupied(&h2));
     } else {
@@ -85,8 +85,8 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
         z: cube.z,
       };
 
-      let h1 = c1.to_axial();
-      let h2 = c2.to_axial();
+      let h1 = c1.into();
+      let h2 = c2.into();
 
       is_accessible = !(grid.is_hex_occupied(&h1) && grid.is_hex_occupied(&h2));
     }
@@ -96,16 +96,16 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
   is_accessible
 }
 
-pub fn queen_surrended_rule(grid: &Grid, color: PieceColor) -> bool {
-  let mut is_queen_surrended = false;
+pub fn queen_surrounded_rule(grid: &Grid, color: PieceColor) -> bool {
+  let mut is_queen_surrounded = false;
 
   for hex_pieces in &grid.grid {
     for piece in hex_pieces.1 {
       if piece.p_type == PieceType::QUEENBEE && piece.p_color == color && grid.is_hex_surrounded(hex_pieces.0) {
-        is_queen_surrended = true
+        is_queen_surrounded = true
       }
     }
   }
 
-  is_queen_surrended
+  is_queen_surrounded
 }

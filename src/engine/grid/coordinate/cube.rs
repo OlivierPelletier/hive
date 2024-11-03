@@ -28,13 +28,6 @@ impl Cube {
     Cube { x: -y - z, y, z }
   }
 
-  pub fn to_axial(&self) -> Hex {
-    Hex {
-      q: self.x,
-      r: self.z,
-    }
-  }
-
   pub fn neighbors(&self) -> Vec<Cube> {
     let x = self.x;
     let z = self.z;
@@ -74,6 +67,16 @@ impl Cube {
     ];
 
     neighbors
+  }
+}
+
+impl From<Hex> for Cube {
+  fn from(hex: Hex) -> Cube {
+    Cube {
+      x: hex.q,
+      z: hex.r,
+      y: -hex.q - hex.r,
+    }
   }
 }
 

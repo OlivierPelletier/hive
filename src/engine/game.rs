@@ -38,24 +38,26 @@ impl Game {
       for from in self.grid.grid.keys() {
         let piece = self.grid.find_top_piece(from);
 
-        if piece.p_type != PieceType::NONE && piece.p_color == player.color {
-          for to in available_moves(&self.grid, from) {
-            actions.push(Action {
-              piece: piece.clone(),
-              from: *from,
-              to,
-              in_hand: false,
-            })
+        if let Some(piece) = piece {
+          if piece.p_color == player.color {
+            for to in available_moves(&self.grid, from) {
+              actions.push(Action {
+                piece: *piece,
+                from: *from,
+                to,
+                in_hand: false,
+              })
+            }
           }
         }
       }
     }
 
-    for to in available_actions_for_piece_color(&self.grid, player.color) {
-      for piece in player.pieces.clone() {
-        if self.can_play_piece(&piece) {
+    for to in available_actions_for_piece_color(&self.grid, &player.color) {
+      for piece in &player.pieces {
+        if self.can_play_piece(piece) {
           actions.push(Action {
-            piece,
+            piece: *piece,
             from: Hex::zero(),
             to,
             in_hand: true,
@@ -90,22 +92,22 @@ impl Game {
       .contains(&action)
     {
       if action.in_hand {
-        grid = grid.place_piece_to_hex(action.piece.clone(), &action.to);
+        grid = grid.place_piece_to_hex(action.piece, action.to);
         let index = current_player
           .pieces
           .iter()
-          .position(|p| p.clone().id == action.piece.id)
+            .position(|p| p.id == action.piece.id)
           .unwrap();
         current_player.pieces.remove(index);
       } else {
-        grid = grid.move_piece_from_to(&action.from, &action.to)
+        grid = grid.move_piece_from_to(action.from, action.to)
       }
 
       if action.piece.p_type == PieceType::QUEENBEE {
         current_player.is_queen_played = true
       }
 
-      actions_history.push(action.clone());
+      actions_history.push(action);
       players[current_player_index] = current_player;
 
       let updated_game = Game {
@@ -119,16 +121,16 @@ impl Game {
 
       updated_game.next_turn()
     } else {
-      (*self).clone()
+      self.clone()
     }
   }
 
   pub fn winner(&self) -> Option<PieceColor> {
     let mut winner: Option<PieceColor> = None;
 
-    if rules::queen_surrended_rule(&self.grid, PieceColor::WHITE) {
+    if rules::queen_surrounded_rule(&self.grid, PieceColor::WHITE) {
       winner = Option::from(PieceColor::BLACK)
-    } else if rules::queen_surrended_rule(&self.grid, PieceColor::BLACK) {
+    } else if rules::queen_surrounded_rule(&self.grid, PieceColor::BLACK) {
       winner = Option::from(PieceColor::WHITE)
     }
 

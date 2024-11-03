@@ -47,11 +47,11 @@ impl Debug for PieceColor {
   }
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Copy, Serialize, Deserialize)]
 pub struct Piece {
   pub p_type: PieceType,
   pub p_color: PieceColor,
-  pub id: String,
+  pub id: Uuid,
 }
 
 impl Piece {
@@ -115,7 +115,7 @@ impl Piece {
     Piece {
       p_type: self.p_type,
       p_color: PieceColor::WHITE,
-      id: self.id.clone(),
+      id: self.id,
     }
   }
 
@@ -123,12 +123,12 @@ impl Piece {
     Piece {
       p_type: self.p_type,
       p_color: PieceColor::BLACK,
-      id: self.id.clone(),
+      id: self.id,
     }
   }
 
-  fn generate_id() -> String {
-    Uuid::new_v4().to_string()
+  fn generate_id() -> Uuid {
+    Uuid::new_v4()
   }
 }
 

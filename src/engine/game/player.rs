@@ -10,55 +10,47 @@ pub struct Player {
 }
 
 impl Player {
-  pub fn new() -> Player {
+    pub fn white() -> Player {
     Player {
       pieces: vec![
-        Piece::queen_bee(),
-        Piece::spider(),
-        Piece::spider(),
-        Piece::beetle(),
-        Piece::beetle(),
-        Piece::grasshopper(),
-        Piece::grasshopper(),
-        Piece::grasshopper(),
-        Piece::soldier_ant(),
-        Piece::soldier_ant(),
-        Piece::soldier_ant(),
-        Piece::mosquito(),
-        Piece::ladybug(),
+          Piece::queen_bee().white(),
+          Piece::spider().white(),
+          Piece::spider().white(),
+          Piece::beetle().white(),
+          Piece::beetle().white(),
+          Piece::grasshopper().white(),
+          Piece::grasshopper().white(),
+          Piece::grasshopper().white(),
+          Piece::soldier_ant().white(),
+          Piece::soldier_ant().white(),
+          Piece::soldier_ant().white(),
+          Piece::mosquito().white(),
+          Piece::ladybug().white(),
       ],
-      color: PieceColor::NONE,
+        color: PieceColor::WHITE,
       is_queen_played: false,
     }
   }
 
-  pub fn black() -> Player {
-    let player = Player::new();
-
-    let mut colored_pieces = player.pieces.clone();
-    for piece in colored_pieces.iter_mut() {
-      *piece = piece.black();
-    }
-
+    pub fn black() -> Player {
     Player {
-      pieces: colored_pieces,
+        pieces: vec![
+            Piece::queen_bee().black(),
+            Piece::spider().black(),
+            Piece::spider().black(),
+            Piece::beetle().black(),
+            Piece::beetle().black(),
+            Piece::grasshopper().black(),
+            Piece::grasshopper().black(),
+            Piece::grasshopper().black(),
+            Piece::soldier_ant().black(),
+            Piece::soldier_ant().black(),
+            Piece::soldier_ant().black(),
+            Piece::mosquito().black(),
+            Piece::ladybug().black(),
+        ],
       color: PieceColor::BLACK,
-      is_queen_played: player.is_queen_played,
-    }
-  }
-
-  pub fn white() -> Player {
-    let player = Player::new();
-
-    let mut colored_pieces = player.pieces.clone();
-    for piece in colored_pieces.iter_mut() {
-      *piece = piece.white();
-    }
-
-    Player {
-      pieces: colored_pieces,
-      color: PieceColor::WHITE,
-      is_queen_played: player.is_queen_played,
+        is_queen_played: false,
     }
   }
 }
