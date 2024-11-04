@@ -1,16 +1,22 @@
+use crate::engine::{
+  game::{action::Action, player::Player},
+  grid::{
+    coordinate::hex::Hex,
+    piece::{Piece, PieceColor, PieceType},
+    Grid,
+  },
+  moves::{available_actions_for_piece_color, available_moves},
+  rules,
+};
 use serde::{Deserialize, Serialize};
-
-use crate::engine::{game::{action::Action, player::Player}, grid::{
-  coordinate::hex::Hex,
-  piece::{Piece, PieceColor, PieceType},
-  Grid,
-}, moves::{available_actions_for_piece_color, available_moves}, rules};
+use uuid::Uuid;
 
 pub mod action;
 pub mod player;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Game {
+  pub id: Uuid,
   pub grid: Grid,
   pub players: Vec<Player>,
   pub actions_history: Vec<Action>,
@@ -22,6 +28,7 @@ pub struct Game {
 impl Game {
   pub fn tournement() -> Game {
     Game {
+      id: Uuid::new_v4(),
       grid: Grid::new(),
       players: vec![Player::white(), Player::black()],
       actions_history: Vec::new(),
@@ -74,8 +81,8 @@ impl Game {
 
     !(self.is_tournement_rule
       && piece.p_type == PieceType::QUEENBEE
-        && (self.turn == 0 || self.turn == 1))
-        && !(piece.p_type != PieceType::QUEENBEE
+      && (self.turn == 0 || self.turn == 1))
+      && !(piece.p_type != PieceType::QUEENBEE
         && !current_player.is_queen_played
         && (self.turn >= 6))
   }
@@ -96,7 +103,7 @@ impl Game {
         let index = current_player
           .pieces
           .iter()
-            .position(|p| p.id == action.piece.id)
+          .position(|p| p.p_type == action.piece.p_type && p.p_color == action.piece.p_color)
           .unwrap();
         current_player.pieces.remove(index);
       } else {
@@ -111,6 +118,7 @@ impl Game {
       players[current_player_index] = current_player;
 
       let updated_game = Game {
+        id: self.id,
         grid,
         players,
         actions_history,
@@ -143,6 +151,7 @@ impl Game {
     turn += 1;
 
     Game {
+      id: self.id,
       grid: self.grid.clone(),
       players: self.players.clone(),
       actions_history: self.actions_history.clone(),

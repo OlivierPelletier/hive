@@ -1,7 +1,6 @@
 use std::fmt::{Debug, Display, Formatter, Result};
 
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 #[derive(Clone, Copy, Eq, PartialEq, Serialize, Deserialize)]
 pub enum PieceType {
@@ -51,7 +50,6 @@ impl Debug for PieceColor {
 pub struct Piece {
   pub p_type: PieceType,
   pub p_color: PieceColor,
-  pub id: Uuid,
 }
 
 impl Piece {
@@ -59,7 +57,6 @@ impl Piece {
     Piece {
       p_type: PieceType::QUEENBEE,
       p_color: PieceColor::NONE,
-      id: Piece::generate_id(),
     }
   }
 
@@ -67,7 +64,6 @@ impl Piece {
     Piece {
       p_type: PieceType::BEETLE,
       p_color: PieceColor::NONE,
-      id: Piece::generate_id(),
     }
   }
 
@@ -75,7 +71,6 @@ impl Piece {
     Piece {
       p_type: PieceType::GRASSHOPPER,
       p_color: PieceColor::NONE,
-      id: Piece::generate_id(),
     }
   }
 
@@ -83,7 +78,6 @@ impl Piece {
     Piece {
       p_type: PieceType::LADYBUG,
       p_color: PieceColor::NONE,
-      id: Piece::generate_id(),
     }
   }
 
@@ -91,7 +85,6 @@ impl Piece {
     Piece {
       p_type: PieceType::MOSQUITO,
       p_color: PieceColor::NONE,
-      id: Piece::generate_id(),
     }
   }
 
@@ -99,7 +92,6 @@ impl Piece {
     Piece {
       p_type: PieceType::SOLDIERANT,
       p_color: PieceColor::NONE,
-      id: Piece::generate_id(),
     }
   }
 
@@ -107,7 +99,6 @@ impl Piece {
     Piece {
       p_type: PieceType::SPIDER,
       p_color: PieceColor::NONE,
-      id: Piece::generate_id(),
     }
   }
 
@@ -115,7 +106,6 @@ impl Piece {
     Piece {
       p_type: self.p_type,
       p_color: PieceColor::WHITE,
-      id: self.id,
     }
   }
 
@@ -123,12 +113,7 @@ impl Piece {
     Piece {
       p_type: self.p_type,
       p_color: PieceColor::BLACK,
-      id: self.id,
     }
-  }
-
-  fn generate_id() -> Uuid {
-    Uuid::new_v4()
   }
 }
 
