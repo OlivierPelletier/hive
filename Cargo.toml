@@ -1,5 +1,5 @@
 [package]
-name = "hive"
+name = "hive-engine"
 version = "0.1.0"
 authors = ["Olivier Pelletier <olivier.op@outlook.com>"]
 edition = "2021"
@@ -14,7 +14,7 @@ name = "hive"
 crate-type = ["lib"]
 
 [[bin]]
-name = "hive"
+name = "hive-engine"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
