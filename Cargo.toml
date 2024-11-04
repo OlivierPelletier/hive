@@ -2,10 +2,12 @@
 name = "hive"
 version = "0.1.0"
 authors = ["Olivier Pelletier <olivier.op@outlook.com>"]
-edition = "2018"
+edition = "2021"
+rust-version = "1.82"
 description = "A game engine for Hive."
 repository = "https://github.com/OlivierPelletier/hive"
-license = ""
+license = "MIT"
+readme = "README.md"
 
 [lib]
 name = "hive"
@@ -19,4 +21,4 @@ serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.11", features = ["v4", "serde"] }
 
 [profile.release]
-opt-level = "s"
+opt-level = 3
