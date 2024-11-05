@@ -22,7 +22,7 @@ fn main() {
 
     let mut chosen_action = get_usize_input("Choose an action");
 
-    while !(0 <= chosen_action) || !(chosen_action < actions.len()) {
+    while !(chosen_action < actions.len()) {
       chosen_action = get_usize_input("Try again...");
     }
 
