@@ -26,7 +26,7 @@ pub struct Game {
 }
 
 impl Game {
-  pub fn tournement() -> Game {
+  pub fn tournament() -> Game {
     Game {
       id: Uuid::new_v4(),
       grid: Grid::new(),
@@ -87,49 +87,30 @@ impl Game {
         && (self.turn >= 6))
   }
 
-  pub fn play_action(&self, action: Action) -> Game {
-    let mut grid = self.grid.clone();
-    let mut players = self.players.clone();
-    let mut actions_history = self.actions_history.clone();
-    let current_player_index = self.current_player_index;
-    let mut current_player = players[current_player_index].clone();
-
+  pub fn play_action(&mut self, action: Action) {
     if self
-      .list_actions_for_player(&current_player)
+      .list_actions_for_player(&self.players[self.current_player_index])
       .contains(&action)
     {
       if action.in_hand {
-        grid = grid.place_piece_to_hex(action.piece, action.to);
-        let index = current_player
+        self.grid.place_piece_to_hex(action.piece, action.to);
+        let index = self.players[self.current_player_index]
           .pieces
           .iter()
           .position(|p| p.p_type == action.piece.p_type && p.p_color == action.piece.p_color)
           .unwrap();
-        current_player.pieces.remove(index);
+        self.players[self.current_player_index].pieces.remove(index);
       } else {
-        grid = grid.move_piece_from_to(action.from, action.to)
+        self.grid.move_piece_from_to(action.from, action.to)
       }
 
       if action.piece.p_type == PieceType::QUEENBEE {
-        current_player.is_queen_played = true
+        self.players[self.current_player_index].is_queen_played = true
       }
 
-      actions_history.push(action);
-      players[current_player_index] = current_player;
+      self.actions_history.push(action);
 
-      let updated_game = Game {
-        id: self.id,
-        grid,
-        players,
-        actions_history,
-        turn: self.turn,
-        is_tournement_rule: self.is_tournement_rule,
-        current_player_index,
-      };
-
-      updated_game.next_turn()
-    } else {
-      self.clone()
+      self.next_turn()
     }
   }
 
@@ -145,20 +126,9 @@ impl Game {
     winner
   }
 
-  fn next_turn(&self) -> Game {
-    let mut turn = self.turn;
-
-    turn += 1;
-
-    Game {
-      id: self.id,
-      grid: self.grid.clone(),
-      players: self.players.clone(),
-      actions_history: self.actions_history.clone(),
-      turn,
-      is_tournement_rule: self.is_tournement_rule,
-      current_player_index: Game::current_player_index(turn),
-    }
+  fn next_turn(&mut self) {
+    self.turn += 1;
+    self.current_player_index = Game::current_player_index(self.turn);
   }
 
   fn current_player_index(turn: u64) -> usize {

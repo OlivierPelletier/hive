@@ -8,28 +8,31 @@ use crate::engine::{
 };
 
 /*
-   __    W MSQT  B LDBG    __      __    W QBEE  W SANT
-  -3,-1   -2,-1   -1,-1   0,-1    1,-1    2,-1    3,-1
-     B QBEE  B GRHP  B BETL  W BETL  W GRHP  W GRHP    __
-      -3,0    -2,0    -1,0     0,0     1,0     2,0     3,0
-         B SANT  B BETL    __    W SPDR    __      __      __
-          -3,1    -2,1    -1,1     0,1     1,1     2,1     3,1
- */
+  __    W MSQT  B LDBG    __      __    W QBEE  W SANT
+ -3,-1   -2,-1   -1,-1   0,-1    1,-1    2,-1    3,-1
+    B QBEE  B GRHP  B BETL  W BETL  W GRHP  W GRHP    __
+     -3,0    -2,0    -1,0     0,0     1,0     2,0     3,0
+        B SANT  B BETL    __    W SPDR    __      __      __
+         -3,1    -2,1    -1,1     0,1     1,1     2,1     3,1
+*/
 fn initialize_grid() -> Grid {
-  Grid::new()
-      .place_piece_to_hex(Piece::queen_bee().white(), Hex::new(2, -1))
-      .place_piece_to_hex(Piece::queen_bee().black(), Hex::new(-3, -0))
-      .place_piece_to_hex(Piece::beetle().white(), Hex::new(0, 0))
-      .place_piece_to_hex(Piece::beetle().black(), Hex::new(-2, 1))
-      .place_piece_to_hex(Piece::beetle().black(), Hex::new(-1, 0))
-      .place_piece_to_hex(Piece::grasshopper().white(), Hex::new(1, 0))
-      .place_piece_to_hex(Piece::grasshopper().white(), Hex::new(2, 0))
-      .place_piece_to_hex(Piece::grasshopper().black(), Hex::new(-2, 0))
-      .place_piece_to_hex(Piece::soldier_ant().black(), Hex::new(-3, 1))
-      .place_piece_to_hex(Piece::soldier_ant().white(), Hex::new(3, -1))
-      .place_piece_to_hex(Piece::spider().white(), Hex::new(0, 1))
-      .place_piece_to_hex(Piece::ladybug().black(), Hex::new(-1, -1))
-      .place_piece_to_hex(Piece::mosquito().white(), Hex::new(-2, -1))
+  let mut grid = Grid::new();
+
+  grid.place_piece_to_hex(Piece::queen_bee().white(), Hex::new(2, -1));
+  grid.place_piece_to_hex(Piece::queen_bee().black(), Hex::new(-3, -0));
+  grid.place_piece_to_hex(Piece::beetle().white(), Hex::new(0, 0));
+  grid.place_piece_to_hex(Piece::beetle().black(), Hex::new(-2, 1));
+  grid.place_piece_to_hex(Piece::beetle().black(), Hex::new(-1, 0));
+  grid.place_piece_to_hex(Piece::grasshopper().white(), Hex::new(1, 0));
+  grid.place_piece_to_hex(Piece::grasshopper().white(), Hex::new(2, 0));
+  grid.place_piece_to_hex(Piece::grasshopper().black(), Hex::new(-2, 0));
+  grid.place_piece_to_hex(Piece::soldier_ant().black(), Hex::new(-3, 1));
+  grid.place_piece_to_hex(Piece::soldier_ant().white(), Hex::new(3, -1));
+  grid.place_piece_to_hex(Piece::spider().white(), Hex::new(0, 1));
+  grid.place_piece_to_hex(Piece::ladybug().black(), Hex::new(-1, -1));
+  grid.place_piece_to_hex(Piece::mosquito().white(), Hex::new(-2, -1));
+
+  grid
 }
 
 #[test]

@@ -15,7 +15,7 @@ pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
   let mut temp_grid = Grid {
     grid: grid.grid.clone(),
   };
-  temp_grid = temp_grid.move_piece_from_to(*from, *to);
+  temp_grid.move_piece_from_to(*from, *to);
 
   if grid.is_hex_occupied(from) {
     is_valid =
@@ -101,7 +101,10 @@ pub fn queen_surrounded_rule(grid: &Grid, color: PieceColor) -> bool {
 
   for hex_pieces in &grid.grid {
     for piece in hex_pieces.1 {
-      if piece.p_type == PieceType::QUEENBEE && piece.p_color == color && grid.is_hex_surrounded(hex_pieces.0) {
+      if piece.p_type == PieceType::QUEENBEE
+        && piece.p_color == color
+        && grid.is_hex_surrounded(hex_pieces.0)
+      {
         is_queen_surrounded = true
       }
     }

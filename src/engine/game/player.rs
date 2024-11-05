@@ -10,47 +10,47 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn white() -> Player {
+  pub fn white() -> Player {
     Player {
       pieces: vec![
-          Piece::queen_bee().white(),
-          Piece::spider().white(),
-          Piece::spider().white(),
-          Piece::beetle().white(),
-          Piece::beetle().white(),
-          Piece::grasshopper().white(),
-          Piece::grasshopper().white(),
-          Piece::grasshopper().white(),
-          Piece::soldier_ant().white(),
-          Piece::soldier_ant().white(),
-          Piece::soldier_ant().white(),
-          Piece::mosquito().white(),
-          Piece::ladybug().white(),
+        Piece::queen_bee().white(),
+        Piece::spider().white(),
+        Piece::spider().white(),
+        Piece::beetle().white(),
+        Piece::beetle().white(),
+        Piece::grasshopper().white(),
+        Piece::grasshopper().white(),
+        Piece::grasshopper().white(),
+        Piece::soldier_ant().white(),
+        Piece::soldier_ant().white(),
+        Piece::soldier_ant().white(),
+        Piece::mosquito().white(),
+        Piece::ladybug().white(),
       ],
-        color: PieceColor::WHITE,
+      color: PieceColor::WHITE,
       is_queen_played: false,
     }
   }
 
-    pub fn black() -> Player {
+  pub fn black() -> Player {
     Player {
-        pieces: vec![
-            Piece::queen_bee().black(),
-            Piece::spider().black(),
-            Piece::spider().black(),
-            Piece::beetle().black(),
-            Piece::beetle().black(),
-            Piece::grasshopper().black(),
-            Piece::grasshopper().black(),
-            Piece::grasshopper().black(),
-            Piece::soldier_ant().black(),
-            Piece::soldier_ant().black(),
-            Piece::soldier_ant().black(),
-            Piece::mosquito().black(),
-            Piece::ladybug().black(),
-        ],
+      pieces: vec![
+        Piece::queen_bee().black(),
+        Piece::spider().black(),
+        Piece::spider().black(),
+        Piece::beetle().black(),
+        Piece::beetle().black(),
+        Piece::grasshopper().black(),
+        Piece::grasshopper().black(),
+        Piece::grasshopper().black(),
+        Piece::soldier_ant().black(),
+        Piece::soldier_ant().black(),
+        Piece::soldier_ant().black(),
+        Piece::mosquito().black(),
+        Piece::ladybug().black(),
+      ],
       color: PieceColor::BLACK,
-        is_queen_played: false,
+      is_queen_played: false,
     }
   }
 }

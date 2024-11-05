@@ -13,7 +13,9 @@ pub fn mosquito_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   for neighbor in hex.neighbors() {
     let piece = grid.find_top_piece(&neighbor);
 
-    if let Some(p) = piece { found_types.push(p.p_type) }
+    if let Some(p) = piece {
+      found_types.push(p.p_type)
+    }
   }
 
   for found_type in found_types {

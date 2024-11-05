@@ -19,7 +19,7 @@ fn spider_moves_it(grid: &Grid, hex: &Hex, initital_hex: &Hex, path: Vec<Hex>) -
     if !_path.contains(&neighbor)
       && !grid.is_hex_occupied(&neighbor)
       && one_hive_rule(grid, initital_hex, &neighbor)
-        && freedom_to_move_rule(grid, hex, &neighbor)
+      && freedom_to_move_rule(grid, hex, &neighbor)
     {
       let mut current_path = _path.clone();
       current_path.push(neighbor);

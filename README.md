@@ -1,10 +1,15 @@
 # Hive Game Engine
+
 A game engine for the board game Hive made with Rust.
 
 ## Hive
-Hive is a bug-themed tabletop game, designed by John Yianni and published in 2001 by Gen42 Games. The object of Hive is to capture the opponent's queen bee by completely surrounding it, while avoiding the capture of one's own queen ([Wikipedia](https://en.wikipedia.org/wiki/Hive_(game))).
+
+Hive is a bug-themed tabletop game, designed by John Yianni and published in 2001 by Gen42 Games.
+The object of Hive is to capture the opponent's queen bee by completely surrounding it, while
+avoiding the capture of one's own queen ([Wikipedia](https://en.wikipedia.org/wiki/Hive_(game))).
 
 ## Purpose
+
 The goal of this project is to create a reliable game engine for the game Hive
 using [Rust Programming Language](https://rust-lang.org).
 
@@ -13,18 +18,40 @@ using [Rust Programming Language](https://rust-lang.org).
 * Rust 1.82.0 (https://www.rust-lang.org/tools/install)
 
 ## Usage
-### Run tests
+
+### As a library
+
+Add hive-engine to your dependencies:
+
 ```
-cargo test
+hive-engine = "0"
 ```
 
-### Play the game through command line
+And then get started in your `main.rs`:
+
+```rust
+// Initialize game
+let mut game: Game = Game::tournament();
+
+//List actions for a player
+let actions: Vec<Action> = game.list_actions_for_player( & game.players[game.current_player_index]);
+
+// Play an action
+let chosen_action: Action = actions[0];
+game.play_action(chosen_action);
+
+// Check if there's a winner
+let winner: Option<PieceColor> = game.winner();
+```
+
+### As a command line prototype
+
 ```
 cargo run
 ```
 
-Ex:
 ```
+...
    __      __      __      __      __      __      __      __      __      __
   -2,-6   -1,-6   0,-6    1,-6    2,-6    3,-6    4,-6    5,-6    6,-6    7,-6
        __      __      __      __      __      __    W BETL    __    W SANT    __
@@ -53,7 +80,14 @@ Choose an action:
 B wins!
 ```
 
+## Development
 
+### Run tests
+
+```
+cargo test
+```
 
 ## TODO
+
 * Add Pillbug piece type

@@ -28,19 +28,17 @@ pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   let piece = grid.find_top_piece(hex);
 
   match piece {
-    Some(p) => {
-      match p.p_type {
-        PieceType::BEETLE => beetle_moves(grid, hex),
-        PieceType::GRASSHOPPER => grasshopper_moves(grid, hex),
-        PieceType::LADYBUG => ladybug_moves(grid, hex),
-        PieceType::MOSQUITO => mosquito_moves(grid, hex),
-        PieceType::NONE => Vec::new(),
-        PieceType::QUEENBEE => queen_bee_moves(grid, hex),
-        PieceType::SOLDIERANT => soldier_ant_moves(grid, hex),
-        PieceType::SPIDER => spider_moves(grid, hex),
-      }
-    }
-    None => { Vec::new() }
+    Some(p) => match p.p_type {
+      PieceType::BEETLE => beetle_moves(grid, hex),
+      PieceType::GRASSHOPPER => grasshopper_moves(grid, hex),
+      PieceType::LADYBUG => ladybug_moves(grid, hex),
+      PieceType::MOSQUITO => mosquito_moves(grid, hex),
+      PieceType::NONE => Vec::new(),
+      PieceType::QUEENBEE => queen_bee_moves(grid, hex),
+      PieceType::SOLDIERANT => soldier_ant_moves(grid, hex),
+      PieceType::SPIDER => spider_moves(grid, hex),
+    },
+    None => Vec::new(),
   }
 }
 

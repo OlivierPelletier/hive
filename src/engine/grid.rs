@@ -28,36 +28,32 @@ impl Grid {
     Grid { grid }
   }
 
-  pub fn place_piece_to_hex(&self, piece: Piece, hex: Hex) -> Grid {
-    let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
-    let mut _vec: Vec<Piece> = match _grid.get(&hex) {
+  pub fn place_piece_to_hex(&mut self, piece: Piece, hex: Hex) {
+    let mut pieces: Vec<Piece> = match self.grid.get(&hex) {
       None => Vec::new(),
       Some(v) => v.to_vec(),
     };
-    _vec.push(piece);
-    _grid.insert(hex, _vec);
-
-    Grid { grid: _grid }
+    pieces.push(piece);
+    self.grid.insert(hex, pieces);
   }
 
-  pub fn remove_top_piece_from_hex(&self, hex: Hex) -> (Grid, Option<Piece>) {
-    let mut _grid: HashMap<Hex, Vec<Piece>> = self.grid.clone();
-    let mut _vec: Vec<Piece> = match _grid.get(&hex) {
+  pub fn remove_top_piece_from_hex(&mut self, hex: Hex) -> Option<Piece> {
+    let mut pieces: Vec<Piece> = match self.grid.get(&hex) {
       None => Vec::new(),
       Some(v) => v.to_vec(),
     };
-    let piece = _vec.pop();
-    _grid.insert(hex, _vec);
+    let piece = pieces.pop();
+    self.grid.insert(hex, pieces);
 
-    (Grid { grid: _grid }, piece)
+    piece
   }
 
-  pub fn move_piece_from_to(&self, from: Hex, to: Hex) -> Grid {
-    let mut _grid_piece = self.remove_top_piece_from_hex(from);
-    match _grid_piece.1 {
-      Some(p) => _grid_piece.0.place_piece_to_hex(p, to),
-      None => _grid_piece.0,
-    }
+  pub fn move_piece_from_to(&mut self, from: Hex, to: Hex) {
+    let removed_piece = self.remove_top_piece_from_hex(from);
+    match removed_piece {
+      Some(p) => self.place_piece_to_hex(p, to),
+      None => (),
+    };
   }
 
   pub fn find_top_piece(&self, hex: &Hex) -> Option<&Piece> {
