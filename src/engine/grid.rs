@@ -50,9 +50,8 @@ impl Grid {
 
   pub fn move_piece_from_to(&mut self, from: Hex, to: Hex) {
     let removed_piece = self.remove_top_piece_from_hex(from);
-    match removed_piece {
-      Some(p) => self.place_piece_to_hex(p, to),
-      None => (),
+    if let Some(p) = removed_piece {
+      self.place_piece_to_hex(p, to)
     };
   }
 
