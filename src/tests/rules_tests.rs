@@ -1,8 +1,8 @@
 use crate::engine::grid::piece::PieceColor;
 use crate::engine::rules::queen_surrounded_rule;
 use crate::engine::{
-    grid::{coordinate::hex::Hex, piece::Piece, Grid},
-    rules::one_hive_rule,
+  grid::{coordinate::hex::Hex, piece::Piece, Grid},
+  rules::one_hive_rule,
 };
 
 /*
