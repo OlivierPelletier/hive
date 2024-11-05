@@ -23,7 +23,7 @@ fn main() {
     let mut chosen_action = get_usize_input("Choose an action");
 
     while chosen_action >= actions.len() {
-      chosen_action = get_usize_input("Try again...");
+      chosen_action = get_usize_input("Invalid number... Try again");
     }
 
     game.play_action(actions[chosen_action]);
