@@ -13,7 +13,7 @@ fn given_grid_when_placing_piece_to_hex_then_hex_contains_piece() {
       let piece = p;
       assert_eq!(*piece.last().unwrap(), queen_bee);
     }
-    None => assert!(false),
+    None => panic!(),
   }
 }
 
@@ -27,7 +27,7 @@ fn given_grid_when_removing_piece_from_hex_then_piece_is_removed_from_hex() {
 
   match grid.grid.get(&hex) {
     Some(p) => assert_eq!(p.len(), 0),
-    None => assert!(false),
+    None => panic!(),
   }
 }
 
@@ -47,7 +47,7 @@ fn given_grid_when_removing_piece_from_hex_containing_two_pieces_then_top_piece_
       let piece = p;
       assert_eq!(piece.last(), Some(&queen_bee));
     }
-    None => assert!(false),
+    None => panic!(),
   }
 }
 
@@ -68,7 +68,7 @@ fn given_grid_when_adding_two_pieces_on_same_hex_then_hex_contains_both_pieces()
       assert_eq!(piece.first(), Some(&queen_bee));
       assert_eq!(piece.last(), Some(&spider));
     }
-    None => assert!(false),
+    None => panic!(),
   }
 }
 
@@ -86,7 +86,7 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
     Some(p) => {
       assert_eq!(p.len(), 0);
     }
-    None => assert!(false),
+    None => panic!(),
   }
 
   match grid.grid.get(&to) {
@@ -94,7 +94,7 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
       let piece = p;
       assert_eq!(piece.last(), Some(&queen_bee));
     }
-    None => assert!(false),
+    None => panic!(),
   }
 }
 
@@ -115,7 +115,7 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
     Some(p) => {
       assert_eq!(p.len(), 0);
     }
-    None => assert!(false),
+    None => panic!(),
   }
 
   match grid.grid.get(&to) {
@@ -124,7 +124,7 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
       assert_eq!(piece.last(), Some(&beetle));
       assert_eq!(piece.first(), Some(&queen_bee));
     }
-    None => assert!(false),
+    None => panic!(),
   }
 }
 
@@ -150,7 +150,7 @@ fn given_empty_grid_when_finding_top_piece_then_no_piece_is_returned() {
 
   let piece = grid.find_top_piece(&hex);
 
-  assert_eq!(piece.is_none(), true);
+  assert!(piece.is_none());
 }
 
 #[test]
