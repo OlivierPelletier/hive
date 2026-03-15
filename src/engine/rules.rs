@@ -15,12 +15,12 @@ pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
     return false;
   }
 
-  let mut temp_grid = Grid {
+  let mut after_move_grid = Grid {
     grid: grid.grid.clone(),
   };
-  temp_grid.move_piece_from_to(*from, *to);
+  after_move_grid.move_piece_from_to(*from, *to);
 
-  hive::one_hive_rule_grid_validation(grid) && hive::one_hive_rule_grid_validation(&temp_grid)
+  hive::one_hive_rule_grid_validation(grid) && hive::one_hive_rule_grid_validation(&after_move_grid)
 }
 
 pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
@@ -28,9 +28,12 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
     return false;
   }
 
-  let is_accessible;
+  let to_stack_size = grid.get_stack_size(to);
+
   let cube = Cube::from(*to);
   let cube_from = Cube::from(*from);
+  let h1;
+  let h2;
 
   if cube.x == cube_from.x {
     let xz_offset = cube.z - cube_from.z;
@@ -47,10 +50,8 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
       z: cube_from.z,
     };
 
-    let h1 = c1.into();
-    let h2 = c2.into();
-
-    is_accessible = !(grid.is_hex_occupied(&h1) && grid.is_hex_occupied(&h2));
+    h1 = c1.into();
+    h2 = c2.into();
   } else if cube.z == cube_from.z {
     let zx_offset = cube.x - cube_from.x;
     let zy_offset = cube.y - cube_from.y;
@@ -66,10 +67,8 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
       z: cube_from.z - zy_offset,
     };
 
-    let h1 = c1.into();
-    let h2 = c2.into();
-
-    is_accessible = !(grid.is_hex_occupied(&h1) && grid.is_hex_occupied(&h2));
+    h1 = c1.into();
+    h2 = c2.into();
   } else {
     let yx_offset = cube.x - cube_from.x;
     let yz_offset = cube.z - cube_from.z;
@@ -85,12 +84,11 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
       z: cube.z,
     };
 
-    let h1 = c1.into();
-    let h2 = c2.into();
-
-    is_accessible = !(grid.is_hex_occupied(&h1) && grid.is_hex_occupied(&h2));
+    h1 = c1.into();
+    h2 = c2.into();
   }
-  is_accessible
+
+  !(grid.get_stack_size(&h1) > to_stack_size && grid.get_stack_size(&h2) > to_stack_size)
 }
 
 pub fn queen_surrounded_rule(grid: &Grid, color: PieceColor) -> bool {

@@ -42,7 +42,7 @@ pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   }
 }
 
-pub fn available_actions_for_piece_color(grid: &Grid, piece_color: &PieceColor) -> Vec<Hex> {
+pub fn available_placements_for_piece_color(grid: &Grid, piece_color: &PieceColor) -> Vec<Hex> {
   let mut moves: HashSet<Hex> = HashSet::new();
 
   if grid.number_of_pieces() == 0 {

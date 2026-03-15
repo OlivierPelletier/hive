@@ -7,7 +7,7 @@ use crate::engine::{
     piece::{Piece, PieceColor, PieceType},
     Grid,
   },
-  moves::{available_actions_for_piece_color, available_moves},
+  moves::{available_placements_for_piece_color, available_moves},
   rules,
 };
 use serde::{Deserialize, Serialize};
@@ -82,7 +82,7 @@ impl Game {
       }
     }
 
-    for to in available_actions_for_piece_color(&self.grid, &player.color) {
+    for to in available_placements_for_piece_color(&self.grid, &player.color) {
       for piece in &player.pieces {
         if self.can_play_piece(piece) {
           actions.push(Action {

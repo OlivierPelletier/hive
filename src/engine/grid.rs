@@ -124,16 +124,16 @@ impl Grid {
   }
 
   pub fn is_hex_neighbors_only_piece_color(&self, hex: &Hex, piece_color: &PieceColor) -> bool {
+    if self.is_hex_alone(hex) {
+      return false;
+    }
+
     let mut is_hex_surrounded_by_piece_color = true;
 
-    if !self.is_hex_alone(hex) {
-      for neighbor in hex.neighbors() {
-        if self.is_hex_occupied(&neighbor) && !self.is_hex_of_color(&neighbor, piece_color) {
-          is_hex_surrounded_by_piece_color = false;
-        }
+    for neighbor in hex.neighbors() {
+      if self.is_hex_occupied(&neighbor) && !self.is_hex_of_color(&neighbor, piece_color) {
+        is_hex_surrounded_by_piece_color = false;
       }
-    } else {
-      is_hex_surrounded_by_piece_color = false;
     }
 
     is_hex_surrounded_by_piece_color
@@ -146,6 +146,18 @@ impl Grid {
     }
 
     count
+  }
+
+  pub fn get_stack_size(&self, hex: &Hex) -> usize {
+    if !self.is_hex_occupied(hex) {
+        return 0;
+    }
+
+    let Some(stack) = self.grid.get(hex) else {
+        return 0;
+    };
+
+    stack.len()
   }
 }
 

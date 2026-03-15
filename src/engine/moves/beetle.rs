@@ -10,7 +10,7 @@ pub fn beetle_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
     if !one_hive_rule(grid, hex, &neighbor) {
       continue;
     }
-    if !grid.is_hex_occupied(hex) && !freedom_to_move_rule(grid, hex, &neighbor) {
+    if !freedom_to_move_rule(grid, hex, &neighbor) {
       continue;
     }
 
