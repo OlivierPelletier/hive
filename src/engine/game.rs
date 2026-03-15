@@ -43,19 +43,20 @@ impl Game {
 
     if player.is_queen_played {
       for from in self.grid.grid.keys() {
-        let piece = self.grid.find_top_piece(from);
+        let Some(piece) = self.grid.find_top_piece(from) else {
+          continue;
+        };
+        if piece.p_color != player.color {
+          continue;
+        }
 
-        if let Some(piece) = piece {
-          if piece.p_color == player.color {
-            for to in available_moves(&self.grid, from) {
-              actions.push(Action {
-                piece: *piece,
-                from: *from,
-                to,
-                in_hand: false,
-              })
-            }
-          }
+        for to in available_moves(&self.grid, from) {
+          actions.push(Action {
+            piece: *piece,
+            from: *from,
+            to,
+            in_hand: false,
+          })
         }
       }
     }

@@ -51,14 +51,19 @@ pub fn available_actions_for_piece_color(grid: &Grid, piece_color: &PieceColor) 
     moves.insert(Hex::new(-1, 0));
   } else {
     for hex in grid.grid.keys() {
-      if grid.is_hex_of_color(hex, piece_color) {
-        for neighbor in hex.neighbors() {
-          if !grid.is_hex_occupied(&neighbor)
-            && grid.is_hex_neighbors_only_piece_color(&neighbor, piece_color)
-          {
-            moves.insert(neighbor);
-          }
+      if !grid.is_hex_of_color(hex, piece_color) {
+        continue;
+      }
+
+      for neighbor in hex.neighbors() {
+        if grid.is_hex_occupied(&neighbor) {
+          continue;
         }
+        if !grid.is_hex_neighbors_only_piece_color(&neighbor, piece_color) {
+          continue;
+        }
+
+        moves.insert(neighbor);
       }
     }
   }
@@ -70,13 +75,17 @@ fn extract_moves_from_paths(paths: Vec<Vec<Hex>>, path_expected_length: usize) -
   let mut moves: Vec<Hex> = Vec::new();
 
   for path in paths {
-    if path.len() == path_expected_length {
-      if let Some(h) = path.last() {
-        if !moves.contains(h) {
-          moves.push(*h);
-        }
-      }
+    if path.len() != path_expected_length {
+      continue;
     }
+    let Some(h) = path.last() else {
+      continue;
+    };
+    if moves.contains(h) {
+      continue;
+    }
+
+    moves.push(*h);
   }
 
   moves
