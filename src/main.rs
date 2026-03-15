@@ -1,13 +1,13 @@
 pub mod misc;
 
 use crate::misc::utils::get_usize_input;
-use hive::engine::game::Game;
+use hive::engine::game::{Game, GameWinnerState};
 
 fn main() {
   let mut game = Game::tournament();
-  let mut winner = game.winner();
+  let mut game_state = game.winner();
 
-  while winner.is_none() {
+  while game_state == GameWinnerState::NONE {
     println!("{:?}", game);
     println!("{:}", game.grid);
 
@@ -27,8 +27,8 @@ fn main() {
     }
 
     game.play_action(actions[chosen_action]);
-    winner = game.winner();
+    game_state = game.winner();
   }
 
-  println!("{:?} wins!", winner.unwrap());
+  println!("Game state: {:?}", game_state);
 }

@@ -1,3 +1,5 @@
+use std::fmt::{Debug, Formatter, Result};
+
 use crate::engine::{
   game::{action::Action, player::Player},
   grid::{
@@ -13,6 +15,25 @@ use uuid::Uuid;
 
 pub mod action;
 pub mod player;
+
+#[derive(Clone, Copy, Eq, PartialEq, Serialize, Deserialize)]
+pub enum GameWinnerState {
+  WHITE,
+  BLACK,
+  DRAW,
+  NONE,
+}
+
+impl Debug for GameWinnerState {
+  fn fmt(&self, f: &mut Formatter) -> Result {
+    match *self {
+      GameWinnerState::WHITE => write!(f, "WHITE"),
+      GameWinnerState::BLACK => write!(f, "BLACK"),
+      GameWinnerState::DRAW => write!(f, "DRAW"),
+      GameWinnerState::NONE => write!(f, "NONE"),
+    }
+  }
+}
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Game {
@@ -80,51 +101,63 @@ impl Game {
   fn can_play_piece(&self, piece: &Piece) -> bool {
     let current_player = &self.players[self.current_player_index];
 
-    !(self.is_tournement_rule
+    if self.is_tournement_rule
       && piece.p_type == PieceType::QUEENBEE
-      && (self.turn == 0 || self.turn == 1))
-      && !(piece.p_type != PieceType::QUEENBEE
-        && !current_player.is_queen_played
-        && (self.turn >= 6))
+      && (self.turn == 0 || self.turn == 1)
+    {
+      return false;
+    }
+
+    if piece.p_type != PieceType::QUEENBEE && !current_player.is_queen_played && self.turn >= 6 {
+      return false;
+    }
+
+    true
   }
 
   pub fn play_action(&mut self, action: Action) {
-    if self
+    let is_valid_action = self
       .list_actions_for_player(&self.players[self.current_player_index])
-      .contains(&action)
-    {
-      if action.in_hand {
-        self.grid.place_piece_to_hex(action.piece, action.to);
-        let index = self.players[self.current_player_index]
-          .pieces
-          .iter()
-          .position(|p| p.p_type == action.piece.p_type && p.p_color == action.piece.p_color)
-          .unwrap();
-        self.players[self.current_player_index].pieces.remove(index);
-      } else {
-        self.grid.move_piece_from_to(action.from, action.to)
-      }
+      .contains(&action);
 
-      if action.piece.p_type == PieceType::QUEENBEE {
-        self.players[self.current_player_index].is_queen_played = true
-      }
-
-      self.actions_history.push(action);
-
-      self.next_turn()
+    if !is_valid_action {
+      return;
     }
+
+    if action.in_hand {
+      self.grid.place_piece_to_hex(action.piece, action.to);
+      let index = self.players[self.current_player_index]
+        .pieces
+        .iter()
+        .position(|p| p.p_type == action.piece.p_type && p.p_color == action.piece.p_color)
+        .unwrap();
+      self.players[self.current_player_index].pieces.remove(index);
+    } else {
+      self.grid.move_piece_from_to(action.from, action.to)
+    }
+
+    if action.piece.p_type == PieceType::QUEENBEE {
+      self.players[self.current_player_index].is_queen_played = true
+    }
+
+    self.actions_history.push(action);
+
+    self.next_turn()
   }
 
-  pub fn winner(&self) -> Option<PieceColor> {
-    let mut winner: Option<PieceColor> = None;
+  pub fn winner(&self) -> GameWinnerState {
+    let is_white_queen_surrounded = rules::queen_surrounded_rule(&self.grid, PieceColor::WHITE);
+    let is_black_queen_surrounded = rules::queen_surrounded_rule(&self.grid, PieceColor::BLACK);
 
-    if rules::queen_surrounded_rule(&self.grid, PieceColor::WHITE) {
-      winner = Option::from(PieceColor::BLACK)
-    } else if rules::queen_surrounded_rule(&self.grid, PieceColor::BLACK) {
-      winner = Option::from(PieceColor::WHITE)
+    if is_white_queen_surrounded && is_black_queen_surrounded {
+      return GameWinnerState::DRAW;
+    } else if is_white_queen_surrounded {
+      return GameWinnerState::BLACK;
+    } else if is_black_queen_surrounded {
+      return GameWinnerState::WHITE;
+    } else {
+      GameWinnerState::NONE
     }
-
-    winner
   }
 
   fn next_turn(&mut self) {
