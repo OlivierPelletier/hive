@@ -1,10 +1,8 @@
 use std::fmt::{Display, Formatter, Result};
 
-use serde::{Deserialize, Serialize};
-
 use crate::engine::grid::{coordinate::hex::Hex, piece::Piece};
 
-#[derive(Debug, PartialEq, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Action {
   pub piece: Piece,
   pub from: Hex,

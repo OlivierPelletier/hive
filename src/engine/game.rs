@@ -7,16 +7,15 @@ use crate::engine::{
     piece::{Piece, PieceColor, PieceType},
     Grid,
   },
-  moves::{available_placements_for_piece_color, available_moves},
+  moves::{available_moves, available_placements_for_piece_color},
   rules,
 };
-use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 pub mod action;
 pub mod player;
 
-#[derive(Clone, Copy, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Eq, PartialEq)]
 pub enum GameWinnerState {
   WHITE,
   BLACK,
@@ -35,7 +34,7 @@ impl Debug for GameWinnerState {
   }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Clone)]
 pub struct Game {
   pub id: Uuid,
   pub grid: Grid,

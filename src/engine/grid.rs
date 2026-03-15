@@ -7,7 +7,6 @@ use crate::engine::grid::{
   coordinate::hex::Hex,
   piece::{Piece, PieceColor},
 };
-use serde::{Deserialize, Serialize};
 
 pub mod coordinate;
 pub mod piece;
@@ -16,7 +15,7 @@ pub mod piece;
 #[path = "../tests/grid_tests.rs"]
 mod grid_tests;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct Grid {
   pub grid: HashMap<Hex, Vec<Piece>>,
 }
@@ -29,24 +28,34 @@ impl Grid {
   }
 
   pub fn place_piece_to_hex(&mut self, piece: Piece, hex: Hex) {
-    let mut pieces: Vec<Piece> = match self.grid.get(&hex) {
-      None => Vec::new(),
-      Some(v) => v.to_vec(),
-    };
-    pieces.push(piece);
-    self.grid.insert(hex, pieces);
+    self.grid.entry(hex).or_default().push(piece)
   }
 
   pub fn remove_top_piece_from_hex(&mut self, hex: Hex) -> Option<Piece> {
-    let mut pieces: Vec<Piece> = match self.grid.get(&hex) {
-      None => Vec::new(),
-      Some(v) => v.to_vec(),
-    };
-    let piece = pieces.pop();
-    self.grid.insert(hex, pieces);
+    let mut removed = None;
+    let mut is_empty = false;
 
-    piece
+    if let Some(stack) = self.grid.get_mut(&hex) {
+      removed = stack.pop();
+      is_empty = stack.is_empty();
+    }
+
+    if is_empty {
+      self.grid.remove(&hex);
+    }
+
+    removed
   }
+  // pub fn remove_top_piece_from_hex(&mut self, hex: Hex) -> Option<Piece> {
+  //   let mut pieces: Vec<Piece> = match self.grid.get(&hex) {
+  //     None => Vec::new(),
+  //     Some(v) => v.to_vec(),
+  //   };
+  //   let piece = pieces.pop();
+  //   self.grid.insert(hex, pieces);
+  //
+  //   piece
+  // }
 
   pub fn move_piece_from_to(&mut self, from: Hex, to: Hex) {
     let removed_piece = self.remove_top_piece_from_hex(from);
@@ -150,11 +159,11 @@ impl Grid {
 
   pub fn get_stack_size(&self, hex: &Hex) -> usize {
     if !self.is_hex_occupied(hex) {
-        return 0;
+      return 0;
     }
 
     let Some(stack) = self.grid.get(hex) else {
-        return 0;
+      return 0;
     };
 
     stack.len()
