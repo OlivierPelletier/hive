@@ -2,8 +2,8 @@
 name = "hive-engine"
 version = "0.2.0"
 authors = ["Olivier Pelletier <olivier.op@outlook.com>"]
-edition = "2021"
-rust-version = "1.82"
+edition = "2024"
+rust-version = "1.94"
 description = "A game engine for Hive."
 repository = "https://github.com/OlivierPelletier/hive"
 license = "MIT"

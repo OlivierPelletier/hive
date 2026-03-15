@@ -5,7 +5,7 @@ Guidance for autonomous coding agents operating in this repository.
 ## Project Snapshot
 
 - Package: `hive-engine`
-- Language: Rust (`edition = "2021"`, `rust-version = "1.82"`)
+- Language: Rust (`edition = "2021"`, `rust-version = "1.94"`)
 - Shape: library crate (`hive`) + CLI binary (`hive-engine`)
 - Domain: Hive board game engine (state, movement, rules)
 
