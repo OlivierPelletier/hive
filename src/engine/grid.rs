@@ -46,16 +46,6 @@ impl Grid {
 
     removed
   }
-  // pub fn remove_top_piece_from_hex(&mut self, hex: Hex) -> Option<Piece> {
-  //   let mut pieces: Vec<Piece> = match self.grid.get(&hex) {
-  //     None => Vec::new(),
-  //     Some(v) => v.to_vec(),
-  //   };
-  //   let piece = pieces.pop();
-  //   self.grid.insert(hex, pieces);
-  //
-  //   piece
-  // }
 
   pub fn move_piece_from_to(&mut self, from: Hex, to: Hex) {
     let removed_piece = self.remove_top_piece_from_hex(from);

@@ -15,7 +15,7 @@ using [Rust Programming Language](https://rust-lang.org).
 
 ## Setup
 
-* Rust 1.82.0 (https://www.rust-lang.org/tools/install)
+* Rust 1.94.0 (https://www.rust-lang.org/tools/install)
 
 ## Usage
 
