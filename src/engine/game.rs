@@ -34,7 +34,7 @@ impl Debug for GameWinnerState {
   }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct Game {
   pub id: Uuid,
   pub grid: Grid,
@@ -149,11 +149,11 @@ impl Game {
     let is_black_queen_surrounded = rules::queen_surrounded_rule(&self.grid, PieceColor::BLACK);
 
     if is_white_queen_surrounded && is_black_queen_surrounded {
-      return GameWinnerState::DRAW;
+      GameWinnerState::DRAW
     } else if is_white_queen_surrounded {
-      return GameWinnerState::BLACK;
+      GameWinnerState::BLACK
     } else if is_black_queen_surrounded {
-      return GameWinnerState::WHITE;
+      GameWinnerState::WHITE
     } else {
       GameWinnerState::NONE
     }
@@ -165,7 +165,7 @@ impl Game {
   }
 
   fn current_player_index(turn: u64) -> usize {
-    if turn % 2 == 0 {
+    if turn.is_multiple_of(2) {
       0
     } else {
       1

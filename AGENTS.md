@@ -4,8 +4,8 @@ Guidance for autonomous coding agents operating in this repository.
 
 ## Project Snapshot
 
-- Package: `hive-engine`
-- Language: Rust (`edition = "2021"`, `rust-version = "1.94"`)
+- Package: `hive-engine` (v0.2.0)
+- Language: Rust (`edition = "2024"`, `rust-version = "1.94"`)
 - Shape: library crate (`hive`) + CLI binary (`hive-engine`)
 - Domain: Hive board game engine (state, movement, rules)
 
@@ -152,10 +152,4 @@ Guidance for autonomous coding agents operating in this repository.
 
 ## Cursor and Copilot Rules
 
-Checked paths in this repository:
-
-- `.cursorrules`: not present
-- `.cursor/rules/`: not present
-- `.github/copilot-instructions.md`: not present
-
-If any of these files are added later, treat them as higher-priority agent guidance and update this document.
+No special rules found in `.cursorrules`, `.cursor/rules/`, or `.github/copilot-instructions.md`. Treat this AGENTS.md as the primary guidance when such files are added.
