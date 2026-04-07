@@ -1,14 +1,27 @@
 use crate::engine::{
-  grid::{coordinate::hex::Hex, Grid},
+  game::action::Action,
+  grid::{Grid, coordinate::hex::Hex, piece::Piece},
   moves::extract_moves_from_paths,
   rules::{freedom_to_move_rule, one_hive_rule},
 };
 
-pub fn ladybug_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
+pub fn ladybug_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
   let initial_path: Vec<Hex> = vec![*hex];
   let paths: Vec<Vec<Hex>> = ladybug_moves_it(grid, hex, hex, &initial_path);
 
-  extract_moves_from_paths(paths, 4)
+  let moves: Vec<Hex> = extract_moves_from_paths(paths, 4);
+
+  let mut actions = Vec::new();
+  for m in moves {
+    actions.push(Action {
+      piece: *piece,
+      from: *hex,
+      to: m,
+      in_hand: false,
+    })
+  }
+
+  actions
 }
 
 fn ladybug_moves_it(grid: &Grid, hex: &Hex, initital_hex: &Hex, path: &[Hex]) -> Vec<Vec<Hex>> {

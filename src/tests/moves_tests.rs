@@ -1,10 +1,11 @@
 use crate::engine::{
+  game::action::Action,
   grid::{
+    Grid,
     coordinate::hex::Hex,
     piece::{Piece, PieceColor},
-    Grid,
   },
-  moves::{available_placements_for_piece_color, available_moves},
+  moves::{available_moves, available_placements_for_piece_color},
 };
 
 /*
@@ -35,15 +36,33 @@ fn initialize_grid() -> Grid {
   grid
 }
 
+fn move_action(piece: Piece, from: Hex, to: Hex) -> Action {
+  Action {
+    piece,
+    from,
+    to,
+    in_hand: false,
+  }
+}
+
+fn sort_actions(actions: &mut [Action]) {
+  actions.sort_by_key(|action| (action.to.q, action.to.r));
+}
+
 #[test]
 fn given_grid_when_available_moves_queenbee_should_return_correct_moves() {
   let grid = initialize_grid();
-  let mut correct_moves = vec![Hex { q: -4, r: 1 }, Hex { q: -3, r: -1 }];
+  let from = Hex::new(-3, 0);
+  let piece = Piece::queen_bee().black();
+  let mut correct_moves = vec![
+    move_action(piece, from, Hex::new(-4, 1)),
+    move_action(piece, from, Hex::new(-3, -1)),
+  ];
 
-  let mut moves = available_moves(&grid, &Hex::new(-3, -0));
+  let mut moves = available_moves(&grid, &from);
 
-  moves.sort();
-  correct_moves.sort();
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
 }
@@ -51,18 +70,20 @@ fn given_grid_when_available_moves_queenbee_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_beetle_should_return_correct_moves() {
   let grid = initialize_grid();
+  let from = Hex::new(-2, 1);
+  let piece = Piece::beetle().black();
   let mut correct_moves = vec![
-    Hex { q: -1, r: 0 },
-    Hex { q: -1, r: 1 },
-    Hex { q: -3, r: 2 },
-    Hex { q: -3, r: 1 },
-    Hex { q: -2, r: 0 },
+    move_action(piece, from, Hex::new(-1, 0)),
+    move_action(piece, from, Hex::new(-1, 1)),
+    move_action(piece, from, Hex::new(-3, 2)),
+    move_action(piece, from, Hex::new(-3, 1)),
+    move_action(piece, from, Hex::new(-2, 0)),
   ];
 
-  let mut moves = available_moves(&grid, &Hex::new(-2, 1));
+  let mut moves = available_moves(&grid, &from);
 
-  moves.sort();
-  correct_moves.sort();
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
 }
@@ -70,16 +91,18 @@ fn given_grid_when_available_moves_beetle_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_grasshopper_should_return_correct_moves() {
   let grid = initialize_grid();
+  let from = Hex::new(2, 0);
+  let piece = Piece::grasshopper().white();
   let mut correct_moves = vec![
-    Hex { q: 4, r: -2 },
-    Hex { q: -4, r: 0 },
-    Hex { q: 2, r: -2 },
+    move_action(piece, from, Hex::new(4, -2)),
+    move_action(piece, from, Hex::new(-4, 0)),
+    move_action(piece, from, Hex::new(2, -2)),
   ];
 
-  let mut moves = available_moves(&grid, &Hex::new(2, 0));
+  let mut moves = available_moves(&grid, &from);
 
-  moves.sort();
-  correct_moves.sort();
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
 }
@@ -87,12 +110,17 @@ fn given_grid_when_available_moves_grasshopper_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_spider_should_return_correct_moves() {
   let grid = initialize_grid();
-  let mut correct_moves = vec![Hex { q: 3, r: 0 }, Hex { q: -3, r: 2 }];
+  let from = Hex::new(0, 1);
+  let piece = Piece::spider().white();
+  let mut correct_moves = vec![
+    move_action(piece, from, Hex::new(3, 0)),
+    move_action(piece, from, Hex::new(-3, 2)),
+  ];
 
-  let mut moves = available_moves(&grid, &Hex::new(0, 1));
+  let mut moves = available_moves(&grid, &from);
 
-  moves.sort();
-  correct_moves.sort();
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
 }
@@ -100,24 +128,26 @@ fn given_grid_when_available_moves_spider_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_ladybug_should_return_correct_moves() {
   let grid = initialize_grid();
+  let from = Hex::new(-1, -1);
+  let piece = Piece::ladybug().black();
   let mut correct_moves = vec![
-    Hex { q: 1, r: -1 },
-    Hex { q: -1, r: 1 },
-    Hex { q: 0, r: -1 },
-    Hex { q: -2, r: 2 },
-    Hex { q: -3, r: 2 },
-    Hex { q: -4, r: 2 },
-    Hex { q: -4, r: 1 },
-    Hex { q: -4, r: 0 },
-    Hex { q: -3, r: -1 },
-    Hex { q: -1, r: -2 },
-    Hex { q: -2, r: -2 },
+    move_action(piece, from, Hex::new(1, -1)),
+    move_action(piece, from, Hex::new(-1, 1)),
+    move_action(piece, from, Hex::new(0, -1)),
+    move_action(piece, from, Hex::new(-2, 2)),
+    move_action(piece, from, Hex::new(-3, 2)),
+    move_action(piece, from, Hex::new(-4, 2)),
+    move_action(piece, from, Hex::new(-4, 1)),
+    move_action(piece, from, Hex::new(-4, 0)),
+    move_action(piece, from, Hex::new(-3, -1)),
+    move_action(piece, from, Hex::new(-1, -2)),
+    move_action(piece, from, Hex::new(-2, -2)),
   ];
 
-  let mut moves = available_moves(&grid, &Hex::new(-1, -1));
+  let mut moves = available_moves(&grid, &from);
 
-  moves.sort();
-  correct_moves.sort();
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
 }
@@ -125,32 +155,34 @@ fn given_grid_when_available_moves_ladybug_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_solider_ant_should_return_correct_moves() {
   let grid = initialize_grid();
+  let from = Hex::new(3, -1);
+  let piece = Piece::soldier_ant().white();
   let mut correct_moves = vec![
-    Hex { q: 3, r: 0 },
-    Hex { q: 2, r: 1 },
-    Hex { q: 1, r: 1 },
-    Hex { q: 0, r: 2 },
-    Hex { q: -1, r: 2 },
-    Hex { q: -2, r: 2 },
-    Hex { q: -1, r: 1 },
-    Hex { q: -3, r: 2 },
-    Hex { q: -4, r: 2 },
-    Hex { q: -4, r: 1 },
-    Hex { q: -4, r: 0 },
-    Hex { q: -3, r: -1 },
-    Hex { q: -2, r: -2 },
-    Hex { q: -1, r: -2 },
-    Hex { q: 0, r: -2 },
-    Hex { q: 0, r: -1 },
-    Hex { q: 1, r: -1 },
-    Hex { q: 2, r: -2 },
-    Hex { q: 3, r: -2 },
+    move_action(piece, from, Hex::new(3, 0)),
+    move_action(piece, from, Hex::new(2, 1)),
+    move_action(piece, from, Hex::new(1, 1)),
+    move_action(piece, from, Hex::new(0, 2)),
+    move_action(piece, from, Hex::new(-1, 2)),
+    move_action(piece, from, Hex::new(-2, 2)),
+    move_action(piece, from, Hex::new(-1, 1)),
+    move_action(piece, from, Hex::new(-3, 2)),
+    move_action(piece, from, Hex::new(-4, 2)),
+    move_action(piece, from, Hex::new(-4, 1)),
+    move_action(piece, from, Hex::new(-4, 0)),
+    move_action(piece, from, Hex::new(-3, -1)),
+    move_action(piece, from, Hex::new(-2, -2)),
+    move_action(piece, from, Hex::new(-1, -2)),
+    move_action(piece, from, Hex::new(0, -2)),
+    move_action(piece, from, Hex::new(0, -1)),
+    move_action(piece, from, Hex::new(1, -1)),
+    move_action(piece, from, Hex::new(2, -2)),
+    move_action(piece, from, Hex::new(3, -2)),
   ];
 
-  let mut moves = available_moves(&grid, &Hex::new(3, -1));
+  let mut moves = available_moves(&grid, &from);
 
-  moves.sort();
-  correct_moves.sort();
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
 }
@@ -158,22 +190,24 @@ fn given_grid_when_available_moves_solider_ant_should_return_correct_moves() {
 #[test]
 fn given_grid_when_available_moves_mosquito_should_return_correct_moves() {
   let grid = initialize_grid();
+  let from = Hex::new(-2, -1);
+  let piece = Piece::mosquito().white();
   let mut correct_moves = vec![
-    Hex { q: 0, r: -1 },
-    Hex { q: -1, r: 1 },
-    Hex { q: 0, r: -2 },
-    Hex { q: -1, r: -2 },
-    Hex { q: -3, r: 2 },
-    Hex { q: -2, r: 2 },
-    Hex { q: -4, r: 2 },
-    Hex { q: -4, r: 1 },
-    Hex { q: -3, r: -1 },
-    Hex { q: -4, r: 0 },
+    move_action(piece, from, Hex::new(0, -1)),
+    move_action(piece, from, Hex::new(-1, 1)),
+    move_action(piece, from, Hex::new(0, -2)),
+    move_action(piece, from, Hex::new(-1, -2)),
+    move_action(piece, from, Hex::new(-3, 2)),
+    move_action(piece, from, Hex::new(-2, 2)),
+    move_action(piece, from, Hex::new(-4, 2)),
+    move_action(piece, from, Hex::new(-4, 1)),
+    move_action(piece, from, Hex::new(-3, -1)),
+    move_action(piece, from, Hex::new(-4, 0)),
   ];
 
-  let mut moves = available_moves(&grid, &Hex::new(-2, -1));
-  moves.sort();
-  correct_moves.sort();
+  let mut moves = available_moves(&grid, &from);
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
 }
@@ -237,18 +271,20 @@ fn initialize_stacked_grid() -> Grid {
 #[test]
 fn given_stacked_grid_when_available_moves_beetle_should_return_correct_moves() {
   let grid = initialize_stacked_grid();
+  let from = Hex::new(3, 0);
+  let piece = Piece::beetle().white();
   let mut correct_moves = vec![
-    Hex { q: 2, r: 0 },
-    Hex { q: 3, r: -1 },
-    Hex { q: 3, r: 1 },
-    Hex { q: 4, r: -1 },
-    Hex { q: 4, r: 0 },
+    move_action(piece, from, Hex::new(2, 0)),
+    move_action(piece, from, Hex::new(3, -1)),
+    move_action(piece, from, Hex::new(3, 1)),
+    move_action(piece, from, Hex::new(4, -1)),
+    move_action(piece, from, Hex::new(4, 0)),
   ];
 
-  let mut moves = available_moves(&grid, &Hex::new(3, 0));
+  let mut moves = available_moves(&grid, &from);
 
-  moves.sort();
-  correct_moves.sort();
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
 }
@@ -256,21 +292,23 @@ fn given_stacked_grid_when_available_moves_beetle_should_return_correct_moves() 
 #[test]
 fn given_stacked_grid_when_available_moves_ladybug_should_return_correct_moves() {
   let grid = initialize_stacked_grid();
+  let from = Hex::new(1, 2);
+  let piece = Piece::ladybug().white();
   let mut correct_moves = vec![
-    Hex { q: 0, r: 2 },
-    Hex { q: 0, r: 1 },
-    Hex { q: 1, r: -1 },
-    Hex { q: 2, r: -1 },
-    Hex { q: 3, r: -1 },
-    Hex { q: 2, r: 2 },
-    Hex { q: 3, r: 2 },
-    Hex { q: 4, r: 1 },
+    move_action(piece, from, Hex::new(0, 2)),
+    move_action(piece, from, Hex::new(0, 1)),
+    move_action(piece, from, Hex::new(1, -1)),
+    move_action(piece, from, Hex::new(2, -1)),
+    move_action(piece, from, Hex::new(3, -1)),
+    move_action(piece, from, Hex::new(2, 2)),
+    move_action(piece, from, Hex::new(3, 2)),
+    move_action(piece, from, Hex::new(4, 1)),
   ];
 
-  let mut moves = available_moves(&grid, &Hex::new(1, 2));
+  let mut moves = available_moves(&grid, &from);
 
-  moves.sort();
-  correct_moves.sort();
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
 }

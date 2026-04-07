@@ -1,8 +1,9 @@
 use crate::engine::{
+  game::action::Action,
   grid::{
+    Grid,
     coordinate::hex::Hex,
     piece::{PieceColor, PieceType},
-    Grid,
   },
   moves::{
     beetle::beetle_moves, grasshoper::grasshopper_moves, ladybug::ladybug_moves,
@@ -24,19 +25,19 @@ pub mod spider;
 #[path = "../tests/moves_tests.rs"]
 mod moves_tests;
 
-pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
+pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Action> {
   let piece = grid.find_top_piece(hex);
 
   match piece {
     Some(p) => match p.p_type {
-      PieceType::BEETLE => beetle_moves(grid, hex),
-      PieceType::GRASSHOPPER => grasshopper_moves(grid, hex),
-      PieceType::LADYBUG => ladybug_moves(grid, hex),
-      PieceType::MOSQUITO => mosquito_moves(grid, hex),
+      PieceType::BEETLE => beetle_moves(grid, p, hex),
+      PieceType::GRASSHOPPER => grasshopper_moves(grid, p, hex),
+      PieceType::LADYBUG => ladybug_moves(grid, p, hex),
+      PieceType::MOSQUITO => mosquito_moves(grid, p, hex),
       PieceType::NONE => Vec::new(),
-      PieceType::QUEENBEE => queen_bee_moves(grid, hex),
-      PieceType::SOLDIERANT => soldier_ant_moves(grid, hex),
-      PieceType::SPIDER => spider_moves(grid, hex),
+      PieceType::QUEENBEE => queen_bee_moves(grid, p, hex),
+      PieceType::SOLDIERANT => soldier_ant_moves(grid, p, hex),
+      PieceType::SPIDER => spider_moves(grid, p, hex),
     },
     None => Vec::new(),
   }

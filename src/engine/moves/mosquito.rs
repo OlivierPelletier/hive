@@ -1,13 +1,18 @@
 use crate::engine::{
-  grid::{coordinate::hex::Hex, piece::PieceType, Grid},
+  game::action::Action,
+  grid::{
+    Grid,
+    coordinate::hex::Hex,
+    piece::{Piece, PieceType},
+  },
   moves::{
     beetle::beetle_moves, grasshoper::grasshopper_moves, ladybug::ladybug_moves,
     queen_bee::queen_bee_moves, soldier_ant::soldier_ant_moves, spider::spider_moves,
   },
 };
 
-pub fn mosquito_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
-  let mut moves: Vec<Hex> = Vec::new();
+pub fn mosquito_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
+  let mut actions: Vec<Action> = Vec::new();
   let mut found_types: Vec<PieceType> = Vec::new();
 
   for neighbor in hex.neighbors() {
@@ -19,23 +24,23 @@ pub fn mosquito_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
   }
 
   for found_type in found_types {
-    let temp_moves: Vec<Hex> = match found_type {
-      PieceType::BEETLE => beetle_moves(grid, hex),
-      PieceType::GRASSHOPPER => grasshopper_moves(grid, hex),
-      PieceType::LADYBUG => ladybug_moves(grid, hex),
+    let moves: Vec<Action> = match found_type {
+      PieceType::BEETLE => beetle_moves(grid, piece, hex),
+      PieceType::GRASSHOPPER => grasshopper_moves(grid, piece, hex),
+      PieceType::LADYBUG => ladybug_moves(grid, piece, hex),
       PieceType::MOSQUITO => Vec::new(),
       PieceType::NONE => Vec::new(),
-      PieceType::QUEENBEE => queen_bee_moves(grid, hex),
-      PieceType::SOLDIERANT => soldier_ant_moves(grid, hex),
-      PieceType::SPIDER => spider_moves(grid, hex),
+      PieceType::QUEENBEE => queen_bee_moves(grid, piece, hex),
+      PieceType::SOLDIERANT => soldier_ant_moves(grid, piece, hex),
+      PieceType::SPIDER => spider_moves(grid, piece, hex),
     };
 
-    for temp_move in temp_moves {
-      if !moves.contains(&temp_move) {
-        moves.push(temp_move)
+    for m in moves {
+      if !actions.contains(&m) {
+        actions.push(m)
       }
     }
   }
 
-  moves
+  actions
 }

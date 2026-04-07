@@ -1,15 +1,27 @@
 use crate::engine::{
-  grid::{coordinate::hex::Hex, Grid},
+  game::action::Action,
+  grid::{Grid, coordinate::hex::Hex, piece::Piece},
   rules::{freedom_to_move_rule, one_hive_rule},
 };
 
-pub fn soldier_ant_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
+pub fn soldier_ant_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
   let mut start_trail = vec![*hex];
   let mut moves = Vec::new();
 
   soldier_ant_moves_it(grid, hex, hex, &mut start_trail, &mut moves);
 
-  moves
+  let mut actions = Vec::new();
+
+  for m in moves {
+    actions.push(Action {
+      piece: *piece,
+      from: *hex,
+      to: m,
+      in_hand: false,
+    });
+  }
+
+  actions
 }
 
 fn soldier_ant_moves_it(

@@ -1,14 +1,16 @@
 use crate::engine::{
+  game::action::Action,
   grid::{
-    coordinate::{cube::Cube, hex::Hex},
     Grid,
+    coordinate::{cube::Cube, hex::Hex},
+    piece::Piece,
   },
   rules::one_hive_rule,
 };
 
-pub fn grasshopper_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
+pub fn grasshopper_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
   let cube = Cube::from(*hex);
-  let mut moves = Vec::new();
+  let mut actions = Vec::new();
   let mut possible_line = Vec::new();
 
   for neighbor in hex.neighbors() {
@@ -33,7 +35,12 @@ pub fn grasshopper_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
       }
 
       if one_hive_rule(grid, hex, &line_hex) {
-        moves.push(line_hex);
+        actions.push(Action {
+          piece: *piece,
+          from: *hex,
+          to: line_hex,
+          in_hand: false,
+        });
       }
     } else if line.y == cube.y {
       let z_offset = line.z - cube.z;
@@ -50,7 +57,12 @@ pub fn grasshopper_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
       }
 
       if one_hive_rule(grid, hex, &line_hex) {
-        moves.push(line_hex);
+        actions.push(Action {
+          piece: *piece,
+          from: *hex,
+          to: line_hex,
+          in_hand: false,
+        });
       }
     } else {
       let x_offset = line.x - cube.x;
@@ -67,10 +79,15 @@ pub fn grasshopper_moves(grid: &Grid, hex: &Hex) -> Vec<Hex> {
       }
 
       if one_hive_rule(grid, hex, &line_hex) {
-        moves.push(line_hex);
+        actions.push(Action {
+          piece: *piece,
+          from: *hex,
+          to: line_hex,
+          in_hand: false,
+        });
       }
     }
   }
 
-  moves
+  actions
 }

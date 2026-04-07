@@ -3,9 +3,9 @@ use std::fmt::{Debug, Formatter, Result};
 use crate::engine::{
   game::{action::Action, player::Player},
   grid::{
+    Grid,
     coordinate::hex::Hex,
     piece::{Piece, PieceColor, PieceType},
-    Grid,
   },
   moves::{available_moves, available_placements_for_piece_color},
   rules,
@@ -70,14 +70,7 @@ impl Game {
           continue;
         }
 
-        for to in available_moves(&self.grid, from) {
-          actions.push(Action {
-            piece: *piece,
-            from: *from,
-            to,
-            in_hand: false,
-          })
-        }
+        actions.append(&mut available_moves(&self.grid, from));
       }
     }
 
@@ -165,10 +158,6 @@ impl Game {
   }
 
   fn current_player_index(turn: u64) -> usize {
-    if turn.is_multiple_of(2) {
-      0
-    } else {
-      1
-    }
+    if turn.is_multiple_of(2) { 0 } else { 1 }
   }
 }
