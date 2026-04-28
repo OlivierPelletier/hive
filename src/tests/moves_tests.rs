@@ -59,7 +59,7 @@ fn given_grid_when_available_moves_queenbee_should_return_correct_moves() {
     move_action(piece, from, Hex::new(-3, -1)),
   ];
 
-  let mut moves = available_moves(&grid, &from);
+  let mut moves = available_moves(&grid, &from, &Vec::new());
 
   sort_actions(&mut moves);
   sort_actions(&mut correct_moves);
@@ -80,7 +80,7 @@ fn given_grid_when_available_moves_beetle_should_return_correct_moves() {
     move_action(piece, from, Hex::new(-2, 0)),
   ];
 
-  let mut moves = available_moves(&grid, &from);
+  let mut moves = available_moves(&grid, &from, &Vec::new());
 
   sort_actions(&mut moves);
   sort_actions(&mut correct_moves);
@@ -99,7 +99,7 @@ fn given_grid_when_available_moves_grasshopper_should_return_correct_moves() {
     move_action(piece, from, Hex::new(2, -2)),
   ];
 
-  let mut moves = available_moves(&grid, &from);
+  let mut moves = available_moves(&grid, &from, &Vec::new());
 
   sort_actions(&mut moves);
   sort_actions(&mut correct_moves);
@@ -117,7 +117,7 @@ fn given_grid_when_available_moves_spider_should_return_correct_moves() {
     move_action(piece, from, Hex::new(-3, 2)),
   ];
 
-  let mut moves = available_moves(&grid, &from);
+  let mut moves = available_moves(&grid, &from, &Vec::new());
 
   sort_actions(&mut moves);
   sort_actions(&mut correct_moves);
@@ -144,7 +144,7 @@ fn given_grid_when_available_moves_ladybug_should_return_correct_moves() {
     move_action(piece, from, Hex::new(-2, -2)),
   ];
 
-  let mut moves = available_moves(&grid, &from);
+  let mut moves = available_moves(&grid, &from, &Vec::new());
 
   sort_actions(&mut moves);
   sort_actions(&mut correct_moves);
@@ -179,7 +179,7 @@ fn given_grid_when_available_moves_solider_ant_should_return_correct_moves() {
     move_action(piece, from, Hex::new(3, -2)),
   ];
 
-  let mut moves = available_moves(&grid, &from);
+  let mut moves = available_moves(&grid, &from, &Vec::new());
 
   sort_actions(&mut moves);
   sort_actions(&mut correct_moves);
@@ -205,7 +205,7 @@ fn given_grid_when_available_moves_mosquito_should_return_correct_moves() {
     move_action(piece, from, Hex::new(-4, 0)),
   ];
 
-  let mut moves = available_moves(&grid, &from);
+  let mut moves = available_moves(&grid, &from, &Vec::new());
   sort_actions(&mut moves);
   sort_actions(&mut correct_moves);
 
@@ -281,7 +281,7 @@ fn given_stacked_grid_when_available_moves_beetle_should_return_correct_moves() 
     move_action(piece, from, Hex::new(4, 0)),
   ];
 
-  let mut moves = available_moves(&grid, &from);
+  let mut moves = available_moves(&grid, &from, &Vec::new());
 
   sort_actions(&mut moves);
   sort_actions(&mut correct_moves);
@@ -305,7 +305,7 @@ fn given_stacked_grid_when_available_moves_ladybug_should_return_correct_moves()
     move_action(piece, from, Hex::new(4, 1)),
   ];
 
-  let mut moves = available_moves(&grid, &from);
+  let mut moves = available_moves(&grid, &from, &Vec::new());
 
   sort_actions(&mut moves);
   sort_actions(&mut correct_moves);

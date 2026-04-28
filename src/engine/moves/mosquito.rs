@@ -7,11 +7,17 @@ use crate::engine::{
   },
   moves::{
     beetle::beetle_moves, grasshoper::grasshopper_moves, ladybug::ladybug_moves,
-    queen_bee::queen_bee_moves, soldier_ant::soldier_ant_moves, spider::spider_moves,
+    pillbug::pillbug_moves, queen_bee::queen_bee_moves, soldier_ant::soldier_ant_moves,
+    spider::spider_moves,
   },
 };
 
-pub fn mosquito_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
+pub fn mosquito_moves(
+  grid: &Grid,
+  piece: &Piece,
+  hex: &Hex,
+  actions_history: &Vec<Action>,
+) -> Vec<Action> {
   let mut actions: Vec<Action> = Vec::new();
   let mut found_types: Vec<PieceType> = Vec::new();
 
@@ -33,6 +39,7 @@ pub fn mosquito_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
       PieceType::QUEENBEE => queen_bee_moves(grid, piece, hex),
       PieceType::SOLDIERANT => soldier_ant_moves(grid, piece, hex),
       PieceType::SPIDER => spider_moves(grid, piece, hex),
+      PieceType::PILLBUG => pillbug_moves(grid, piece, hex, actions_history),
     };
 
     for m in moves {

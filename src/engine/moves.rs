@@ -7,8 +7,8 @@ use crate::engine::{
   },
   moves::{
     beetle::beetle_moves, grasshoper::grasshopper_moves, ladybug::ladybug_moves,
-    mosquito::mosquito_moves, queen_bee::queen_bee_moves, soldier_ant::soldier_ant_moves,
-    spider::spider_moves,
+    mosquito::mosquito_moves, pillbug::pillbug_moves, queen_bee::queen_bee_moves,
+    soldier_ant::soldier_ant_moves, spider::spider_moves,
   },
 };
 use std::collections::HashSet;
@@ -17,6 +17,7 @@ pub mod beetle;
 pub mod grasshoper;
 pub mod ladybug;
 pub mod mosquito;
+pub mod pillbug;
 pub mod queen_bee;
 pub mod soldier_ant;
 pub mod spider;
@@ -25,7 +26,7 @@ pub mod spider;
 #[path = "../tests/moves_tests.rs"]
 mod moves_tests;
 
-pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Action> {
+pub fn available_moves(grid: &Grid, hex: &Hex, actions_history: &Vec<Action>) -> Vec<Action> {
   let piece = grid.find_top_piece(hex);
 
   match piece {
@@ -33,11 +34,12 @@ pub fn available_moves(grid: &Grid, hex: &Hex) -> Vec<Action> {
       PieceType::BEETLE => beetle_moves(grid, p, hex),
       PieceType::GRASSHOPPER => grasshopper_moves(grid, p, hex),
       PieceType::LADYBUG => ladybug_moves(grid, p, hex),
-      PieceType::MOSQUITO => mosquito_moves(grid, p, hex),
+      PieceType::MOSQUITO => mosquito_moves(grid, p, hex, actions_history),
       PieceType::NONE => Vec::new(),
       PieceType::QUEENBEE => queen_bee_moves(grid, p, hex),
       PieceType::SOLDIERANT => soldier_ant_moves(grid, p, hex),
       PieceType::SPIDER => spider_moves(grid, p, hex),
+      PieceType::PILLBUG => pillbug_moves(grid, p, hex, actions_history),
     },
     None => Vec::new(),
   }

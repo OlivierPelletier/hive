@@ -9,6 +9,7 @@ pub enum PieceType {
   MOSQUITO,
   SOLDIERANT,
   SPIDER,
+  PILLBUG,
   NONE,
 }
 
@@ -22,6 +23,7 @@ impl Debug for PieceType {
       PieceType::MOSQUITO => write!(f, "MSQT"),
       PieceType::SOLDIERANT => write!(f, "SANT"),
       PieceType::SPIDER => write!(f, "SPDR"),
+      PieceType::PILLBUG => write!(f, "PLBG"),
       PieceType::NONE => write!(f, " NA "),
     }
   }
@@ -96,6 +98,13 @@ impl Piece {
   pub fn spider() -> Piece {
     Piece {
       p_type: PieceType::SPIDER,
+      p_color: PieceColor::NONE,
+    }
+  }
+
+  pub fn pillbug() -> Piece {
+    Piece {
+      p_type: PieceType::PILLBUG,
       p_color: PieceColor::NONE,
     }
   }

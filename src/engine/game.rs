@@ -70,7 +70,11 @@ impl Game {
           continue;
         }
 
-        actions.append(&mut available_moves(&self.grid, from));
+        actions.append(&mut available_moves(
+          &self.grid,
+          from,
+          &self.actions_history,
+        ));
       }
     }
 
