@@ -46,7 +46,7 @@ fn move_action(piece: Piece, from: Hex, to: Hex) -> Action {
 }
 
 fn sort_actions(actions: &mut [Action]) {
-  actions.sort_by_key(|action| (action.to.q, action.to.r));
+  actions.sort_by_key(|action| (action.from.q, action.from.r, action.to.q, action.to.r));
 }
 
 #[test]
@@ -303,6 +303,80 @@ fn given_stacked_grid_when_available_moves_ladybug_should_return_correct_moves()
     move_action(piece, from, Hex::new(2, 2)),
     move_action(piece, from, Hex::new(3, 2)),
     move_action(piece, from, Hex::new(4, 1)),
+  ];
+
+  let mut moves = available_moves(&grid, &from, &Vec::new());
+
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
+
+  assert_eq!(moves, correct_moves);
+}
+
+/*
+   __      __    B PLBG  W PLBG  W PLBG
+  -2,0    -1,0     0,0     1,0     2,0
+     B PLBG  B PLBG    __    W PLBG  W PLBG
+      -2,1    -1,1     0,1     1,1     2,1
+         B PLBG  B PLBG    __      __      __
+          -2,2    -1,2     0,2     1,2     2,2
+*/
+fn initialize_pillbug_grid() -> Grid {
+  let mut grid = Grid::new();
+
+  grid.place_piece_to_hex(Piece::pillbug().black(), Hex::new(0, 0));
+  grid.place_piece_to_hex(Piece::pillbug().black(), Hex::new(-1, 1));
+  grid.place_piece_to_hex(Piece::pillbug().black(), Hex::new(-2, 1));
+  grid.place_piece_to_hex(Piece::pillbug().black(), Hex::new(-2, 2));
+  grid.place_piece_to_hex(Piece::pillbug().black(), Hex::new(-1, 2));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(1, 1));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(1, 0));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(1, 0));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(2, 1));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(2, 1));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(2, 0));
+
+  grid
+}
+
+#[test]
+fn given_grid_when_available_moves_pillbug_should_return_correct_moves() {
+  let grid = initialize_pillbug_grid();
+  let from = Hex::new(-2, 2);
+  let piece = Piece::pillbug().black();
+  let mut correct_moves = vec![
+    move_action(piece, from, Hex::new(-3, 2)),
+    move_action(piece, from, Hex::new(-2, 3)),
+    move_action(piece, Hex::new(-1, 2), Hex::new(-3, 2)),
+    move_action(piece, Hex::new(-2, 1), Hex::new(-2, 3)),
+  ];
+
+  let mut moves = available_moves(
+    &grid,
+    &from,
+    &vec![Action {
+      piece: Piece::pillbug().white(),
+      from: Hex::new(1, 2),
+      to: Hex::new(1, 1),
+      in_hand: false,
+    }],
+  );
+
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
+
+  assert_eq!(moves, correct_moves);
+}
+
+#[test]
+fn given_grid_when_available_moves_pillbug_with_stacked_pieces_should_return_correct_moves() {
+  let grid = initialize_pillbug_grid();
+  let from = Hex::new(1, 1);
+  let piece = Piece::pillbug().white();
+  let mut correct_moves = vec![
+    move_action(piece, from, Hex::new(0, 1)),
+    move_action(piece, from, Hex::new(0, 2)),
+    move_action(piece, from, Hex::new(1, 2)),
   ];
 
   let mut moves = available_moves(&grid, &from, &Vec::new());

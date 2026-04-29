@@ -17,6 +17,7 @@ pub fn pillbug_moves(
   let mut actions: Vec<Action> = Vec::new();
   let mut potential_hexes: Vec<Hex> = Vec::new();
 
+  // check for 1 hex move around
   for neighbor in hex.neighbors() {
     if grid.is_hex_occupied(&neighbor) {
       continue;
@@ -36,6 +37,7 @@ pub fn pillbug_moves(
     });
   }
 
+  // look for potential pieces to flip over
   for neighbor in hex.neighbors() {
     if grid.get_stack_size(&neighbor) != 1 {
       continue;
@@ -53,6 +55,7 @@ pub fn pillbug_moves(
     potential_hexes.push(neighbor)
   }
 
+  // check if flipping potential piece a legal move
   for potential_hex in potential_hexes {
     let Some(potential_piece) = grid.find_top_piece(&potential_hex) else {
       continue;
@@ -67,12 +70,21 @@ pub fn pillbug_moves(
     let potential_cube = Cube::from(potential_hex);
 
     for neighbor in hex.neighbors() {
-      if grid.is_hex_occupied(hex) {
+      if neighbor == potential_hex {
         continue;
       }
 
-      let cube = Cube::from(neighbor);
-      if cube.x == potential_cube.x || cube.y == potential_cube.y || cube.z == potential_cube.z {
+      if grid.is_hex_occupied(&neighbor) {
+        continue;
+      }
+
+      let cube = Cube::from(*hex);
+      let neighnor_cube = Cube::from(neighbor);
+      // make sure potential piece, main piece and neighbor is on the same line
+      if (cube.x == neighnor_cube.x && cube.x == potential_cube.x)
+        || (cube.y == neighnor_cube.y && cube.y == potential_cube.y)
+        || (cube.z == neighnor_cube.z && cube.z == potential_cube.z)
+      {
         actions.push(Action {
           piece: *potential_piece,
           from: Hex::from(potential_cube),

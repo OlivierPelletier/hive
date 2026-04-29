@@ -1,7 +1,7 @@
 use crate::engine::grid::piece::{PieceColor, PieceType};
 use crate::engine::grid::{
-  coordinate::{cube::Cube, hex::Hex},
   Grid,
+  coordinate::{cube::Cube, hex::Hex},
 };
 
 pub mod hive;
@@ -19,8 +19,14 @@ pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
     grid: grid.grid.clone(),
   };
   after_move_grid.move_piece_from_to(*from, *to);
+  let mut without_piece_grid = Grid {
+    grid: grid.grid.clone(),
+  };
+  without_piece_grid.remove_top_piece_from_hex(*from);
 
-  hive::one_hive_rule_grid_validation(grid) && hive::one_hive_rule_grid_validation(&after_move_grid)
+  hive::one_hive_rule_grid_validation(grid)
+    && hive::one_hive_rule_grid_validation(&after_move_grid)
+    && hive::one_hive_rule_grid_validation(&without_piece_grid)
 }
 
 pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
