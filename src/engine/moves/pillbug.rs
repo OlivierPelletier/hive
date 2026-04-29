@@ -67,23 +67,23 @@ pub fn pillbug_moves(
       continue;
     }
 
+    let cube = Cube::from(*hex);
     let potential_cube = Cube::from(potential_hex);
 
     for neighbor in hex.neighbors() {
       if neighbor == potential_hex {
         continue;
       }
-
       if grid.is_hex_occupied(&neighbor) {
         continue;
       }
 
-      let cube = Cube::from(*hex);
-      let neighnor_cube = Cube::from(neighbor);
+      let neighbor_cube = Cube::from(neighbor);
+
       // make sure potential piece, main piece and neighbor is on the same line
-      if (cube.x == neighnor_cube.x && cube.x == potential_cube.x)
-        || (cube.y == neighnor_cube.y && cube.y == potential_cube.y)
-        || (cube.z == neighnor_cube.z && cube.z == potential_cube.z)
+      if (cube.x == neighbor_cube.x && cube.x == potential_cube.x)
+        || (cube.y == neighbor_cube.y && cube.y == potential_cube.y)
+        || (cube.z == neighbor_cube.z && cube.z == potential_cube.z)
       {
         actions.push(Action {
           piece: *potential_piece,
