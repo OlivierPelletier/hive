@@ -221,8 +221,15 @@ impl Display for Grid {
               write!(f, "{}", hex)?;
             } else {
               let piece = self.find_top_piece(&hex);
+              let stack_size = self.get_stack_size(&hex);
               match piece {
-                Some(p) => write!(f, " {} ", p)?,
+                Some(p) => {
+                  if stack_size > 1 {
+                    write!(f, "({})", p)
+                  } else {
+                    write!(f, " {} ", p)
+                  }?
+                }
                 None => write!(f, " NA ")?,
               }
             }

@@ -234,9 +234,9 @@ fn given_grid_when_available_placements_by_color_should_return_correct_placement
 /*
    __      __      __      __      __      __      __      __    W BETL
   -3,-1   -2,-1   -1,-1   0,-1    1,-1    2,-1    3,-1    4,-1    5,-1
-     B QBEE  B SANT  B GRHP  W GRHP  W SANT  W BETL  W BETL  W BETL    __
+     B QBEE  B SANT  B GRHP  W GRHP  W SANT (W BETL) W BETL  W BETL    __
       -3,0    -2,0    -1,0     0,0     1,0     2,0     3,0     4,0     5,0
-         B SANT  B SANT  B SANT    __    W BETL  W SANT  W BETL    __      __
+         B SANT  B SANT  B SANT    __   (W BETL) W SANT (W BETL)   __      __
           -3,1    -2,1    -1,1     0,1     1,1     2,1     3,1     4,1     5,1
                __      __      __      __    W LDBG    __      __      __      __
               -3,2    -2,2    -1,2     0,2     1,2     2,2     3,2     4,2     5,2
@@ -314,9 +314,9 @@ fn given_stacked_grid_when_available_moves_ladybug_should_return_correct_moves()
 }
 
 /*
-   __      __    B PLBG  W PLBG  W PLBG
+   __      __    B PLBG (W PLBG) W PLBG
   -2,0    -1,0     0,0     1,0     2,0
-     B PLBG  B PLBG    __    W PLBG  W PLBG
+     B PLBG  B PLBG    __    W PLBG (W PLBG)
       -2,1    -1,1     0,1     1,1     2,1
          B PLBG  B PLBG    __      __      __
           -2,2    -1,2     0,2     1,2     2,2
@@ -342,6 +342,7 @@ fn initialize_pillbug_grid() -> Grid {
 #[test]
 fn given_grid_when_available_moves_pillbug_should_return_correct_moves() {
   let grid = initialize_pillbug_grid();
+  println!("Grid:\n{}", grid);
   let from = Hex::new(-2, 2);
   let piece = Piece::pillbug().black();
   let mut correct_moves = vec![
