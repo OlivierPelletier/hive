@@ -161,7 +161,7 @@ fn initialize_pillbug_stun_grid() -> Grid {
 }
 
 #[test]
-fn given_actions_history_with_stuned_piece_when_pillbug_stun_rule_should_return_true() {
+fn given_actions_history_with_stunned_piece_when_pillbug_stun_rule_should_return_true() {
   let grid = initialize_pillbug_stun_grid();
   let actions_history = &[Action {
     piece: Piece::queen_bee().white(),
@@ -175,7 +175,7 @@ fn given_actions_history_with_stuned_piece_when_pillbug_stun_rule_should_return_
 }
 
 #[test]
-fn given_actions_history_without_stuned_piece_when_pillbug_stun_rule_should_return_true() {
+fn given_actions_history_without_stunned_piece_when_pillbug_stun_rule_should_return_false() {
   let grid = initialize_pillbug_stun_grid();
   let actions_history = &[Action {
     piece: Piece::queen_bee().white(),
@@ -189,7 +189,7 @@ fn given_actions_history_without_stuned_piece_when_pillbug_stun_rule_should_retu
 }
 
 #[test]
-fn given_actions_history_with_stuned_piece_second_from_last_when_pillbug_stun_rule_should_return_true()
+fn given_actions_history_with_stunned_piece_second_from_last_when_pillbug_stun_rule_should_return_true()
  {
   let grid = initialize_pillbug_stun_grid();
   let actions_history = &[

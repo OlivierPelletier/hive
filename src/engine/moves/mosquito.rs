@@ -16,7 +16,7 @@ pub fn mosquito_moves(
   grid: &Grid,
   piece: &Piece,
   hex: &Hex,
-  actions_history: &Vec<Action>,
+  actions_history: &[Action],
 ) -> Vec<Action> {
   let mut actions: Vec<Action> = Vec::new();
   let mut found_types: Vec<PieceType> = Vec::new();

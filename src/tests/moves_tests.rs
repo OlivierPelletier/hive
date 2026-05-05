@@ -353,7 +353,6 @@ fn initialize_pillbug_grid() -> Grid {
 #[test]
 fn given_grid_when_available_moves_pillbug_should_return_correct_moves() {
   let grid = initialize_pillbug_grid();
-  println!("Grid:\n{}", grid);
   let from = Hex::new(-2, 2);
   let piece = Piece::pillbug().black();
   let mut correct_moves = vec![
@@ -366,7 +365,7 @@ fn given_grid_when_available_moves_pillbug_should_return_correct_moves() {
   let mut moves = available_moves(
     &grid,
     &from,
-    &vec![Action {
+    &[Action {
       piece: Piece::pillbug().white(),
       from: Hex::new(1, 2),
       to: Hex::new(1, 1),
@@ -398,4 +397,35 @@ fn given_grid_when_available_moves_pillbug_with_stacked_pieces_should_return_cor
   sort_actions(&mut correct_moves);
 
   assert_eq!(moves, correct_moves);
+}
+
+/*
+   __   (W PLBG)   __
+   0,0     1,0     2,0
+       __    W PLBG (W PLBG)
+       0,1     1,1     2,1
+         W PLBG    __      __
+           0,2     1,2     2,2
+*/
+fn initialize_pillbug_extra_stacked_scenario_grid() -> Grid {
+  let mut grid = Grid::new();
+
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(1, 1));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(1, 0));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(1, 0));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(2, 1));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(2, 1));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(0, 2));
+
+  grid
+}
+
+#[test]
+fn given_grid_when_available_moves_pillbug_with_extra_stacked_pieces_should_return_empty_moves() {
+  let grid = initialize_pillbug_extra_stacked_scenario_grid();
+  let from = Hex::new(1, 1);
+
+  let moves = available_moves(&grid, &from, &Vec::new());
+
+  assert!(moves.is_empty());
 }

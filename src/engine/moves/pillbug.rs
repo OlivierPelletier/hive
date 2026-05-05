@@ -88,9 +88,15 @@ pub fn pillbug_moves(
         || (cube.y == neighbor_cube.y && cube.y == potential_cube.y)
         || (cube.z == neighbor_cube.z && cube.z == potential_cube.z)
       {
+        let mut temp_grid = grid.clone();
+        temp_grid.place_piece_to_hex(*piece, *hex);
+        if !freedom_to_move_rule(&temp_grid, hex, &neighbor) {
+          continue;
+        }
+
         actions.push(Action {
           piece: *potential_piece,
-          from: Hex::from(potential_cube),
+          from: potential_hex,
           to: neighbor,
           in_hand: false,
           is_pillbug_special_move: true,

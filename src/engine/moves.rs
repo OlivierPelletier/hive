@@ -27,7 +27,7 @@ pub mod spider;
 #[path = "../tests/moves_tests.rs"]
 mod moves_tests;
 
-pub fn available_moves(grid: &Grid, hex: &Hex, actions_history: &Vec<Action>) -> Vec<Action> {
+pub fn available_moves(grid: &Grid, hex: &Hex, actions_history: &[Action]) -> Vec<Action> {
   let piece = grid.find_top_piece(hex);
 
   let moves = match piece {
