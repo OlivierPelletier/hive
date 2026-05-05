@@ -1,15 +1,14 @@
 use std::fmt::{Display, Formatter, Result};
 
-use serde::{Deserialize, Serialize};
-
 use crate::engine::grid::{coordinate::hex::Hex, piece::Piece};
 
-#[derive(Debug, PartialEq, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Action {
   pub piece: Piece,
   pub from: Hex,
   pub to: Hex,
   pub in_hand: bool,
+  pub is_pillbug_special_move: bool,
 }
 
 impl Display for Action {

@@ -1,8 +1,6 @@
 use std::fmt::{Debug, Display, Formatter, Result};
 
-use serde::{Deserialize, Serialize};
-
-#[derive(Clone, Copy, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Eq, PartialEq)]
 pub enum PieceType {
   QUEENBEE,
   BEETLE,
@@ -11,6 +9,7 @@ pub enum PieceType {
   MOSQUITO,
   SOLDIERANT,
   SPIDER,
+  PILLBUG,
   NONE,
 }
 
@@ -24,12 +23,13 @@ impl Debug for PieceType {
       PieceType::MOSQUITO => write!(f, "MSQT"),
       PieceType::SOLDIERANT => write!(f, "SANT"),
       PieceType::SPIDER => write!(f, "SPDR"),
+      PieceType::PILLBUG => write!(f, "PLBG"),
       PieceType::NONE => write!(f, " NA "),
     }
   }
 }
 
-#[derive(Clone, Eq, PartialEq, Copy, Serialize, Deserialize)]
+#[derive(Clone, Eq, PartialEq, Copy)]
 pub enum PieceColor {
   BLACK,
   WHITE,
@@ -46,7 +46,7 @@ impl Debug for PieceColor {
   }
 }
 
-#[derive(Debug, PartialEq, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Piece {
   pub p_type: PieceType,
   pub p_color: PieceColor,
@@ -98,6 +98,13 @@ impl Piece {
   pub fn spider() -> Piece {
     Piece {
       p_type: PieceType::SPIDER,
+      p_color: PieceColor::NONE,
+    }
+  }
+
+  pub fn pillbug() -> Piece {
+    Piece {
+      p_type: PieceType::PILLBUG,
       p_color: PieceColor::NONE,
     }
   }

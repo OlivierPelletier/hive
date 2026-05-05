@@ -18,17 +18,33 @@ fn given_grid_when_placing_piece_to_hex_then_hex_contains_piece() {
 }
 
 #[test]
-fn given_grid_when_removing_piece_from_hex_then_piece_is_removed_from_hex() {
+fn given_grid_with_single_piece_when_removing_piece_from_hex_then_hex_is_removed() {
   let mut grid = Grid::new();
   let hex = Hex::new(0, 0);
 
   grid.place_piece_to_hex(Piece::queen_bee(), hex);
   grid.remove_top_piece_from_hex(hex);
 
+  assert!(!grid.grid.contains_key(&hex))
+}
+
+#[test]
+fn given_grid_with_two_pieces_stack_when_removing_piece_from_hex_then_piece_is_removed_from_hex() {
+  let mut grid = Grid::new();
+  let hex = Hex::new(0, 0);
+  let first_piece = Piece::queen_bee();
+  let second_piece = Piece::beetle();
+
+  grid.place_piece_to_hex(first_piece, hex);
+  grid.place_piece_to_hex(second_piece, hex);
+  grid.remove_top_piece_from_hex(hex);
+
   match grid.grid.get(&hex) {
-    Some(p) => assert_eq!(p.len(), 0),
-    None => assert!(false),
-  }
+    Some(p) => assert_eq!(p.len(), 1),
+    None => unreachable!(),
+  };
+    
+  assert_eq!(*grid.grid.get(&hex).unwrap().first().unwrap(), first_piece)
 }
 
 #[test]
@@ -68,7 +84,7 @@ fn given_grid_when_adding_two_pieces_on_same_hex_then_hex_contains_both_pieces()
       assert_eq!(piece.first(), Some(&queen_bee));
       assert_eq!(piece.last(), Some(&spider));
     }
-    None => assert!(false),
+    None => unreachable!(),
   }
 }
 
@@ -82,11 +98,8 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
 
   grid.move_piece_from_to(from, to);
 
-  match grid.grid.get(&from) {
-    Some(p) => {
-      assert_eq!(p.len(), 0);
-    }
-    None => assert!(false),
+  if grid.grid.contains_key(&from) {
+    unreachable!();
   }
 
   match grid.grid.get(&to) {
@@ -94,7 +107,7 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
       let piece = p;
       assert_eq!(piece.last(), Some(&queen_bee));
     }
-    None => assert!(false),
+    None => unreachable!(),
   }
 }
 
@@ -111,11 +124,8 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
 
   grid.move_piece_from_to(from, to);
 
-  match grid.grid.get(&from) {
-    Some(p) => {
-      assert_eq!(p.len(), 0);
-    }
-    None => assert!(false),
+  if grid.grid.contains_key(&from) {
+    unreachable!();
   }
 
   match grid.grid.get(&to) {
@@ -124,7 +134,7 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
       assert_eq!(piece.last(), Some(&beetle));
       assert_eq!(piece.first(), Some(&queen_bee));
     }
-    None => assert!(false),
+    None => unreachable!(),
   }
 }
 
@@ -150,7 +160,7 @@ fn given_empty_grid_when_finding_top_piece_then_no_piece_is_returned() {
 
   let piece = grid.find_top_piece(&hex);
 
-  assert_eq!(piece.is_none(), true);
+  assert!(piece.is_none());
 }
 
 #[test]

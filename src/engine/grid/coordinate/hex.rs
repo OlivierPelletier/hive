@@ -1,10 +1,8 @@
 use std::fmt::{Display, Formatter, Result};
 
-use serde::{Deserialize, Serialize};
-
 use crate::engine::grid::coordinate::cube::Cube;
 
-#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy, Ord, PartialOrd, Serialize, Deserialize)]
+#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy, Ord, PartialOrd)]
 pub struct Hex {
   pub q: i64,
   pub r: i64,

@@ -8,7 +8,7 @@ pub fn one_hive_rule_grid_validation(grid: &Grid) -> bool {
   let mut found_pieces = HashSet::new();
 
   if let Some(start) = keys_it.find(|h| grid.is_hex_occupied(h)) {
-    found_pieces = one_hive_rule_iterative_pieces_search(grid, found_pieces, start)
+    one_hive_rule_iterative_pieces_search(grid, &mut found_pieces, start)
   }
 
   if found_pieces.len() != grid.number_of_pieces() {
@@ -20,24 +20,23 @@ pub fn one_hive_rule_grid_validation(grid: &Grid) -> bool {
 
 fn one_hive_rule_iterative_pieces_search(
   grid: &Grid,
-  found_pieces: HashSet<(Hex, usize)>,
+  found_pieces: &mut HashSet<(Hex, usize)>,
   hex: &Hex,
-) -> HashSet<(Hex, usize)> {
-  let mut _found_pieces = found_pieces;
-  let pieces = match grid.grid.get(hex) {
-    Some(v) => v.clone(),
-    None => Vec::new(),
-  };
+) {
+  let piece_count = grid.grid.get(hex).map_or(0, Vec::len);
 
-  for i in 0..pieces.len() {
-    _found_pieces.insert((*hex, i));
+  for i in 0..piece_count {
+    found_pieces.insert((*hex, i));
   }
 
   for neighbor in hex.neighbors() {
     let zero: usize = 0;
-    if !_found_pieces.contains(&(neighbor, zero)) && grid.is_hex_occupied(&neighbor) {
-      _found_pieces = one_hive_rule_iterative_pieces_search(grid, _found_pieces, &neighbor);
+    if found_pieces.contains(&(neighbor, zero)) {
+      continue;
     }
+    if !grid.is_hex_occupied(&neighbor) {
+      continue;
+    }
+    one_hive_rule_iterative_pieces_search(grid, found_pieces, &neighbor);
   }
-  _found_pieces
 }
