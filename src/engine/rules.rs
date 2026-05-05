@@ -1,3 +1,4 @@
+use crate::engine::game::action::Action;
 use crate::engine::grid::piece::{PieceColor, PieceType};
 use crate::engine::grid::{
   Grid,
@@ -119,4 +120,35 @@ pub fn queen_surrounded_rule(grid: &Grid, color: PieceColor) -> bool {
   }
 
   is_queen_surrounded
+}
+
+pub fn pillbug_stun_rule(grid: &Grid, from: &Hex, actions_history: &[Action]) -> bool {
+  let Some(piece) = grid.find_top_piece(from) else {
+    return false;
+  };
+
+  let Some(last) = actions_history.last() else {
+    return false;
+  };
+
+  if piece.p_color == last.piece.p_color && *from == last.to && last.pillbug_flip {
+    return true;
+  }
+
+  if actions_history.len() < 2 {
+    return false;
+  }
+
+  let Some(second_from_last) = actions_history.get(actions_history.len() - 2) else {
+    return false;
+  };
+
+  if piece.p_color == second_from_last.piece.p_color
+    && *from == second_from_last.to
+    && second_from_last.pillbug_flip
+  {
+    return true;
+  }
+
+  false
 }

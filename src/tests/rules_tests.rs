@@ -1,7 +1,8 @@
+use crate::engine::game::action::Action;
 use crate::engine::grid::piece::PieceColor;
-use crate::engine::rules::queen_surrounded_rule;
+use crate::engine::rules::{pillbug_stun_rule, queen_surrounded_rule};
 use crate::engine::{
-  grid::{coordinate::hex::Hex, piece::Piece, Grid},
+  grid::{Grid, coordinate::hex::Hex, piece::Piece},
   rules::one_hive_rule,
 };
 
@@ -140,4 +141,97 @@ fn given_filled_black_loosing_grid_when_queen_surrended_rule_with_black_should_r
   let grid = initialize_black_losing_grid();
 
   assert!(queen_surrounded_rule(&grid, PieceColor::BLACK))
+}
+
+/*
+ B BETL  W PLBG
+  -2,-1   -1,-1
+     B QBEE  W QBEE
+      -2,0    -1,0
+*/
+fn initialize_pillbug_stun_grid() -> Grid {
+  let mut grid = Grid::new();
+
+  grid.place_piece_to_hex(Piece::queen_bee().black(), Hex::new(-2, 0));
+  grid.place_piece_to_hex(Piece::queen_bee().white(), Hex::new(-1, 0));
+  grid.place_piece_to_hex(Piece::beetle().black(), Hex::new(-2, -1));
+  grid.place_piece_to_hex(Piece::pillbug().white(), Hex::new(-1, -1));
+
+  grid
+}
+
+#[test]
+fn given_actions_history_with_stuned_piece_when_pillbug_stun_rule_should_return_true() {
+  let grid = initialize_pillbug_stun_grid();
+  let actions_history = &[Action {
+    piece: Piece::queen_bee().white(),
+    from: Hex::new(-1, -2),
+    to: Hex::new(-1, 0),
+    in_hand: false,
+    pillbug_flip: true,
+  }];
+
+  assert!(pillbug_stun_rule(&grid, &Hex::new(-1, 0), actions_history))
+}
+
+#[test]
+fn given_actions_history_without_stuned_piece_when_pillbug_stun_rule_should_return_true() {
+  let grid = initialize_pillbug_stun_grid();
+  let actions_history = &[Action {
+    piece: Piece::queen_bee().white(),
+    from: Hex::new(-1, -2),
+    to: Hex::new(-1, 0),
+    in_hand: false,
+    pillbug_flip: false,
+  }];
+
+  assert!(!pillbug_stun_rule(&grid, &Hex::new(-1, 0), actions_history))
+}
+
+#[test]
+fn given_actions_history_with_stuned_piece_second_from_last_when_pillbug_stun_rule_should_return_true()
+ {
+  let grid = initialize_pillbug_stun_grid();
+  let actions_history = &[
+    Action {
+      piece: Piece::queen_bee().white(),
+      from: Hex::new(-1, -2),
+      to: Hex::new(-1, 0),
+      in_hand: false,
+      pillbug_flip: true,
+    },
+    Action {
+      piece: Piece::beetle().black(),
+      from: Hex::new(-3, -1),
+      to: Hex::new(-2, 1),
+      in_hand: false,
+      pillbug_flip: false,
+    },
+  ];
+
+  assert!(pillbug_stun_rule(&grid, &Hex::new(-1, 0), actions_history))
+}
+
+#[test]
+fn given_actions_history_with_normal_piece_second_from_last_when_pillbug_stun_rule_should_return_false()
+ {
+  let grid = initialize_pillbug_stun_grid();
+  let actions_history = &[
+    Action {
+      piece: Piece::queen_bee().white(),
+      from: Hex::new(-1, -2),
+      to: Hex::new(-1, 0),
+      in_hand: false,
+      pillbug_flip: false,
+    },
+    Action {
+      piece: Piece::beetle().black(),
+      from: Hex::new(-3, -1),
+      to: Hex::new(-2, 1),
+      in_hand: false,
+      pillbug_flip: false,
+    },
+  ];
+
+  assert!(!pillbug_stun_rule(&grid, &Hex::new(-1, 0), actions_history))
 }

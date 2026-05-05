@@ -34,6 +34,7 @@ pub fn pillbug_moves(
       from: *hex,
       to: neighbor,
       in_hand: false,
+      pillbug_flip: false,
     });
   }
 
@@ -90,6 +91,7 @@ pub fn pillbug_moves(
           from: Hex::from(potential_cube),
           to: neighbor,
           in_hand: false,
+          pillbug_flip: true,
         });
         break;
       }

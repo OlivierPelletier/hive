@@ -86,6 +86,7 @@ impl Game {
             from: Hex::zero(),
             to,
             in_hand: true,
+            pillbug_flip: false,
           })
         }
       }

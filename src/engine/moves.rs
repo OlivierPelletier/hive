@@ -10,6 +10,7 @@ use crate::engine::{
     mosquito::mosquito_moves, pillbug::pillbug_moves, queen_bee::queen_bee_moves,
     soldier_ant::soldier_ant_moves, spider::spider_moves,
   },
+  rules::pillbug_stun_rule,
 };
 use std::collections::HashSet;
 
@@ -29,7 +30,7 @@ mod moves_tests;
 pub fn available_moves(grid: &Grid, hex: &Hex, actions_history: &Vec<Action>) -> Vec<Action> {
   let piece = grid.find_top_piece(hex);
 
-  match piece {
+  let moves = match piece {
     Some(p) => match p.p_type {
       PieceType::BEETLE => beetle_moves(grid, p, hex),
       PieceType::GRASSHOPPER => grasshopper_moves(grid, p, hex),
@@ -42,7 +43,12 @@ pub fn available_moves(grid: &Grid, hex: &Hex, actions_history: &Vec<Action>) ->
       PieceType::PILLBUG => pillbug_moves(grid, p, hex, actions_history),
     },
     None => Vec::new(),
-  }
+  };
+
+  moves
+    .into_iter()
+    .filter(|m| !pillbug_stun_rule(grid, &m.from, actions_history))
+    .collect()
 }
 
 pub fn available_placements_for_piece_color(grid: &Grid, piece_color: &PieceColor) -> Vec<Hex> {

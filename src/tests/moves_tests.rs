@@ -42,6 +42,17 @@ fn move_action(piece: Piece, from: Hex, to: Hex) -> Action {
     from,
     to,
     in_hand: false,
+    pillbug_flip: false,
+  }
+}
+
+fn move_action_pillbug_flip(piece: Piece, from: Hex, to: Hex) -> Action {
+  Action {
+    piece,
+    from,
+    to,
+    in_hand: false,
+    pillbug_flip: true,
   }
 }
 
@@ -348,8 +359,8 @@ fn given_grid_when_available_moves_pillbug_should_return_correct_moves() {
   let mut correct_moves = vec![
     move_action(piece, from, Hex::new(-3, 2)),
     move_action(piece, from, Hex::new(-2, 3)),
-    move_action(piece, Hex::new(-1, 2), Hex::new(-3, 2)),
-    move_action(piece, Hex::new(-2, 1), Hex::new(-2, 3)),
+    move_action_pillbug_flip(piece, Hex::new(-1, 2), Hex::new(-3, 2)),
+    move_action_pillbug_flip(piece, Hex::new(-2, 1), Hex::new(-2, 3)),
   ];
 
   let mut moves = available_moves(
@@ -360,6 +371,7 @@ fn given_grid_when_available_moves_pillbug_should_return_correct_moves() {
       from: Hex::new(1, 2),
       to: Hex::new(1, 1),
       in_hand: false,
+      pillbug_flip: false,
     }],
   );
 

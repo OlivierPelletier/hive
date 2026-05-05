@@ -18,6 +18,7 @@ pub fn soldier_ant_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
       from: *hex,
       to: m,
       in_hand: false,
+      pillbug_flip: false,
     });
   }
 
