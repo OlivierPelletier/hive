@@ -42,7 +42,7 @@ fn move_action(piece: Piece, from: Hex, to: Hex) -> Action {
     from,
     to,
     in_hand: false,
-    pillbug_flip: false,
+    is_pillbug_special_move: false,
   }
 }
 
@@ -52,7 +52,7 @@ fn move_action_pillbug_flip(piece: Piece, from: Hex, to: Hex) -> Action {
     from,
     to,
     in_hand: false,
-    pillbug_flip: true,
+    is_pillbug_special_move: true,
   }
 }
 
@@ -371,7 +371,7 @@ fn given_grid_when_available_moves_pillbug_should_return_correct_moves() {
       from: Hex::new(1, 2),
       to: Hex::new(1, 1),
       in_hand: false,
-      pillbug_flip: false,
+      is_pillbug_special_move: false,
     }],
   );
 

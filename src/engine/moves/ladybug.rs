@@ -18,7 +18,7 @@ pub fn ladybug_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
       from: *hex,
       to: m,
       in_hand: false,
-      pillbug_flip: false,
+      is_pillbug_special_move: false,
     })
   }
 

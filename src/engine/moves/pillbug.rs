@@ -34,16 +34,18 @@ pub fn pillbug_moves(
       from: *hex,
       to: neighbor,
       in_hand: false,
-      pillbug_flip: false,
+      is_pillbug_special_move: false,
     });
   }
 
   // look for potential pieces to flip over
   for neighbor in hex.neighbors() {
+    // skip if hex is empty or stacked
     if grid.get_stack_size(&neighbor) != 1 {
       continue;
     }
 
+    // skip if piece was just move by opponent
     if let Some(last_opposite_action) = actions_history
       .iter()
       .rev()
@@ -91,7 +93,7 @@ pub fn pillbug_moves(
           from: Hex::from(potential_cube),
           to: neighbor,
           in_hand: false,
-          pillbug_flip: true,
+          is_pillbug_special_move: true,
         });
         break;
       }

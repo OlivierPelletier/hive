@@ -1,6 +1,6 @@
 use crate::engine::game::action::Action;
 use crate::engine::grid::piece::PieceColor;
-use crate::engine::rules::{pillbug_stun_rule, queen_surrounded_rule};
+use crate::engine::rules::{pillbug_special_move_rule, queen_surrounded_rule};
 use crate::engine::{
   grid::{Grid, coordinate::hex::Hex, piece::Piece},
   rules::one_hive_rule,
@@ -168,10 +168,10 @@ fn given_actions_history_with_stuned_piece_when_pillbug_stun_rule_should_return_
     from: Hex::new(-1, -2),
     to: Hex::new(-1, 0),
     in_hand: false,
-    pillbug_flip: true,
+    is_pillbug_special_move: true,
   }];
 
-  assert!(pillbug_stun_rule(&grid, &Hex::new(-1, 0), actions_history))
+  assert!(pillbug_special_move_rule(&grid, &Hex::new(-1, 0), actions_history))
 }
 
 #[test]
@@ -182,10 +182,10 @@ fn given_actions_history_without_stuned_piece_when_pillbug_stun_rule_should_retu
     from: Hex::new(-1, -2),
     to: Hex::new(-1, 0),
     in_hand: false,
-    pillbug_flip: false,
+    is_pillbug_special_move: false,
   }];
 
-  assert!(!pillbug_stun_rule(&grid, &Hex::new(-1, 0), actions_history))
+  assert!(!pillbug_special_move_rule(&grid, &Hex::new(-1, 0), actions_history))
 }
 
 #[test]
@@ -198,18 +198,18 @@ fn given_actions_history_with_stuned_piece_second_from_last_when_pillbug_stun_ru
       from: Hex::new(-1, -2),
       to: Hex::new(-1, 0),
       in_hand: false,
-      pillbug_flip: true,
+      is_pillbug_special_move: true,
     },
     Action {
       piece: Piece::beetle().black(),
       from: Hex::new(-3, -1),
       to: Hex::new(-2, 1),
       in_hand: false,
-      pillbug_flip: false,
+      is_pillbug_special_move: false,
     },
   ];
 
-  assert!(pillbug_stun_rule(&grid, &Hex::new(-1, 0), actions_history))
+  assert!(pillbug_special_move_rule(&grid, &Hex::new(-1, 0), actions_history))
 }
 
 #[test]
@@ -222,16 +222,16 @@ fn given_actions_history_with_normal_piece_second_from_last_when_pillbug_stun_ru
       from: Hex::new(-1, -2),
       to: Hex::new(-1, 0),
       in_hand: false,
-      pillbug_flip: false,
+      is_pillbug_special_move: false,
     },
     Action {
       piece: Piece::beetle().black(),
       from: Hex::new(-3, -1),
       to: Hex::new(-2, 1),
       in_hand: false,
-      pillbug_flip: false,
+      is_pillbug_special_move: false,
     },
   ];
 
-  assert!(!pillbug_stun_rule(&grid, &Hex::new(-1, 0), actions_history))
+  assert!(!pillbug_special_move_rule(&grid, &Hex::new(-1, 0), actions_history))
 }

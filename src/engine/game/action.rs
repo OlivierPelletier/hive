@@ -8,7 +8,7 @@ pub struct Action {
   pub from: Hex,
   pub to: Hex,
   pub in_hand: bool,
-  pub pillbug_flip: bool,
+  pub is_pillbug_special_move: bool,
 }
 
 impl Display for Action {

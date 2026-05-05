@@ -122,7 +122,7 @@ pub fn queen_surrounded_rule(grid: &Grid, color: PieceColor) -> bool {
   is_queen_surrounded
 }
 
-pub fn pillbug_stun_rule(grid: &Grid, from: &Hex, actions_history: &[Action]) -> bool {
+pub fn pillbug_special_move_rule(grid: &Grid, from: &Hex, actions_history: &[Action]) -> bool {
   let Some(piece) = grid.find_top_piece(from) else {
     return false;
   };
@@ -131,7 +131,7 @@ pub fn pillbug_stun_rule(grid: &Grid, from: &Hex, actions_history: &[Action]) ->
     return false;
   };
 
-  if piece.p_color == last.piece.p_color && *from == last.to && last.pillbug_flip {
+  if piece.p_color == last.piece.p_color && *from == last.to && last.is_pillbug_special_move {
     return true;
   }
 
@@ -145,7 +145,7 @@ pub fn pillbug_stun_rule(grid: &Grid, from: &Hex, actions_history: &[Action]) ->
 
   if piece.p_color == second_from_last.piece.p_color
     && *from == second_from_last.to
-    && second_from_last.pillbug_flip
+    && second_from_last.is_pillbug_special_move
   {
     return true;
   }

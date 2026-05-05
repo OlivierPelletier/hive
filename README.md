@@ -88,6 +88,3 @@ B wins!
 cargo test
 ```
 
-## TODO
-
-* Complete pillbug rule preventing other played to play the flipped piece for one turn.

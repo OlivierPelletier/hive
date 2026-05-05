@@ -40,7 +40,7 @@ pub fn grasshopper_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
           from: *hex,
           to: line_hex,
           in_hand: false,
-          pillbug_flip: false,
+          is_pillbug_special_move: false,
         });
       }
     } else if line.y == cube.y {
@@ -63,7 +63,7 @@ pub fn grasshopper_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
           from: *hex,
           to: line_hex,
           in_hand: false,
-          pillbug_flip: false,
+          is_pillbug_special_move: false,
         });
       }
     } else {
@@ -86,7 +86,7 @@ pub fn grasshopper_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
           from: *hex,
           to: line_hex,
           in_hand: false,
-          pillbug_flip: false,
+          is_pillbug_special_move: false,
         });
       }
     }

@@ -10,7 +10,7 @@ use crate::engine::{
     mosquito::mosquito_moves, pillbug::pillbug_moves, queen_bee::queen_bee_moves,
     soldier_ant::soldier_ant_moves, spider::spider_moves,
   },
-  rules::pillbug_stun_rule,
+  rules::pillbug_special_move_rule,
 };
 use std::collections::HashSet;
 
@@ -47,7 +47,7 @@ pub fn available_moves(grid: &Grid, hex: &Hex, actions_history: &Vec<Action>) ->
 
   moves
     .into_iter()
-    .filter(|m| !pillbug_stun_rule(grid, &m.from, actions_history))
+    .filter(|m| !pillbug_special_move_rule(grid, &m.from, actions_history))
     .collect()
 }
 

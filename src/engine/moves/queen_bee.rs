@@ -23,7 +23,7 @@ pub fn queen_bee_moves(grid: &Grid, piece: &Piece, hex: &Hex) -> Vec<Action> {
       from: *hex,
       to: neighbor,
       in_hand: false,
-      pillbug_flip: false,
+      is_pillbug_special_move: false,
     });
   }
 
