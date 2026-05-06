@@ -41,7 +41,7 @@ let chosen_action: Action = actions[0];
 game.play_action(chosen_action);
 
 // Check if there's a winner
-let winner: Option<PieceColor> = game.winner();
+let winner: GameWinnerState = game.winner();
 ```
 
 ### As a command line prototype
