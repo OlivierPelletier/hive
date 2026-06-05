@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Display, Formatter, Result};
 
-#[derive(Clone, Copy, Eq, PartialEq)]
+#[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
 pub enum PieceType {
   QUEENBEE,
   BEETLE,
@@ -29,7 +29,7 @@ impl Debug for PieceType {
   }
 }
 
-#[derive(Clone, Eq, PartialEq, Copy)]
+#[derive(Clone, Eq, PartialEq, Copy, Ord, PartialOrd)]
 pub enum PieceColor {
   BLACK,
   WHITE,
@@ -46,7 +46,7 @@ impl Debug for PieceColor {
   }
 }
 
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Clone, Copy, Ord, PartialOrd)]
 pub struct Piece {
   pub p_type: PieceType,
   pub p_color: PieceColor,

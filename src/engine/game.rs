@@ -92,6 +92,17 @@ impl Game {
       }
     }
 
+    actions.sort_by_key(|action| {
+      (
+        action.from.q,
+        action.from.r,
+        action.to.q,
+        action.to.r,
+        action.piece.p_color,
+        action.piece.p_type,
+      )
+    });
+
     actions
   }
 
