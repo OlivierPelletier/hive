@@ -53,5 +53,6 @@ fn soldier_ant_moves_it(
     }
 
     soldier_ant_moves_it(grid, initital_hex, &neighbor, trail, moves);
+    trail.pop();
   }
 }

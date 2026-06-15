@@ -6,7 +6,7 @@ use crate::engine::{
     piece::{Piece, PieceType},
   },
   moves::{
-    beetle::beetle_moves, grasshoper::grasshopper_moves, ladybug::ladybug_moves,
+    beetle::beetle_moves, grasshopper::grasshopper_moves, ladybug::ladybug_moves,
     pillbug::pillbug_moves, queen_bee::queen_bee_moves, soldier_ant::soldier_ant_moves,
     spider::spider_moves,
   },

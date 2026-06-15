@@ -17,11 +17,11 @@ pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
   }
 
   let mut after_move_grid = Grid {
-    grid: grid.grid.clone(),
+    cells: grid.cells.clone(),
   };
   after_move_grid.move_piece_from_to(*from, *to);
   let mut without_piece_grid = Grid {
-    grid: grid.grid.clone(),
+    cells: grid.cells.clone(),
   };
   without_piece_grid.remove_top_piece_from_hex(*from);
 
@@ -101,7 +101,7 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
 pub fn queen_surrounded_rule(grid: &Grid, color: PieceColor) -> bool {
   let mut is_queen_surrounded = false;
 
-  for hex_pieces in &grid.grid {
+  for hex_pieces in &grid.cells {
     for piece in hex_pieces.1 {
       if piece.p_type != PieceType::QUEENBEE {
         continue;

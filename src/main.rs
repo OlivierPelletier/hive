@@ -26,7 +26,7 @@ fn main() {
       chosen_action = get_usize_input("Invalid number... Try again");
     }
 
-    game.play_action(actions[chosen_action]);
+    let _ = game.play_action(actions[chosen_action]);
     game_state = game.winner();
   }
 

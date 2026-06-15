@@ -1,7 +1,7 @@
-use std::fmt::{Debug, Formatter, Result};
+use std::fmt::{self, Debug, Formatter};
 
 use crate::engine::{
-  game::{action::Action, player::Player},
+  game::{action::Action, error::PlayError, player::Player},
   grid::{
     Grid,
     coordinate::hex::Hex,
@@ -13,6 +13,7 @@ use crate::engine::{
 use uuid::Uuid;
 
 pub mod action;
+pub mod error;
 pub mod player;
 
 #[derive(Clone, Copy, Eq, PartialEq)]
@@ -24,7 +25,7 @@ pub enum GameWinnerState {
 }
 
 impl Debug for GameWinnerState {
-  fn fmt(&self, f: &mut Formatter) -> Result {
+  fn fmt(&self, f: &mut Formatter) -> fmt::Result {
     match *self {
       GameWinnerState::WHITE => write!(f, "WHITE"),
       GameWinnerState::BLACK => write!(f, "BLACK"),
@@ -41,7 +42,7 @@ pub struct Game {
   pub players: Vec<Player>,
   pub actions_history: Vec<Action>,
   pub turn: u64,
-  pub is_tournement_rule: bool,
+  pub is_tournament_rule: bool,
   pub current_player_index: usize,
 }
 
@@ -53,7 +54,7 @@ impl Game {
       players: vec![Player::white(), Player::black()],
       actions_history: Vec::new(),
       turn: 0,
-      is_tournement_rule: true,
+      is_tournament_rule: true,
       current_player_index: 0,
     }
   }
@@ -62,7 +63,7 @@ impl Game {
     let mut actions: Vec<Action> = Vec::new();
 
     if player.is_queen_played {
-      for from in self.grid.grid.keys() {
+      for from in self.grid.cells.keys() {
         let Some(piece) = self.grid.find_top_piece(from) else {
           continue;
         };
@@ -109,7 +110,7 @@ impl Game {
   fn can_play_piece(&self, piece: &Piece) -> bool {
     let current_player = &self.players[self.current_player_index];
 
-    if self.is_tournement_rule
+    if self.is_tournament_rule
       && piece.p_type == PieceType::QUEENBEE
       && (self.turn == 0 || self.turn == 1)
     {
@@ -123,13 +124,13 @@ impl Game {
     true
   }
 
-  pub fn play_action(&mut self, action: Action) {
+  pub fn play_action(&mut self, action: Action) -> Result<(), PlayError> {
     let is_valid_action = self
       .list_actions_for_player(&self.players[self.current_player_index])
       .contains(&action);
 
     if !is_valid_action {
-      return;
+      return Err(PlayError::InvalidAction);
     }
 
     if action.in_hand {
@@ -150,7 +151,8 @@ impl Game {
 
     self.actions_history.push(action);
 
-    self.next_turn()
+    self.next_turn();
+    Ok(())
   }
 
   pub fn winner(&self) -> GameWinnerState {
@@ -166,6 +168,10 @@ impl Game {
     } else {
       GameWinnerState::NONE
     }
+  }
+
+  pub fn current_player(&self) -> &Player {
+    self.players.get(self.current_player_index).unwrap()
   }
 
   fn next_turn(&mut self) {

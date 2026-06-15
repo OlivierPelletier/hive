@@ -4,7 +4,7 @@ use crate::engine::grid::{coordinate::hex::Hex, Grid};
 
 pub fn one_hive_rule_grid_validation(grid: &Grid) -> bool {
   let mut is_valid = true;
-  let mut keys_it = grid.grid.keys();
+  let mut keys_it = grid.cells.keys();
   let mut found_pieces = HashSet::new();
 
   if let Some(start) = keys_it.find(|h| grid.is_hex_occupied(h)) {
@@ -23,7 +23,7 @@ fn one_hive_rule_iterative_pieces_search(
   found_pieces: &mut HashSet<(Hex, usize)>,
   hex: &Hex,
 ) {
-  let piece_count = grid.grid.get(hex).map_or(0, Vec::len);
+  let piece_count = grid.cells.get(hex).map_or(0, Vec::len);
 
   for i in 0..piece_count {
     found_pieces.insert((*hex, i));

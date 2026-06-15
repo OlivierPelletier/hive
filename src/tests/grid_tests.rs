@@ -8,7 +8,7 @@ fn given_grid_when_placing_piece_to_hex_then_hex_contains_piece() {
 
   grid.place_piece_to_hex(queen_bee, hex);
 
-  match grid.grid.get(&hex) {
+  match grid.cells.get(&hex) {
     Some(p) => {
       let piece = p;
       assert_eq!(*piece.last().unwrap(), queen_bee);
@@ -25,7 +25,7 @@ fn given_grid_with_single_piece_when_removing_piece_from_hex_then_hex_is_removed
   grid.place_piece_to_hex(Piece::queen_bee(), hex);
   grid.remove_top_piece_from_hex(hex);
 
-  assert!(!grid.grid.contains_key(&hex))
+  assert!(!grid.cells.contains_key(&hex))
 }
 
 #[test]
@@ -39,12 +39,12 @@ fn given_grid_with_two_pieces_stack_when_removing_piece_from_hex_then_piece_is_r
   grid.place_piece_to_hex(second_piece, hex);
   grid.remove_top_piece_from_hex(hex);
 
-  match grid.grid.get(&hex) {
+  match grid.cells.get(&hex) {
     Some(p) => assert_eq!(p.len(), 1),
     None => unreachable!(),
   };
     
-  assert_eq!(*grid.grid.get(&hex).unwrap().first().unwrap(), first_piece)
+  assert_eq!(*grid.cells.get(&hex).unwrap().first().unwrap(), first_piece)
 }
 
 #[test]
@@ -58,7 +58,7 @@ fn given_grid_when_removing_piece_from_hex_containing_two_pieces_then_top_piece_
   grid.place_piece_to_hex(beetle, hex);
   grid.remove_top_piece_from_hex(hex);
 
-  match grid.grid.get(&hex) {
+  match grid.cells.get(&hex) {
     Some(p) => {
       let piece = p;
       assert_eq!(piece.last(), Some(&queen_bee));
@@ -77,7 +77,7 @@ fn given_grid_when_adding_two_pieces_on_same_hex_then_hex_contains_both_pieces()
   grid.place_piece_to_hex(queen_bee, hex);
   grid.place_piece_to_hex(spider, hex);
 
-  match grid.grid.get(&hex) {
+  match grid.cells.get(&hex) {
     Some(p) => {
       let piece = p;
       assert_eq!(p.len(), 2);
@@ -98,11 +98,11 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
 
   grid.move_piece_from_to(from, to);
 
-  if grid.grid.contains_key(&from) {
+  if grid.cells.contains_key(&from) {
     unreachable!();
   }
 
-  match grid.grid.get(&to) {
+  match grid.cells.get(&to) {
     Some(p) => {
       let piece = p;
       assert_eq!(piece.last(), Some(&queen_bee));
@@ -124,11 +124,11 @@ fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and
 
   grid.move_piece_from_to(from, to);
 
-  if grid.grid.contains_key(&from) {
+  if grid.cells.contains_key(&from) {
     unreachable!();
   }
 
-  match grid.grid.get(&to) {
+  match grid.cells.get(&to) {
     Some(p) => {
       let piece = p;
       assert_eq!(piece.last(), Some(&beetle));

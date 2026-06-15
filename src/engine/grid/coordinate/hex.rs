@@ -17,20 +17,18 @@ impl Hex {
     Hex { q: 0, r: 0 }
   }
 
-  pub fn neighbors(&self) -> Vec<Hex> {
+  pub fn neighbors(&self) -> [Hex; 6] {
     let q = self.q;
     let r = self.r;
 
-    let neighbors: Vec<Hex> = vec![
+    [
       Hex::new(q + 1, r - 1),
       Hex::new(q + 1, r),
       Hex::new(q, r + 1),
       Hex::new(q - 1, r + 1),
       Hex::new(q - 1, r),
       Hex::new(q, r - 1),
-    ];
-
-    neighbors
+    ]
   }
 }
 

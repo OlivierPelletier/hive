@@ -6,7 +6,7 @@ use crate::engine::{
     piece::{PieceColor, PieceType},
   },
   moves::{
-    beetle::beetle_moves, grasshoper::grasshopper_moves, ladybug::ladybug_moves,
+    beetle::beetle_moves, grasshopper::grasshopper_moves, ladybug::ladybug_moves,
     mosquito::mosquito_moves, pillbug::pillbug_moves, queen_bee::queen_bee_moves,
     soldier_ant::soldier_ant_moves, spider::spider_moves,
   },
@@ -15,7 +15,7 @@ use crate::engine::{
 use std::collections::HashSet;
 
 pub mod beetle;
-pub mod grasshoper;
+pub mod grasshopper;
 pub mod ladybug;
 pub mod mosquito;
 pub mod pillbug;
@@ -59,7 +59,7 @@ pub fn available_placements_for_piece_color(grid: &Grid, piece_color: &PieceColo
   } else if grid.number_of_pieces() == 1 {
     moves.insert(Hex::new(-1, 0));
   } else {
-    for hex in grid.grid.keys() {
+    for hex in grid.cells.keys() {
       if !grid.is_hex_of_color(hex, piece_color) {
         continue;
       }
@@ -78,24 +78,4 @@ pub fn available_placements_for_piece_color(grid: &Grid, piece_color: &PieceColo
   }
 
   moves.into_iter().collect()
-}
-
-fn extract_moves_from_paths(paths: Vec<Vec<Hex>>, path_expected_length: usize) -> Vec<Hex> {
-  let mut moves: Vec<Hex> = Vec::new();
-
-  for path in paths {
-    if path.len() != path_expected_length {
-      continue;
-    }
-    let Some(h) = path.last() else {
-      continue;
-    };
-    if moves.contains(h) {
-      continue;
-    }
-
-    moves.push(*h);
-  }
-
-  moves
 }

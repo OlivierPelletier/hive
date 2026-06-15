@@ -17,31 +17,31 @@ mod grid_tests;
 
 #[derive(Debug, Clone)]
 pub struct Grid {
-  pub grid: HashMap<Hex, Vec<Piece>>,
+  pub cells: HashMap<Hex, Vec<Piece>>,
 }
 
 impl Grid {
   pub fn new() -> Grid {
-    let grid: HashMap<Hex, Vec<Piece>> = HashMap::new();
+    let cells: HashMap<Hex, Vec<Piece>> = HashMap::new();
 
-    Grid { grid }
+    Grid { cells }
   }
 
   pub fn place_piece_to_hex(&mut self, piece: Piece, hex: Hex) {
-    self.grid.entry(hex).or_default().push(piece)
+    self.cells.entry(hex).or_default().push(piece)
   }
 
   pub fn remove_top_piece_from_hex(&mut self, hex: Hex) -> Option<Piece> {
     let mut removed = None;
     let mut is_empty = false;
 
-    if let Some(stack) = self.grid.get_mut(&hex) {
+    if let Some(stack) = self.cells.get_mut(&hex) {
       removed = stack.pop();
       is_empty = stack.is_empty();
     }
 
     if is_empty {
-      self.grid.remove(&hex);
+      self.cells.remove(&hex);
     }
 
     removed
@@ -56,7 +56,7 @@ impl Grid {
 
   pub fn find_top_piece(&self, hex: &Hex) -> Option<&Piece> {
     if self.is_hex_occupied(hex) {
-      match self.grid.get(hex) {
+      match self.cells.get(hex) {
         Some(v) => v.last(),
         None => None,
       }
@@ -71,7 +71,7 @@ impl Grid {
     let mut is_surrended = true;
 
     for neighbor in &neighbors {
-      let pieces = self.grid.get(neighbor);
+      let pieces = self.cells.get(neighbor);
       is_surrended = is_surrended
         && match pieces {
           Some(p) => !p.is_empty(),
@@ -93,7 +93,7 @@ impl Grid {
   }
 
   pub fn is_hex_occupied(&self, hex: &Hex) -> bool {
-    let pieces = self.grid.get(hex);
+    let pieces = self.cells.get(hex);
 
     match pieces {
       Some(p) => !p.is_empty(),
@@ -140,11 +140,23 @@ impl Grid {
 
   pub fn number_of_pieces(&self) -> usize {
     let mut count = 0;
-    for vec in self.grid.values() {
+    for vec in self.cells.values() {
       count += vec.len()
     }
 
     count
+  }
+
+  pub fn iter(&self) -> impl Iterator<Item = (&Hex, &Vec<Piece>)> {
+    self.cells.iter()
+  }
+
+  pub fn is_empty(&self) -> bool {
+    self.cells.is_empty()
+  }
+
+  pub fn contains_hex(&self, hex: &Hex) -> bool {
+    self.cells.contains_key(hex)
   }
 
   pub fn get_stack_size(&self, hex: &Hex) -> usize {
@@ -152,7 +164,7 @@ impl Grid {
       return 0;
     }
 
-    let Some(stack) = self.grid.get(hex) else {
+    let Some(stack) = self.cells.get(hex) else {
       return 0;
     };
 
@@ -174,7 +186,7 @@ impl Display for Grid {
     let mut min_r = 0;
     let mut max_r = 0;
 
-    for key in self.grid.keys() {
+    for key in self.cells.keys() {
       if !initialized {
         min_q = key.q;
         max_q = key.q;
