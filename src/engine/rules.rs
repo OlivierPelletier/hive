@@ -35,8 +35,6 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
     return false;
   }
 
-  let to_stack_size = grid.get_stack_size(to);
-
   let cube = Cube::from(*to);
   let cube_from = Cube::from(*from);
   let h1;
@@ -95,7 +93,30 @@ pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
     h2 = c2.into();
   }
 
-  !(grid.get_stack_size(&h1) > to_stack_size && grid.get_stack_size(&h2) > to_stack_size)
+  let from_stack_size = match grid.get_stack_size(from) > 0 {
+    true => grid.get_stack_size(from) - 1,
+    false => 0,
+  };
+  let to_stack_size = grid.get_stack_size(to);
+  let going_down = from_stack_size > to_stack_size;
+  let going_up = !going_down;
+  let same_level = from_stack_size == to_stack_size;
+
+  if same_level {
+    return !(grid.get_stack_size(&h1) > from_stack_size
+      && grid.get_stack_size(&h2) > from_stack_size);
+  }
+
+  if going_down {
+    return !(grid.get_stack_size(&h1) > from_stack_size
+      && grid.get_stack_size(&h2) > from_stack_size);
+  }
+
+  if going_up {
+    return !(grid.get_stack_size(&h1) > to_stack_size && grid.get_stack_size(&h2) > to_stack_size);
+  }
+
+  unreachable!()
 }
 
 pub fn queen_surrounded_rule(grid: &Grid, color: PieceColor) -> bool {

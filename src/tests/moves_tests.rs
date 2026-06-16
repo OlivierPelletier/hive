@@ -429,3 +429,47 @@ fn given_grid_when_available_moves_pillbug_with_extra_stacked_pieces_should_retu
 
   assert!(moves.is_empty());
 }
+
+/*
+   __    W LDBG  W LDBG
+   0,0     1,0     2,0
+     W LDBG    __    W LDBG
+       0,1     1,1     2,1
+         W LDBG  W LDBG    __
+           0,2     1,2     2,2
+*/
+fn initialize_ladybug_extra_surrounded_scenario_grid() -> Grid {
+  let mut grid = Grid::new();
+
+  grid.place_piece_to_hex(Piece::ladybug().white(), Hex::new(0, 1));
+  grid.place_piece_to_hex(Piece::ladybug().white(), Hex::new(0, 2));
+  grid.place_piece_to_hex(Piece::ladybug().white(), Hex::new(1, 0));
+  grid.place_piece_to_hex(Piece::ladybug().white(), Hex::new(1, 2));
+  grid.place_piece_to_hex(Piece::ladybug().white(), Hex::new(2, 0));
+  grid.place_piece_to_hex(Piece::ladybug().white(), Hex::new(2, 1));
+
+  grid
+}
+
+#[test]
+fn given_grid_when_available_moves_ladybug_with_surrounded_hex_should_return_correct_moves() {
+  let grid = initialize_ladybug_extra_surrounded_scenario_grid();
+  let from = Hex::new(1, 2);
+  let piece = Piece::ladybug().white();
+  let mut correct_moves = vec![
+    move_action(piece, from, Hex::new(-1, 1)),
+    move_action(piece, from, Hex::new(-1, 2)),
+    move_action(piece, from, Hex::new(0, 0)),
+    move_action(piece, from, Hex::new(1, 1)),
+    move_action(piece, from, Hex::new(2, -1)),
+    move_action(piece, from, Hex::new(3, 0)),
+    move_action(piece, from, Hex::new(3, -1)),
+  ];
+
+  let mut moves = available_moves(&grid, &from, &Vec::new());
+
+  sort_actions(&mut moves);
+  sort_actions(&mut correct_moves);
+
+  assert_eq!(moves, correct_moves);
+}

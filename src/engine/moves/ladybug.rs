@@ -38,7 +38,12 @@ fn ladybug_moves_it(
     if !one_hive_rule(grid, initial_hex, &neighbor) {
       continue;
     }
-    if !freedom_to_move_rule(grid, hex, &neighbor) {
+    let mut temp_grid = grid.clone();
+    if *initial_hex != *hex {
+      let ladybug = temp_grid.remove_top_piece_from_hex(*initial_hex).unwrap();
+      temp_grid.place_piece_to_hex(ladybug, *hex);
+    }
+    if !freedom_to_move_rule(&temp_grid, hex, &neighbor) {
       continue;
     }
     if trail.len() == 1 && !grid.is_hex_occupied(&neighbor) {
