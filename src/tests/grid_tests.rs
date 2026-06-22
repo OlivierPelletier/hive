@@ -1,4 +1,4 @@
-use super::{coordinate::hex::Hex, piece::Piece, Grid};
+use super::{Grid, coordinate::hex::Hex, piece::Piece};
 
 #[test]
 fn given_grid_when_placing_piece_to_hex_then_hex_contains_piece() {
@@ -43,13 +43,13 @@ fn given_grid_with_two_pieces_stack_when_removing_piece_from_hex_then_piece_is_r
     Some(p) => assert_eq!(p.len(), 1),
     None => unreachable!(),
   };
-    
+
   assert_eq!(*grid.cells.get(&hex).unwrap().first().unwrap(), first_piece)
 }
 
 #[test]
-fn given_grid_when_removing_piece_from_hex_containing_two_pieces_then_top_piece_is_removed_from_hex(
-) {
+fn given_grid_when_removing_piece_from_hex_containing_two_pieces_then_top_piece_is_removed_from_hex()
+ {
   let mut grid = Grid::new();
   let hex = Hex::new(0, 0);
   let queen_bee = Piece::queen_bee();
@@ -112,8 +112,8 @@ fn given_grid_when_moving_piece_from_hex_to_hex_then_piece_is_moved() {
 }
 
 #[test]
-fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and_hex_contains_both_pieces(
-) {
+fn given_grid_when_moving_piece_from_hex_to_occupied_hex_then_piece_is_moved_and_hex_contains_both_pieces()
+ {
   let mut grid = Grid::new();
   let from = Hex::new(0, 0);
   let to = Hex::new(0, 1);

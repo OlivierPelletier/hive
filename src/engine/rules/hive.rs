@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use crate::engine::grid::{coordinate::hex::Hex, Grid};
+use crate::engine::grid::{Grid, coordinate::hex::Hex};
 
 pub fn one_hive_rule_grid_validation(grid: &Grid) -> bool {
   let mut is_valid = true;

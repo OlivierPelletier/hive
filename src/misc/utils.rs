@@ -1,4 +1,4 @@
-use std::io::{stdin, stdout, Write};
+use std::io::{Write, stdin, stdout};
 
 pub fn get_input(message: &str) -> String {
   let mut buffer = String::new();

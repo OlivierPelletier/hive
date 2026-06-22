@@ -171,7 +171,11 @@ fn given_actions_history_with_stunned_piece_when_pillbug_stun_rule_should_return
     is_pillbug_special_move: true,
   }];
 
-  assert!(pillbug_special_move_rule(&grid, &Hex::new(-1, 0), actions_history))
+  assert!(pillbug_special_move_rule(
+    &grid,
+    &Hex::new(-1, 0),
+    actions_history
+  ))
 }
 
 #[test]
@@ -185,7 +189,11 @@ fn given_actions_history_without_stunned_piece_when_pillbug_stun_rule_should_ret
     is_pillbug_special_move: false,
   }];
 
-  assert!(!pillbug_special_move_rule(&grid, &Hex::new(-1, 0), actions_history))
+  assert!(!pillbug_special_move_rule(
+    &grid,
+    &Hex::new(-1, 0),
+    actions_history
+  ))
 }
 
 #[test]
@@ -209,7 +217,11 @@ fn given_actions_history_with_stunned_piece_second_from_last_when_pillbug_stun_r
     },
   ];
 
-  assert!(pillbug_special_move_rule(&grid, &Hex::new(-1, 0), actions_history))
+  assert!(pillbug_special_move_rule(
+    &grid,
+    &Hex::new(-1, 0),
+    actions_history
+  ))
 }
 
 #[test]
@@ -233,5 +245,9 @@ fn given_actions_history_with_normal_piece_second_from_last_when_pillbug_stun_ru
     },
   ];
 
-  assert!(!pillbug_special_move_rule(&grid, &Hex::new(-1, 0), actions_history))
+  assert!(!pillbug_special_move_rule(
+    &grid,
+    &Hex::new(-1, 0),
+    actions_history
+  ))
 }
