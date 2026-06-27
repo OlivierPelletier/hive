@@ -16,18 +16,20 @@ pub fn one_hive_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
     return false;
   }
 
-  let mut after_move_grid = Grid {
-    cells: grid.cells.clone(),
-  };
-  after_move_grid.move_piece_from_to(*from, *to);
+  if grid.is_hex_alone(to) {
+    return false;
+  }
+
   let mut without_piece_grid = Grid {
     cells: grid.cells.clone(),
   };
   without_piece_grid.remove_top_piece_from_hex(*from);
 
-  hive::one_hive_rule_grid_validation(grid)
-    && hive::one_hive_rule_grid_validation(&after_move_grid)
-    && hive::one_hive_rule_grid_validation(&without_piece_grid)
+  if without_piece_grid.is_hex_alone(to) {
+    return false;
+  }
+
+  hive::one_hive_rule_grid_validation(&without_piece_grid)
 }
 
 pub fn freedom_to_move_rule(grid: &Grid, from: &Hex, to: &Hex) -> bool {
