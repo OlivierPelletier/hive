@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0](https://github.com/OlivierPelletier/hive/compare/v0.3.0...v0.4.0) - 2026-07-17
+
+### Added
+
+- QoL changes, fixing typos and some minor refactoring for performance
+
+### Fixed
+
+- fixing freedom to move rule with stacked pieces and ladybug movement
+- sorting player actions before returning
+
+### Other
+
+- shortcutting one_hive_rule algorithm
+- todos
+- applying rustfmt
+- README.md update
+
 ## [0.3.0](https://github.com/OlivierPelletier/hive/compare/v0.2.0...v0.3.0) - 2026-05-05
 
 ### Added
